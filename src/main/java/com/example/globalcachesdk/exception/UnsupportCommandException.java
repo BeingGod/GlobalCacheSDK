@@ -1,16 +1,16 @@
-package com.example.demo.globalcachesdk.exception;
+package com.example.globalcachesdk.exception;
 
 /**
- * SSH连接不存在异常
+ * 不支持的命令
  * @author ya059
  */
-public class SessionNotExistException extends Exception {
+public class UnsupportCommandException extends Exception {
 
     /**
      * 构造函数
      * @param message 异常信息
      */
-    public SessionNotExistException(String message) {
+    public UnsupportCommandException(String message) {
         super(message);
     }
 
@@ -19,7 +19,7 @@ public class SessionNotExistException extends Exception {
      * @param message 异常信息
      * @param cause 异常原因
      */
-    public SessionNotExistException(String message, Throwable cause) {
+    public UnsupportCommandException(String message, Throwable cause) {
         super(message, cause);
     }
 }

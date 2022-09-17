@@ -1,6 +1,6 @@
-package com.example.demo.globalcachesdk.excutor;
+package com.example.globalcachesdk.excutor;
 
-import com.example.demo.globalcachesdk.StatusCode;
+import com.example.globalcachesdk.StatusCode;
 import lombok.Data;
 
 /**

@@ -1,11 +1,11 @@
-package com.example.demo.globalcachesdk.excutor;
+package com.example.globalcachesdk.excutor;
 
 
 import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.extra.ssh.JschRuntimeException;
 import cn.hutool.extra.ssh.JschUtil;
-import com.example.demo.globalcachesdk.entity.MemInfo;
-import com.example.demo.globalcachesdk.exception.CommandExecFailedException;
+import com.example.globalcachesdk.entity.MemInfo;
+import com.example.globalcachesdk.exception.CommandExecFailedException;
 import com.jcraft.jsch.Session;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;

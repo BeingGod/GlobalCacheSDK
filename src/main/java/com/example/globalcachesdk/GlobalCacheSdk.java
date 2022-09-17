@@ -1,10 +1,10 @@
-package com.example.demo.globalcachesdk;
+package com.example.globalcachesdk;
 
-import com.example.demo.globalcachesdk.exception.ConnectFailedException;
-import com.example.demo.globalcachesdk.exception.SessionAlreadyExistException;
-import com.example.demo.globalcachesdk.exception.SessionNotExistException;
-import com.example.demo.globalcachesdk.excutor.CommandExecuteResult;
-import com.example.demo.globalcachesdk.pool.SshSessionPool;
+import com.example.globalcachesdk.exception.ConnectFailedException;
+import com.example.globalcachesdk.exception.SessionAlreadyExistException;
+import com.example.globalcachesdk.exception.SessionNotExistException;
+import com.example.globalcachesdk.excutor.CommandExecuteResult;
+import com.example.globalcachesdk.pool.SshSessionPool;
 
 import java.util.ArrayList;
 import java.util.HashMap;

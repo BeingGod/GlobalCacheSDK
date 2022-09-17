@@ -1,4 +1,4 @@
-package com.example.demo.globalcachesdk.entity;
+package com.example.globalcachesdk.entity;
 
 import lombok.Data;
 

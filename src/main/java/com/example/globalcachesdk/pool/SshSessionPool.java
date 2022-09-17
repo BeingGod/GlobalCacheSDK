@@ -1,28 +1,27 @@
-package com.example.demo.globalcachesdk.pool;
+package com.example.globalcachesdk.pool;
 
 import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.extra.ssh.JschRuntimeException;
-import com.example.demo.globalcachesdk.entity.MemInfo;
-import com.example.demo.globalcachesdk.exception.ConnectFailedException;
-import com.example.demo.globalcachesdk.exception.SessionAlreadyExistException;
-import com.example.demo.globalcachesdk.exception.SessionNotExistException;
-import com.example.demo.globalcachesdk.excutor.CommandExcutor;
+import com.example.globalcachesdk.entity.MemInfo;
+import com.example.globalcachesdk.exception.ConnectFailedException;
+import com.example.globalcachesdk.exception.SessionAlreadyExistException;
+import com.example.globalcachesdk.exception.SessionNotExistException;
+import com.example.globalcachesdk.excutor.CommandExcutor;
 import com.jcraft.jsch.Session;
 import cn.hutool.extra.ssh.JschUtil;
-import com.example.demo.globalcachesdk.SupportedCommand;
-import com.example.demo.globalcachesdk.excutor.CommandExecuteResult;
+import com.example.globalcachesdk.SupportedCommand;
+import com.example.globalcachesdk.excutor.CommandExecuteResult;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static com.example.demo.globalcachesdk.StatusCode.*;
+import static com.example.globalcachesdk.StatusCode.*;
 
 /**
  * SSH连接池

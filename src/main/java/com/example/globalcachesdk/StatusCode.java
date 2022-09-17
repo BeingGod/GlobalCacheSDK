@@ -1,4 +1,4 @@
-package com.example.demo.globalcachesdk;
+package com.example.globalcachesdk;
 
 /**
  * 请求状态码

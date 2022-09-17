@@ -1,16 +1,16 @@
-package com.example.demo.globalcachesdk.exception;
+package com.example.globalcachesdk.exception;
 
 /**
- * SSH连接创建失败异常
+ * SSH连接不存在异常
  * @author ya059
  */
-public class ConnectFailedException extends Exception {
+public class SessionNotExistException extends Exception {
 
     /**
      * 构造函数
      * @param message 异常信息
      */
-    public ConnectFailedException(String message) {
+    public SessionNotExistException(String message) {
         super(message);
     }
 
@@ -19,8 +19,7 @@ public class ConnectFailedException extends Exception {
      * @param message 异常信息
      * @param cause 异常原因
      */
-    public ConnectFailedException(String message, Throwable cause) {
+    public SessionNotExistException(String message, Throwable cause) {
         super(message, cause);
     }
 }
-

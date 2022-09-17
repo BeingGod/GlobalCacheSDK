@@ -1,4 +1,4 @@
-package com.example.demo.globalcachesdk.exception;
+package com.example.globalcachesdk.exception;
 
 public class SessionAlreadyExistException extends Exception {
     /**

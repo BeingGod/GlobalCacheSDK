@@ -1,16 +1,16 @@
-package com.example.demo.globalcachesdk.exception;
+package com.example.globalcachesdk.exception;
 
 /**
- * 不支持的命令
+ * SSH连接创建失败异常
  * @author ya059
  */
-public class UnsupportCommandException extends Exception {
+public class ConnectFailedException extends Exception {
 
     /**
      * 构造函数
      * @param message 异常信息
      */
-    public UnsupportCommandException(String message) {
+    public ConnectFailedException(String message) {
         super(message);
     }
 
@@ -19,7 +19,8 @@ public class UnsupportCommandException extends Exception {
      * @param message 异常信息
      * @param cause 异常原因
      */
-    public UnsupportCommandException(String message, Throwable cause) {
+    public ConnectFailedException(String message, Throwable cause) {
         super(message, cause);
     }
 }
+

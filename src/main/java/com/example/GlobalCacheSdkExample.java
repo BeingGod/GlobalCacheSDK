@@ -1,12 +1,12 @@
-package com.example.demo;
+package com.example;
 
-import com.example.demo.globalcachesdk.GlobalCacheSdk;
-import com.example.demo.globalcachesdk.StatusCode;
-import com.example.demo.globalcachesdk.entity.MemInfo;
-import com.example.demo.globalcachesdk.exception.ConnectFailedException;
-import com.example.demo.globalcachesdk.exception.SessionAlreadyExistException;
-import com.example.demo.globalcachesdk.exception.SessionNotExistException;
-import com.example.demo.globalcachesdk.excutor.CommandExecuteResult;
+import com.example.globalcachesdk.GlobalCacheSdk;
+import com.example.globalcachesdk.StatusCode;
+import com.example.globalcachesdk.entity.MemInfo;
+import com.example.globalcachesdk.exception.ConnectFailedException;
+import com.example.globalcachesdk.exception.SessionAlreadyExistException;
+import com.example.globalcachesdk.exception.SessionNotExistException;
+import com.example.globalcachesdk.excutor.CommandExecuteResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;

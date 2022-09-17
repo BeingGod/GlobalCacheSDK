@@ -1,4 +1,4 @@
-package com.example.demo.globalcachesdk.exception;
+package com.example.globalcachesdk.exception;
 
 /**
  * 命令执行失败异常

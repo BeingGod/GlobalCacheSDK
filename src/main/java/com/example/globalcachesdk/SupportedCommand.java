@@ -1,4 +1,4 @@
-package com.example.demo.globalcachesdk;
+package com.example.globalcachesdk;
 
 /**
  * 节点支持的可执行命令
