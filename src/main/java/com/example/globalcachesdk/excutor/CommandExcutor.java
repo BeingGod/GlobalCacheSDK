@@ -7,6 +7,9 @@ import cn.hutool.extra.ssh.JschUtil;
 import com.example.globalcachesdk.entity.MemInfo;
 import com.example.globalcachesdk.exception.CommandExecFailedException;
 import com.jcraft.jsch.Session;
+
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,14 +27,39 @@ public class CommandExcutor {
 
     /**
      * 执行命令, 若执行失败则抛出异常
-     * TODO: 待实现
      * @param sshSession SSH会话
      * @param command 需要执行的命令
      * @return 命令执行结果
      * @throws CommandExecFailedException 命令执行失败异常
      */
-    private static String exce(Session sshSession, String command) throws CommandExecFailedException {
-        return null;
+    private static String exec(Session sshSession, String command) throws CommandExecFailedException {
+        try {
+            int[] RunningSuccess = {1};
+            OutputStream NewErrStream = new OutputStream() {
+                @Override
+                public void write(int b) throws IOException {
+                    //TODO：本处输出为ASCII强转实现，UTF-8适配
+                    System.err.print((char) b);
+                }
+                @Override
+                public void write(byte b[], int off, int len) throws IOException {
+                    RunningSuccess[0] = 0;
+                    String errMsg="";
+                    for (int i = 0; i < len; i++) {
+                        errMsg+=(char)b[off + i];
+                    }
+                    System.err.print(errMsg);
+                }
+            };
+            String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset(), NewErrStream);
+            if (RunningSuccess[0] == 0) {
+                throw new CommandExecFailedException("命令执行失败");
+            } else {
+                return returnValue;
+            }
+        }catch (CommandExecFailedException e) {
+            throw new CommandExecFailedException("命令执行失败");
+        }
     }
 
     /**
@@ -42,13 +70,7 @@ public class CommandExcutor {
     public static MemInfo queryMemInfo(Session sshSession) throws CommandExecFailedException {
         String command = "sh /root/scripts/mem_info.sh";
 
-        // TODO: 使用exec函数进行替换
-        String returnValue;
-        try {
-            returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset());
-        } catch (IORuntimeException | JschRuntimeException e) {
-            throw new CommandExecFailedException("命令执行失败", e);
-        }
+        String returnValue = exec(sshSession, command);
 
         Matcher matcher = MEM_INFO_PATTERN.matcher(returnValue);
         MemInfo memInfo = new MemInfo();
