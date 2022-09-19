@@ -59,13 +59,17 @@ public class GlobalCacheSdk {
         return sshSessionPool.execute(hosts, SupportedCommand.GET_MEM_INFO);
     }
 
+
+
     /**
      * 获取节点的CPU信息
      * @param hosts 需要获取主机IP列表
      * @return
      */
-    public static HashMap<String, Object> getNodesCpuInfo(ArrayList<String> hosts) {
-        return null;
+    public static HashMap<String, CommandExecuteResult> getNodesCpuInfo(ArrayList<String> hosts) {
+        SshSessionPool sshSessionPool = SshSessionPool.getInstance();
+
+        return  sshSessionPool.execute(hosts, SupportedCommand.GET_CPU_INFO);
     }
 
 }

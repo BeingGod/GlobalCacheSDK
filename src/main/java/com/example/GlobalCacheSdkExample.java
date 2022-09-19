@@ -3,6 +3,7 @@ package com.example;
 import com.example.globalcachesdk.GlobalCacheSdk;
 import com.example.globalcachesdk.StatusCode;
 import com.example.globalcachesdk.entity.MemInfo;
+import com.example.globalcachesdk.entity.CpuInfo;
 import com.example.globalcachesdk.exception.ConnectFailedException;
 import com.example.globalcachesdk.exception.SessionAlreadyExistException;
 import com.example.globalcachesdk.exception.SessionNotExistException;
@@ -42,7 +43,6 @@ public class GlobalCacheSdkExample {
 				e.printStackTrace();
 			}
 		}
-
 		Map<String, MemInfo> nodesMemInfoHashMap = new HashMap<>();
 		for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSdk.getNodesMemInfo(hosts).entrySet()) {
 			if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
@@ -51,6 +51,15 @@ public class GlobalCacheSdkExample {
 		}
 
 		System.out.println(nodesMemInfoHashMap);
+
+		Map<String, CpuInfo> nodesCpuInfoHashMap = new HashMap<>();
+		for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSdk.getNodesCpuInfo(hosts).entrySet()) {
+			if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
+				nodesCpuInfoHashMap.put(entry.getKey(), (CpuInfo) entry.getValue().getData());
+			}
+		}
+
+		System.out.println(nodesCpuInfoHashMap);
 
 		for (int i = 0;i < hosts.size(); i++) {
 			try {

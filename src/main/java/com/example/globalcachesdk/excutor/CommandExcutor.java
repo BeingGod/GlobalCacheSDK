@@ -5,6 +5,7 @@ import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.extra.ssh.JschRuntimeException;
 import cn.hutool.extra.ssh.JschUtil;
 import com.example.globalcachesdk.entity.MemInfo;
+import com.example.globalcachesdk.entity.CpuInfo;
 import com.example.globalcachesdk.exception.CommandExecFailedException;
 import com.jcraft.jsch.Session;
 import java.nio.charset.Charset;
@@ -20,7 +21,8 @@ public class CommandExcutor {
     /**
      * 节点内存信息正则表达式
      */
-    private static final Pattern MEM_INFO_PATTERN = Pattern.compile("\\d+");
+    private static final Pattern MEM_INFO_PATTERN = Pattern.compile("\\d+"),
+            CPU_INFO_PATTERN = Pattern.compile("\\d+\\.\\d+"); // TODO: CHANGE REGEX!!
 
     /**
      * 执行命令, 若执行失败则抛出异常
@@ -63,5 +65,28 @@ public class CommandExcutor {
         }
 
         return memInfo;
+    }
+
+    public static CpuInfo queryCpuInfo(Session sshSession) throws CommandExecFailedException {
+        String command = "bash /root/scripts/cpu_usage.sh";
+
+        // TODO: 使用exec函数进行替换
+        String returnValue;
+        try {
+            returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset());
+        } catch (IORuntimeException | JschRuntimeException e) {
+            throw new CommandExecFailedException("命令执行失败", e);
+        }
+
+        Matcher matcher = CPU_INFO_PATTERN.matcher(returnValue);
+        CpuInfo cpuInfo = new CpuInfo();
+
+        for (int cpuIdx = 0; cpuIdx <= 128; cpuIdx++) {
+            if(matcher.find()) {
+                cpuInfo.setUsage(cpuIdx, Double.parseDouble(matcher.group(0)));
+            }
+        }
+
+        return cpuInfo;
     }
 }
