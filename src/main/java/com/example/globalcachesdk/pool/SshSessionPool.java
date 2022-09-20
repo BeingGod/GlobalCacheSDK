@@ -4,6 +4,7 @@ import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.extra.ssh.JschRuntimeException;
 import com.example.globalcachesdk.entity.MemInfo;
+import com.example.globalcachesdk.entity.CpuInfo;
 import com.example.globalcachesdk.exception.ConnectFailedException;
 import com.example.globalcachesdk.exception.SessionAlreadyExistException;
 import com.example.globalcachesdk.exception.SessionNotExistException;
@@ -162,6 +163,8 @@ public class SshSessionPool {
                     method = CommandExcutor.class.getMethod("queryMemInfo", Session.class);
                     break;
                 case GET_CPU_INFO:
+                    returnValue = new CpuInfo();
+                    method = CommandExcutor.class.getMethod("queryCpuInfo", Session.class);
                     break;
 
                 default:
