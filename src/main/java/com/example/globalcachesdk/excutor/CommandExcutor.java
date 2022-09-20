@@ -34,25 +34,25 @@ public class CommandExcutor {
      */
     private static String exec(Session sshSession, String command) throws CommandExecFailedException {
         try {
-            int[] RunningSuccess = {1};
-            OutputStream NewErrStream = new OutputStream() {
+            int[] flag = {1};
+            OutputStream newErrStream = new OutputStream() {
                 @Override
                 public void write(int b) throws IOException {
                     //TODO：本处输出为ASCII强转实现，UTF-8适配
                     System.err.print((char) b);
                 }
                 @Override
-                public void write(byte b[], int off, int len) throws IOException {
-                    RunningSuccess[0] = 0;
-                    String errMsg="";
+                public void write(byte[] b, int off, int len) throws IOException {
+                    flag[0] = 0;
+                    StringBuilder errMsg= new StringBuilder();
                     for (int i = 0; i < len; i++) {
-                        errMsg+=(char)b[off + i];
+                        errMsg.append((char) b[off + i]);
                     }
                     System.err.print(errMsg);
                 }
             };
-            String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset(), NewErrStream);
-            if (RunningSuccess[0] == 0) {
+            String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset(), newErrStream);
+            if (flag[0] == 0) {
                 throw new CommandExecFailedException("命令执行失败");
             } else {
                 return returnValue;
