@@ -25,7 +25,7 @@ public class CommandExcutor {
      * 节点内存信息正则表达式
      */
     private static final Pattern MEM_INFO_PATTERN = Pattern.compile("\\d+"),
-            CPU_INFO_PATTERN = Pattern.compile("\\d+\\.\\d+"); // TODO: CHANGE REGEX!!
+            CPU_INFO_PATTERN = Pattern.compile("\\d+\\.\\d+");
 
     /**
      * 执行命令, 若执行失败则抛出异常
@@ -89,6 +89,11 @@ public class CommandExcutor {
         return memInfo;
     }
 
+    /**
+     * 请求节点CPU信息
+     * @param sshSession ssh会话
+     * @return CpuInfo
+     */
     public static CpuInfo queryCpuInfo(Session sshSession) throws CommandExecFailedException {
         String command = "bash /root/scripts/cpu_usage.sh";
 
@@ -103,10 +108,8 @@ public class CommandExcutor {
         Matcher matcher = CPU_INFO_PATTERN.matcher(returnValue);
         CpuInfo cpuInfo = new CpuInfo();
 
-        for (int cpuIdx = 0; cpuIdx <= 128; cpuIdx++) {
-            if(matcher.find()) {
-                cpuInfo.setUsage(cpuIdx, Double.parseDouble(matcher.group(0)));
-            }
+        while(matcher.find()) {
+            cpuInfo.setUsage(Double.parseDouble(matcher.group(0)));
         }
 
         return cpuInfo;
