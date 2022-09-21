@@ -1,5 +1,9 @@
 package com.example.globalcachesdk.exception;
 
+/**
+ * SSH会话不存在异常
+ * @author ya059
+ */
 public class SessionAlreadyExistException extends Exception {
     /**
      * 构造函数

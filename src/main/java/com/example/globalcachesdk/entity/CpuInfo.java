@@ -11,16 +11,12 @@ import java.util.ArrayList;
 @Data
 public class CpuInfo {
     /**
-     * 节点CPU占用率 单位 百分比
-     * ArrayList第零号数据为整体占用情况 其他为各核心
+     * 节点CPU整体占用率
     */
-    private ArrayList<Double> usage;
+    private double totalUsage;
 
-    public CpuInfo() {
-        usage = new ArrayList<Double>();
-    }
-
-    public void setUsage(double idle) {
-        (this.usage).add(100.00 - idle);
-    }
+    /**
+     * 节点逻辑核心占用率 单位 百分比
+     */
+    private ArrayList<Double> coreUsage;
 }

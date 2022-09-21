@@ -5,10 +5,8 @@ import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.extra.ssh.JschRuntimeException;
 import com.example.globalcachesdk.entity.MemInfo;
 import com.example.globalcachesdk.entity.CpuInfo;
-import com.example.globalcachesdk.exception.ConnectFailedException;
-import com.example.globalcachesdk.exception.SessionAlreadyExistException;
-import com.example.globalcachesdk.exception.SessionNotExistException;
-import com.example.globalcachesdk.excutor.CommandExcutor;
+import com.example.globalcachesdk.exception.*;
+import com.example.globalcachesdk.excutor.CommandExecutor;
 import com.jcraft.jsch.Session;
 import cn.hutool.extra.ssh.JschUtil;
 import com.example.globalcachesdk.SupportedCommand;
@@ -87,6 +85,8 @@ public class SshSessionPool {
      * @param user 用户名
      * @param password 密码
      * @param port 端口号
+     * @throws SessionAlreadyExistException 会话已存在异常
+     * @throws ConnectFailedException SSH连接失败异常
      */
     public void createSession(String host, String user, String password, int port) throws SessionAlreadyExistException, ConnectFailedException {
         Session session =  hostSessionHashMap.get(host);
@@ -108,17 +108,18 @@ public class SshSessionPool {
      * 没有任何异常则表示执行成功
      * 如果链接不存在需要抛出SessionNotExistException异常
      * @param host 主机IP
+     * @throws SessionNotExistException 会话不存在异常
+     * @throws SessionCloseFailedException 会话关闭失败异常
      */
-    public void releaseSession(String host) throws SessionNotExistException, SessionAlreadyExistException {
+    public void releaseSession(String host) throws SessionNotExistException,SessionCloseFailedException  {
         Session session =  hostSessionHashMap.get(host);
         if (session != null) {
             try {
                 JschUtil.close(session);
                 // 当数据量大，只使用get时采用破坏遍历结构的方式换取最高的执行效率
                 hostSessionHashMap.remove(host);
-            }
-            catch (JschRuntimeException | IORuntimeException e) {
-                throw new SessionAlreadyExistException("链接关闭失败");
+            } catch (JschRuntimeException | IORuntimeException e) {
+                throw new SessionCloseFailedException("链接关闭失败");
             }
         } else {
             throw new SessionNotExistException("主机不存在");
@@ -128,7 +129,7 @@ public class SshSessionPool {
     /**
      * 根据host获取session给函数调用使用
      * @param host 需要获取连接session的主机IP
-     * @return session
+     * @return JSCH会话对象
      * @throws SessionNotExistException 会话不存在异常
      */
     private Session getSession(String host) throws SessionNotExistException {
@@ -146,59 +147,38 @@ public class SshSessionPool {
      * @param hosts 需要执行命令的主机IP列表
      * @param type 命令类型
      * @return 每个节点命令执行结果
-     * {
-     *     host: CommandExecuteResult,
-     *     ......
-     * }
      */
     public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, SupportedCommand type) {
-        // 需要执行的命令函数
-        Method method = null;
+        // 需要执行的命令函数名
+        String methodName = null;
+        // 命令函数返回值
         Object returnValue = null;
-        try {
-            switch (type) {
-                // 根据不同的类型，使用反射机制获取需要执行的函数
-                case GET_MEM_INFO:
-                    returnValue = new MemInfo();
-                    method = CommandExcutor.class.getMethod("queryMemInfo", Session.class);
-                    break;
-                case GET_CPU_INFO:
-                    returnValue = new CpuInfo();
-                    method = CommandExcutor.class.getMethod("queryCpuInfo", Session.class);
-                    break;
+        switch (type) {
+            // 根据不同的类型，使用反射机制获取需要执行的函数
+            case GET_MEM_INFO:
+                returnValue = new MemInfo();
+                methodName = "queryMemInfo";
+                break;
+            case GET_CPU_INFO:
+                returnValue = new CpuInfo();
+                methodName = "queryCpuInfo";
+                break;
 
-                default:
-                    throw new UnsupportedOperationException("不支持的命令");
-            }
+            default:
+                break;
+        }
+
+        // 需要执行的函数对象
+        Method method = null;
+        try {
+            // 使用反射获取需要执行的函数对象
+            method = CommandExecutor.class.getMethod(methodName, Session.class);
+
         } catch (NoSuchMethodException e) {
-            throw new UnsupportedOperationException("不支持的命令", e);
+            e.printStackTrace();
         }
 
         return executeWrapper(hosts, method, returnValue);
-    }
-
-    /**
-     * 执行带参命令
-     * 根据type的值, 在hosts的所有节点执行命令
-     * @param hosts 需要执行命令的主机IP列表
-     * @param type 命令类型
-     * @param args 参数
-     * @return 每个节点命令执行结果
-     * {
-     *    host: CommandExecuteResult,
-     *    ......
-     * }
-     */
-    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, SupportedCommand type, ArrayList<String> args) {
-        // 将参数列表解析为字符串
-        StringBuilder argsStringBuilder = new StringBuilder();
-        for (String arg : args) {
-            argsStringBuilder.append(" " + arg);
-        }
-
-        Method method = null;
-
-        return executeWrapper(hosts, method, argsStringBuilder.toString());
     }
 
     /**
@@ -209,7 +189,7 @@ public class SshSessionPool {
      */
     public synchronized HashMap<String, CommandExecuteResult> executeWrapper(ArrayList<String> hosts, Method method, Object returnValue) {
         // 初始化一个哈希表存放运行结果
-        HashMap<String, CommandExecuteResult> commandExecuteResultHashMap = new HashMap<>();
+        HashMap<String, CommandExecuteResult> commandExecuteResultHashMap = new HashMap<>(hosts.size());
         // 一个对象锁，保护共有资源防止输出时结果数量异常
         Lock lock = new ReentrantLock();
         for(int i = 0; i < hosts.size(); i++) {
@@ -251,54 +231,4 @@ public class SshSessionPool {
 
         return commandExecuteResultHashMap;
     }
-
-//    /**
-//     * 利用连接池和线程池获取各节点的信息存到hashmap中
-//     * @param hosts  需要执行命令的主机列表
-//     * @param method 需要执行的方法（带参）
-//     * @param args 方法需要参数
-//     * @return 每个结点的运行结果
-//     */
-//    public synchronized HashMap<String, CommandExecuteResult> executeWrapper(ArrayList<String> hosts, Method method, String args) {
-//        // 初始化一个哈希表存放运行结果
-//        HashMap<String, CommandExecuteResult> commandExecuteResultHashMap = new HashMap<>();
-//        // 一个对象锁，保护共有资源防止输出时结果数量异常
-//        Lock lock = new ReentrantLock();
-//        for(int i = 0; i < hosts.size(); i++) {
-//            int finalI = i;
-//            // 向线程池中添加任务
-//            threadPool.execute(() -> {
-//                CommandExecuteResult commandExecuteResult =new CommandExecuteResult();
-//                try {
-//                    // 每个线程一个Session
-//                    Session session = getSession(hosts.get(finalI));
-//                    // 执行命令, 将脚本需要参数以字符串方式传入
-//                    Object data = method.invoke(session, args);
-//                    commandExecuteResult.setStatusCode(SUCCESS);
-//                    commandExecuteResult.setData(data);
-//                } catch (SessionNotExistException e) {
-//                    // 连接不存在，设置状态码
-//                    commandExecuteResult.setStatusCode(SESSION_NOT_EXIST);
-//                } catch (InvocationTargetException | IllegalAccessException e) {
-//                    // 命令执行失败，设置状态码
-//                    commandExecuteResult.setStatusCode(EXEC_COMMAND_FAILED);
-//                } finally {
-//                    // 加锁保护结果生成过程
-//                    lock.lock();
-//                    // 向总哈希表中添加当前节点运行结果
-//                    commandExecuteResultHashMap.put(""+hosts.get(finalI), commandExecuteResult);
-//                    // 解锁
-//                    lock.unlock();
-//                }
-//            });
-//        }
-//        // TODO: 优化忙等待的方式
-//        while (commandExecuteResultHashMap.size() < hosts.size()){
-//            //主线程死锁等待子线程全部结束，添加一行输出空格防止死锁被优化
-//            System.out.print("");
-//        }
-//
-//        return commandExecuteResultHashMap;
-//    }
-
 }

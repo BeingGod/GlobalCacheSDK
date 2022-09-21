@@ -1,8 +1,5 @@
 package com.example.globalcachesdk.excutor;
 
-
-import cn.hutool.core.io.IORuntimeException;
-import cn.hutool.extra.ssh.JschRuntimeException;
 import cn.hutool.extra.ssh.JschUtil;
 import com.example.globalcachesdk.entity.MemInfo;
 import com.example.globalcachesdk.entity.CpuInfo;
@@ -12,6 +9,7 @@ import com.jcraft.jsch.Session;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,13 +17,17 @@ import java.util.regex.Pattern;
  * Shell命令调用
  * @author ya059
  */
-public class CommandExcutor {
+public class CommandExecutor {
 
     /**
      * 节点内存信息正则表达式
      */
-    private static final Pattern MEM_INFO_PATTERN = Pattern.compile("\\d+"),
-            CPU_INFO_PATTERN = Pattern.compile("\\d+\\.\\d+");
+    private static final Pattern MEM_INFO_PATTERN = Pattern.compile("\\d+");
+
+    /**
+     * 节点CPU信息正则表达式
+     */
+    private static final Pattern CPU_INFO_PATTERN = Pattern.compile("\\d+\\.\\d+");
 
     /**
      * 执行命令, 若执行失败则抛出异常
@@ -39,12 +41,12 @@ public class CommandExcutor {
             int[] flag = {1};
             OutputStream newErrStream = new OutputStream() {
                 @Override
-                public void write(int b) throws IOException {
+                public void write(int b) {
                     //TODO：本处输出为ASCII强转实现，UTF-8适配
                     System.err.print((char) b);
                 }
                 @Override
-                public void write(byte[] b, int off, int len) throws IOException {
+                public void write(byte[] b, int off, int len) {
                     flag[0] = 0;
                     StringBuilder errMsg= new StringBuilder();
                     for (int i = 0; i < len; i++) {
@@ -59,7 +61,7 @@ public class CommandExcutor {
             } else {
                 return returnValue;
             }
-        }catch (CommandExecFailedException e) {
+        } catch (CommandExecFailedException e) {
             throw new CommandExecFailedException("命令执行失败");
         }
     }
@@ -67,7 +69,8 @@ public class CommandExcutor {
     /**
      * 请求节点内存信息
      * @param sshSession ssh会话
-     * @return MemInfo
+     * @return 内存信息
+     * @throws CommandExecFailedException 命令执行失败异常
      */
     public static MemInfo queryMemInfo(Session sshSession) throws CommandExecFailedException {
         String command = "sh /root/scripts/mem_info.sh";
@@ -92,25 +95,28 @@ public class CommandExcutor {
     /**
      * 请求节点CPU信息
      * @param sshSession ssh会话
-     * @return CpuInfo
+     * @return CPU信息
+     * @throws CommandExecFailedException 命令执行失败异常
      */
     public static CpuInfo queryCpuInfo(Session sshSession) throws CommandExecFailedException {
         String command = "bash /root/scripts/cpu_usage.sh";
 
-        // TODO: 使用exec函数进行替换
-        String returnValue;
-        try {
-            returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset());
-        } catch (IORuntimeException | JschRuntimeException e) {
-            throw new CommandExecFailedException("命令执行失败", e);
-        }
+        String returnValue = exec(sshSession, command);
 
         Matcher matcher = CPU_INFO_PATTERN.matcher(returnValue);
         CpuInfo cpuInfo = new CpuInfo();
 
-        while(matcher.find()) {
-            cpuInfo.setUsage(Double.parseDouble(matcher.group(0)));
+        // 整体核心利用率
+        if (matcher.find()) {
+            cpuInfo.setTotalUsage(100 - Double.parseDouble(matcher.group(0)));
         }
+
+        // 每个逻辑核心的利用率
+        ArrayList<Double> coreUsage = new ArrayList<>();
+        while (matcher.find()) {
+            coreUsage.add(100 - Double.parseDouble(matcher.group(0)));
+        }
+        cpuInfo.setCoreUsage(coreUsage);
 
         return cpuInfo;
     }
