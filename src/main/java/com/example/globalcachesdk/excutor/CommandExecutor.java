@@ -6,7 +6,6 @@ import com.example.globalcachesdk.entity.CpuInfo;
 import com.example.globalcachesdk.exception.CommandExecFailedException;
 import com.jcraft.jsch.Session;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.regex.Pattern;
 
 /**
  * Shell命令调用
- * @author ya059
+ * @author 章睿彬
  */
 public class CommandExecutor {
 
@@ -30,11 +29,13 @@ public class CommandExecutor {
     private static final Pattern CPU_INFO_PATTERN = Pattern.compile("\\d+\\.\\d+");
 
     /**
-     * 执行命令, 若执行失败则抛出异常
+     * 执行命令
+     * 通过自定义错误流判断shell脚本是否执行成功
+     *
      * @param sshSession SSH会话
      * @param command 需要执行的命令
      * @return 命令执行结果
-     * @throws CommandExecFailedException 命令执行失败异常
+     * @throws CommandExecFailedException 命令执行失败抛出此异常
      */
     private static String exec(Session sshSession, String command) throws CommandExecFailedException {
         try {
@@ -68,6 +69,7 @@ public class CommandExecutor {
 
     /**
      * 请求节点内存信息
+     *
      * @param sshSession ssh会话
      * @return 内存信息
      * @throws CommandExecFailedException 命令执行失败异常
@@ -94,9 +96,10 @@ public class CommandExecutor {
 
     /**
      * 请求节点CPU信息
+     *
      * @param sshSession ssh会话
      * @return CPU信息
-     * @throws CommandExecFailedException 命令执行失败异常
+     * @throws CommandExecFailedException 命令执行失败抛出此异常
      */
     public static CpuInfo queryCpuInfo(Session sshSession) throws CommandExecFailedException {
         String command = "bash /root/scripts/cpu_usage.sh";

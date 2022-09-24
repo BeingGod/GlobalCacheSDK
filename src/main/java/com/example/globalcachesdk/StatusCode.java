@@ -2,7 +2,8 @@ package com.example.globalcachesdk;
 
 /**
  * 请求状态码
- * @author ya059
+ * 除了请求成功，其他状态均表示请求失败
+ * @author 章睿彬
  */
 public enum StatusCode {
     /**

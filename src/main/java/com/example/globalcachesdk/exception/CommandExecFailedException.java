@@ -2,7 +2,7 @@ package com.example.globalcachesdk.exception;
 
 /**
  * 命令执行失败异常
- * @author ya059
+ * @author 章睿彬
  */
 public class CommandExecFailedException extends Exception {
 
