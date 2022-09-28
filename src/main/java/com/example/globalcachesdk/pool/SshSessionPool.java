@@ -95,7 +95,7 @@ public class SshSessionPool {
             try {
                 Session newSession = JschUtil.getSession(host,port,user,password);
                 hostSessionHashMap.put(host, newSession);
-            } catch (JschRuntimeException | IORuntimeException e) {
+            } catch (RuntimeException e) {
                 throw new ConnectFailedException("连接失败",e);
             }
         } else {
@@ -118,7 +118,7 @@ public class SshSessionPool {
                 JschUtil.close(session);
                 // 当数据量大，只使用get时采用破坏遍历结构的方式换取最高的执行效率
                 hostSessionHashMap.remove(host);
-            } catch (JschRuntimeException | IORuntimeException e) {
+            } catch (RuntimeException e) {
                 throw new SessionCloseFailedException("链接关闭失败");
             }
         } else {
