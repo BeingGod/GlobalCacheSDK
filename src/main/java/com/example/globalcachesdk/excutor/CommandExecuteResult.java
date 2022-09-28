@@ -1,13 +1,14 @@
 package com.example.globalcachesdk.excutor;
 
 import com.example.globalcachesdk.StatusCode;
-import lombok.Data;
+import com.example.globalcachesdk.entity.AbstractEntity;
 
 /**
  * 节点命令执行结果
- * @author ya059
+ * 对于每个命令执行结果，使用请求状态码表示其状态
+ *  除了请求成功，其他状态均表示请求失败，其结果无效
+ * @author 章睿彬
  */
-@Data
 public class CommandExecuteResult {
 
     /**
@@ -20,5 +21,33 @@ public class CommandExecuteResult {
      * 节点执行结果
      * 状态码不为SUCCESS，该值为null
      */
-    private Object data;
+    private AbstractEntity data;
+
+    /**
+     * @return 请求状态码
+     */
+    public StatusCode getStatusCode() {
+        return statusCode;
+    }
+
+    /**
+     * @param statusCode 请求状态码
+     */
+    public void setStatusCode(StatusCode statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    /**
+     * @return 请求结果数据实体
+     */
+    public AbstractEntity getData() {
+        return data;
+    }
+
+    /**
+     * @param data 请求结果数据实体
+     */
+    public void setData(AbstractEntity data) {
+        this.data = data;
+    }
 }

@@ -2,7 +2,7 @@ package com.example.globalcachesdk;
 
 /**
  * 节点支持的可执行命令
- * @author ya059
+ * @author 章睿彬
  */
 public enum SupportedCommand {
     /**

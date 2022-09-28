@@ -2,7 +2,7 @@ package com.example.globalcachesdk.exception;
 
 /**
  * JSCH SSH连接关闭失败异常
- * @author ya059
+ * @author 章睿彬
  */
 public class SessionCloseFailedException extends Exception {
     /**

@@ -3,6 +3,7 @@ package com.example.globalcachesdk.pool;
 import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.extra.ssh.JschRuntimeException;
+import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.entity.MemInfo;
 import com.example.globalcachesdk.entity.CpuInfo;
 import com.example.globalcachesdk.exception.*;
@@ -23,9 +24,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import static com.example.globalcachesdk.StatusCode.*;
 
 /**
- * SSH连接池
- * 用于持久化SSH连接
- * @author ya059
+ * SSH连接池，使用单例模式进行实现，用于持久化SSH连接和并发SSH请求
+ * @author 章睿彬
  */
 public class SshSessionPool {
 
@@ -45,7 +45,9 @@ public class SshSessionPool {
     private static ExecutorService threadPool = null;
 
     /**
-     * 构造函数
+     * 构造函数，具体执行操作：
+     * 1. 获取当前运行环境的系统处理器个数，并初始化定长的线程池
+     * 2. 初始化HashMap
      */
     private SshSessionPool() {
         // 获取系统处理器个数，作为线程池数量
@@ -66,7 +68,8 @@ public class SshSessionPool {
 
     /**
      * 使用懒加载形式进行类初始化
-     * @return ssh会话池实例
+     *
+     * @return SSH会话池实例
      */
     public static synchronized SshSessionPool getInstance() {
         if (instance == null) {
@@ -77,16 +80,16 @@ public class SshSessionPool {
     }
 
     /**
-     * 创建SSH连接, 并将其添加到hostSessionHashMap中
-     * 没有任何异常则表示执行成功
+     * 创建SSH连接, 并将其添加到hostSessionHashMap中，没有任何异常则表示执行成功
      * 如果链接失败需要抛出ConnectFailedException异常
      * 如果链接已存在抛出SessionAlreadyExistException异常
+     *
      * @param host 主机IP
      * @param user 用户名
      * @param password 密码
      * @param port 端口号
-     * @throws SessionAlreadyExistException 会话已存在异常
-     * @throws ConnectFailedException SSH连接失败异常
+     * @throws SessionAlreadyExistException 会话已存在抛出此异常
+     * @throws ConnectFailedException SSH连接失败抛出此异常
      */
     public void createSession(String host, String user, String password, int port) throws SessionAlreadyExistException, ConnectFailedException {
         Session session =  hostSessionHashMap.get(host);
@@ -104,12 +107,11 @@ public class SshSessionPool {
     }
 
     /**
-     * 释放SSH连接，并将其从hostSessionHashMap中移除
-     * 没有任何异常则表示执行成功
-     * 如果链接不存在需要抛出SessionNotExistException异常
+     * 释放SSH连接，并将其从hostSessionHashMap中移，没有任何异常则表示执行成功
+     *
      * @param host 主机IP
-     * @throws SessionNotExistException 会话不存在异常
-     * @throws SessionCloseFailedException 会话关闭失败异常
+     * @throws SessionNotExistException 会话不存在抛出此异常
+     * @throws SessionCloseFailedException 会话关闭失败抛出此异常
      */
     public void releaseSession(String host) throws SessionNotExistException,SessionCloseFailedException  {
         Session session =  hostSessionHashMap.get(host);
@@ -128,9 +130,10 @@ public class SshSessionPool {
 
     /**
      * 根据host获取session给函数调用使用
+     *
      * @param host 需要获取连接session的主机IP
      * @return JSCH会话对象
-     * @throws SessionNotExistException 会话不存在异常
+     * @throws SessionNotExistException 会话不存在抛出此异常
      */
     private Session getSession(String host) throws SessionNotExistException {
         Session session =  hostSessionHashMap.get(host);
@@ -144,6 +147,7 @@ public class SshSessionPool {
     /**
      * 执行无参命令
      * 根据type的值, 在hosts的所有节点执行命令
+     *
      * @param hosts 需要执行命令的主机IP列表
      * @param type 命令类型
      * @return 每个节点命令执行结果
@@ -183,6 +187,7 @@ public class SshSessionPool {
 
     /**
      * 利用连接池和线程池获取各节点的信息存到hashmap中
+     *
      * @param hosts  需要执行命令的主机列表
      * @param method 需要执行的方法（不带参）
      * @return 每个结点的运行结果
@@ -206,7 +211,7 @@ public class SshSessionPool {
                     // 执行命令
                     Object data = method.invoke(returnValue, parameters);
                     commandExecuteResult.setStatusCode(SUCCESS);
-                    commandExecuteResult.setData(data);
+                    commandExecuteResult.setData((AbstractEntity) data);
                 } catch (SessionNotExistException e) {
                     // 连接不存在，设置状态码
                     commandExecuteResult.setStatusCode(SESSION_NOT_EXIST);

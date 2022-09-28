@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * Global Cache SDK 调用示例
- * @author ya059
+ * @author 章睿彬
  */
 public class GlobalCacheSdkExample {
 

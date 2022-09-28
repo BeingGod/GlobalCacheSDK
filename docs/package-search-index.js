@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"com.example"},{"l":"com.example.globalcachesdk"},{"l":"com.example.globalcachesdk.entity"},{"l":"com.example.globalcachesdk.exception"},{"l":"com.example.globalcachesdk.excutor"},{"l":"com.example.globalcachesdk.pool"},{"l":"所有程序包","u":"allpackages-index.html"}];updateSearchResults();

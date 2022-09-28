@@ -2,7 +2,7 @@ package com.example.globalcachesdk.exception;
 
 /**
  * SSH会话不存在异常
- * @author ya059
+ * @author 章睿彬
  */
 public class SessionAlreadyExistException extends Exception {
     /**

@@ -2,7 +2,7 @@ package com.example.globalcachesdk.exception;
 
 /**
  * SSH连接创建失败异常
- * @author ya059
+ * @author 章睿彬
  */
 public class ConnectFailedException extends Exception {
 
