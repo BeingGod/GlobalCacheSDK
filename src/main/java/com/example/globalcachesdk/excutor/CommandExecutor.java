@@ -75,7 +75,7 @@ public class CommandExecutor {
      * @throws CommandExecFailedException 命令执行失败异常
      */
     public static MemInfo queryMemInfo(Session sshSession) throws CommandExecFailedException {
-        String command = "sh /root/scripts/mem_info.sh";
+        String command = "sh /home/globalcachesdk/scripts/mem_info.sh";
 
         String returnValue = exec(sshSession, command);
 
@@ -102,7 +102,7 @@ public class CommandExecutor {
      * @throws CommandExecFailedException 命令执行失败抛出此异常
      */
     public static CpuInfo queryCpuInfo(Session sshSession) throws CommandExecFailedException {
-        String command = "bash /root/scripts/cpu_usage.sh";
+        String command = "sh /home/globalcachesdk/scripts/cpu_usage.sh";
 
         String returnValue = exec(sshSession, command);
 

@@ -29,16 +29,16 @@ public class GlobalCacheSdkExample {
 		hosts.add("175.34.8.39");
 
 		ArrayList<String> users = new ArrayList<>();
-		users.add("root");
-		users.add("root");
-		users.add("root");
-		users.add("root");
+		users.add("globalcachesdk");
+		users.add("globalcachesdk");
+		users.add("globalcachesdk");
+		users.add("globalcachesdk");
 
 		ArrayList<String> passwords = new ArrayList<>();
-		passwords.add("75=bYmdmMu");
-		passwords.add("75=bYmdmMu");
-		passwords.add("75=bYmdmMu");
-		passwords.add("75=bYmdmMu");
+		passwords.add("globalcachesdk");
+		passwords.add("globalcachesdk");
+		passwords.add("globalcachesdk");
+		passwords.add("globalcachesdk");
 
 		for (int i = 0;i < hosts.size(); i++) {
 			try {
