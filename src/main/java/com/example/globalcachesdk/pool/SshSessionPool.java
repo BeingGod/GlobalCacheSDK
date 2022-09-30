@@ -54,12 +54,15 @@ public class SshSessionPool {
         int nThreads = Runtime.getRuntime().availableProcessors();
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().build();
 
+        int corePoolSize = nThreads * 2 + 1;
+        /* 集群最大节点数为512 */
+        int maxmumPoolSize = Math.max(corePoolSize, 512);
+        int bufferCapacity = Math.max(corePoolSize, 512);
         // 当提交的任务数大于corePoolSize时，会优先放到队列缓冲区，只有填满了缓冲区后，才会判断当前运行的任务是否大于maxPoolSize，
         // 小于时会新建线程处理。大于时就触发了拒绝策略，
         // 本池中操作均为IO密集型，设定线程池最大线程数 = 可获取的逻辑处理器个数 * 2 + 1
-        // TODO 对于maximumPoolSize大小和capacity大小的选择需要进行优化
-        threadPool = new ThreadPoolExecutor(nThreads * 2 + 1, 100, 0L,
-                TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(1024),
+        threadPool = new ThreadPoolExecutor(corePoolSize, maxmumPoolSize, 0L,
+                TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(bufferCapacity),
                 namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
 
         // 初始化Session表
