@@ -155,7 +155,7 @@ public class SshSessionPool {
      * @param type 命令类型
      * @return 每个节点命令执行结果
      */
-    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, SupportedCommand type) {
+    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, SupportedCommand type)  {
         // 需要执行的命令函数名
         String methodName = null;
         // 命令函数返回值
@@ -184,9 +184,18 @@ public class SshSessionPool {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+        HashMap<String, CommandExecuteResult> resultHashMap = new HashMap<>();
+        try{
+            resultHashMap=executeWrapper(hosts, method, returnValue);
+        }catch (InterruptedException e){
+            //TODO:创建对应错误
+            throw new RuntimeException("线程池内部错误");
+        }
 
-        return executeWrapper(hosts, method, returnValue);
+        return resultHashMap;
     }
+
+
 
     /**
      * 利用连接池和线程池获取各节点的信息存到hashmap中
@@ -195,11 +204,11 @@ public class SshSessionPool {
      * @param method 需要执行的方法（不带参）
      * @return 每个结点的运行结果
      */
-    public synchronized HashMap<String, CommandExecuteResult> executeWrapper(ArrayList<String> hosts, Method method, Object returnValue) {
+    public HashMap<String, CommandExecuteResult> executeWrapper(ArrayList<String> hosts, Method method, Object returnValue) throws InterruptedException {
         // 初始化一个哈希表存放运行结果
         HashMap<String, CommandExecuteResult> commandExecuteResultHashMap = new HashMap<>(hosts.size());
-        // 一个对象锁，保护共有资源防止输出时结果数量异常
-        Lock lock = new ReentrantLock();
+        //设置信号量，节点数
+        final CountDownLatch countDownLatch=new CountDownLatch(hosts.size());
         for(int i = 0; i < hosts.size(); i++) {
             int finalI = i;
             threadPool.execute(() -> {
@@ -222,21 +231,26 @@ public class SshSessionPool {
                     // 命令执行失败，设置状态码
                     commandExecuteResult.setStatusCode(EXEC_COMMAND_FAILED);
                 } finally {
-                    // 加锁保护结果生成过程
-                    lock.lock();
-                    // 向总哈希表中添加当前节点运行结果
-                    commandExecuteResultHashMap.put(""+hosts.get(finalI), commandExecuteResult);
-                    // 解锁
-                    lock.unlock();
+                    setCommandExecuteResultHashMap(commandExecuteResultHashMap,"" + hosts.get(finalI), commandExecuteResult);
+                    //信号量减一
+                    countDownLatch.countDown();
                 }
             });
         }
-        // TODO: 优化忙等待的方式
-        while (commandExecuteResultHashMap.size() < hosts.size()){
-            //主线程死锁等待子线程全部结束，添加一行输出空格防止死锁被优化
-            System.out.print("");
-        }
+        //超时时间设置60秒
+        countDownLatch.await(60,TimeUnit.SECONDS);
 
         return commandExecuteResultHashMap;
+    }
+
+    /**
+     * 向Map中存入结果，避免使用lock
+     *
+     * @param  commandExecuteResultHashMap 要存入的Map
+     * @param hostName 节点地址
+     * @param commandExecuteResultommandExecuteResult 结果对象
+     */
+    public synchronized void setCommandExecuteResultHashMap(HashMap<String, CommandExecuteResult> commandExecuteResultHashMap ,String hostName,CommandExecuteResult commandExecuteResultommandExecuteResult) {
+        commandExecuteResultHashMap.put(hostName,commandExecuteResultommandExecuteResult);
     }
 }
