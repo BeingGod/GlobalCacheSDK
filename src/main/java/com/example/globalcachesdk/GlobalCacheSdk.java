@@ -1,9 +1,6 @@
 package com.example.globalcachesdk;
 
-import com.example.globalcachesdk.exception.ConnectFailedException;
-import com.example.globalcachesdk.exception.SessionAlreadyExistException;
-import com.example.globalcachesdk.exception.SessionCloseFailedException;
-import com.example.globalcachesdk.exception.SessionNotExistException;
+import com.example.globalcachesdk.exception.*;
 import com.example.globalcachesdk.excutor.CommandExecuteResult;
 import com.example.globalcachesdk.pool.SshSessionPool;
 
@@ -53,9 +50,10 @@ public class GlobalCacheSdk {
      *
      * @param hosts 需要获取主机IP列表
      * @return 每个节点内存信息查询结果
+     * @throws ThreadPoolRuntimeException 运行时线程池故障抛出此异常
      * @see com.example.globalcachesdk.entity.MemInfo
      */
-    public static HashMap<String, CommandExecuteResult> getNodesMemInfo(ArrayList<String> hosts) {
+    public static HashMap<String, CommandExecuteResult> getNodesMemInfo(ArrayList<String> hosts) throws ThreadPoolRuntimeException {
         SshSessionPool sshSessionPool = SshSessionPool.getInstance();
 
         return sshSessionPool.execute(hosts, SupportedCommand.GET_MEM_INFO);
@@ -68,9 +66,10 @@ public class GlobalCacheSdk {
      *
      * @param hosts 需要获取主机IP列表
      * @return 每个节点CPU信息查询结果
+     * @throws ThreadPoolRuntimeException 运行时线程池故障抛出此异常
      * @see com.example.globalcachesdk.entity.CpuInfo
      */
-    public static HashMap<String, CommandExecuteResult> getNodesCpuInfo(ArrayList<String> hosts) {
+    public static HashMap<String, CommandExecuteResult> getNodesCpuInfo(ArrayList<String> hosts) throws ThreadPoolRuntimeException {
         SshSessionPool sshSessionPool = SshSessionPool.getInstance();
 
         return  sshSessionPool.execute(hosts, SupportedCommand.GET_CPU_INFO);

@@ -75,7 +75,7 @@ public class CommandExecutor {
      * @throws CommandExecFailedException 命令执行失败异常
      */
     public static MemInfo queryMemInfo(Session sshSession) throws CommandExecFailedException {
-        String command = "sh /root/scripts/mem_info.sh";
+        String command = "sh /home/globalcachesdk/scripts/mem_info.sh";
 
         String returnValue = exec(sshSession, command);
 

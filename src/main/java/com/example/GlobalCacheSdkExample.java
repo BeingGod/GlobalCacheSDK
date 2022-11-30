@@ -4,10 +4,7 @@ import com.example.globalcachesdk.GlobalCacheSdk;
 import com.example.globalcachesdk.StatusCode;
 import com.example.globalcachesdk.entity.MemInfo;
 import com.example.globalcachesdk.entity.CpuInfo;
-import com.example.globalcachesdk.exception.ConnectFailedException;
-import com.example.globalcachesdk.exception.SessionAlreadyExistException;
-import com.example.globalcachesdk.exception.SessionCloseFailedException;
-import com.example.globalcachesdk.exception.SessionNotExistException;
+import com.example.globalcachesdk.exception.*;
 import com.example.globalcachesdk.excutor.CommandExecuteResult;
 
 import java.util.ArrayList;
@@ -50,7 +47,13 @@ public class GlobalCacheSdkExample {
 			}
 		}
 		Map<String, MemInfo> nodesMemInfoHashMap = new HashMap<>(hosts.size());
-		for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSdk.getNodesMemInfo(hosts).entrySet()) {
+		HashMap<String, CommandExecuteResult> NodesMemInfo = new HashMap<>(hosts.size());
+		try{
+			NodesMemInfo=GlobalCacheSdk.getNodesMemInfo(hosts);
+		} catch (ThreadPoolRuntimeException e) {
+			System.out.println("运行时线程池发生故障，主线程意外死亡");
+		}
+		for (Map.Entry<String, CommandExecuteResult> entry : NodesMemInfo.entrySet()) {
 			if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
 				nodesMemInfoHashMap.put(entry.getKey(), (MemInfo) entry.getValue().getData());
 			}
@@ -59,7 +62,13 @@ public class GlobalCacheSdkExample {
 		System.out.println(nodesMemInfoHashMap);
 
 		Map<String, CpuInfo> nodesCpuInfoHashMap = new HashMap<>(hosts.size());
-		for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSdk.getNodesCpuInfo(hosts).entrySet()) {
+		HashMap<String, CommandExecuteResult> NodesCpuInfo = new HashMap<>(hosts.size());
+		try{
+			NodesCpuInfo=GlobalCacheSdk.getNodesCpuInfo(hosts);
+		} catch (ThreadPoolRuntimeException e) {
+			System.out.println("运行时线程池发生故障，主线程意外死亡");
+		}
+		for (Map.Entry<String, CommandExecuteResult> entry : NodesCpuInfo.entrySet()) {
 			if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
 				nodesCpuInfoHashMap.put(entry.getKey(), (CpuInfo) entry.getValue().getData());
 			}

@@ -155,7 +155,7 @@ public class SshSessionPool {
      * @param type 命令类型
      * @return 每个节点命令执行结果
      */
-    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, SupportedCommand type)  {
+    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, SupportedCommand type) throws ThreadPoolRuntimeException {
         // 需要执行的命令函数名
         String methodName = null;
         // 命令函数返回值
@@ -184,27 +184,36 @@ public class SshSessionPool {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-        HashMap<String, CommandExecuteResult> resultHashMap = new HashMap<>();
+        HashMap<String, CommandExecuteResult> resultHashMap = new HashMap<>(hosts.size());
         try{
             resultHashMap=executeWrapper(hosts, method, returnValue);
         }catch (InterruptedException e){
-            //TODO:创建对应错误
-            throw new RuntimeException("线程池内部错误");
+            throw new ThreadPoolRuntimeException("主线程意外死亡");
         }
 
         return resultHashMap;
     }
 
-
+    /**
+     * 利用连接池和线程池获取各节点的信息存到hashmap中，默认超时时间60秒
+     *
+     * @param hosts  需要执行命令的主机列表
+     * @param method 需要执行的方法（不带参）
+     * @return 每个结点的运行结果
+     */
+    public HashMap<String, CommandExecuteResult> executeWrapper(ArrayList<String> hosts, Method method,Object returnValue) throws InterruptedException {
+        return executeWrapper(hosts,method,60,returnValue);
+    }
 
     /**
      * 利用连接池和线程池获取各节点的信息存到hashmap中
      *
      * @param hosts  需要执行命令的主机列表
      * @param method 需要执行的方法（不带参）
+     * @param timeOutTime  任务执行超时时间，单位秒
      * @return 每个结点的运行结果
      */
-    public HashMap<String, CommandExecuteResult> executeWrapper(ArrayList<String> hosts, Method method, Object returnValue) throws InterruptedException {
+    public HashMap<String, CommandExecuteResult> executeWrapper(ArrayList<String> hosts, Method method,int timeOutTime ,Object returnValue) throws InterruptedException {
         // 初始化一个哈希表存放运行结果
         HashMap<String, CommandExecuteResult> commandExecuteResultHashMap = new HashMap<>(hosts.size());
         //设置信号量，节点数
@@ -238,7 +247,7 @@ public class SshSessionPool {
             });
         }
         //超时时间设置60秒
-        countDownLatch.await(60,TimeUnit.SECONDS);
+        countDownLatch.await(timeOutTime,TimeUnit.SECONDS);
 
         return commandExecuteResultHashMap;
     }
