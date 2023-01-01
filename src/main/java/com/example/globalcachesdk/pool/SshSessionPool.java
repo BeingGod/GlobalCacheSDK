@@ -4,7 +4,6 @@ import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.extra.ssh.JschRuntimeException;
 import com.example.globalcachesdk.entity.AbstractEntity;
-import com.example.globalcachesdk.entity.GeneralOperationResult;
 import com.example.globalcachesdk.entity.MemInfo;
 import com.example.globalcachesdk.entity.CpuInfo;
 import com.example.globalcachesdk.exception.*;
@@ -18,7 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -158,19 +156,6 @@ public class SshSessionPool {
      * @return 每个节点命令执行结果
      */
     public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, SupportedCommand type) throws ThreadPoolRuntimeException {
-        return execute(hosts,type,"");
-    }
-
-    /**
-     * 执行带参命令
-     * 根据type的值, 在hosts的所有节点执行命令
-     *
-     * @param hosts 需要执行命令的主机IP列表
-     * @param type 命令类型
-     * @param parameter 参数
-     * @return 每个节点命令执行结果
-     */
-    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, SupportedCommand type,String parameter) throws ThreadPoolRuntimeException {
         // 需要执行的命令函数名
         String methodName = null;
         // 命令函数返回值
@@ -185,18 +170,7 @@ public class SshSessionPool {
                 returnValue = new CpuInfo();
                 methodName = "queryCpuInfo";
                 break;
-            case ZOOKEEPER_CLEAN:
-                returnValue=new GeneralOperationResult();
-                methodName="zookeeperClean";
-                break;
-            case BDM_INIT:
-                returnValue=new GeneralOperationResult();
-                methodName="bdmInit";
-                break;
-            case GC_SERVICE_CONTROL:
-                returnValue=new GeneralOperationResult();
-                methodName="gcServiceControl";
-                break;
+
             default:
                 break;
         }
@@ -205,13 +179,8 @@ public class SshSessionPool {
         Method method = null;
         try {
             // 使用反射获取需要执行的函数对象
-            if(!Objects.equals(parameter, "")){
-                //参数不为空，执行有参版本
-                method = CommandExecutor.class.getMethod(methodName, Session.class, parameter.getClass());
-            }else{
-                //参数为空，执行无参版本
-                method = CommandExecutor.class.getMethod(methodName, Session.class);
-            }
+            method = CommandExecutor.class.getMethod(methodName, Session.class);
+
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -288,9 +257,9 @@ public class SshSessionPool {
      *
      * @param  commandExecuteResultHashMap 要存入的Map
      * @param hostName 节点地址
-     * @param commandExecuteResultCommandExecuteResult 结果对象
+     * @param commandExecuteResultommandExecuteResult 结果对象
      */
-    public synchronized void setCommandExecuteResultHashMap(HashMap<String, CommandExecuteResult> commandExecuteResultHashMap ,String hostName,CommandExecuteResult commandExecuteResultCommandExecuteResult) {
-        commandExecuteResultHashMap.put(hostName,commandExecuteResultCommandExecuteResult);
+    public synchronized void setCommandExecuteResultHashMap(HashMap<String, CommandExecuteResult> commandExecuteResultHashMap ,String hostName,CommandExecuteResult commandExecuteResultommandExecuteResult) {
+        commandExecuteResultHashMap.put(hostName,commandExecuteResultommandExecuteResult);
     }
 }

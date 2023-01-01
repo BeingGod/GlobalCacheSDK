@@ -47,13 +47,13 @@ public class GlobalCacheSdkExample {
 			}
 		}
 		Map<String, MemInfo> nodesMemInfoHashMap = new HashMap<>(hosts.size());
-		HashMap<String, CommandExecuteResult> nodesMemInfo = new HashMap<>(hosts.size());
+		HashMap<String, CommandExecuteResult> NodesMemInfo = new HashMap<>(hosts.size());
 		try{
-			nodesMemInfo=GlobalCacheSdk.getNodesMemInfo(hosts);
+			NodesMemInfo=GlobalCacheSdk.getNodesMemInfo(hosts);
 		} catch (ThreadPoolRuntimeException e) {
 			System.out.println("运行时线程池发生故障，主线程意外死亡");
 		}
-		for (Map.Entry<String, CommandExecuteResult> entry : nodesMemInfo.entrySet()) {
+		for (Map.Entry<String, CommandExecuteResult> entry : NodesMemInfo.entrySet()) {
 			if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
 				nodesMemInfoHashMap.put(entry.getKey(), (MemInfo) entry.getValue().getData());
 			}
@@ -62,13 +62,13 @@ public class GlobalCacheSdkExample {
 		System.out.println(nodesMemInfoHashMap);
 
 		Map<String, CpuInfo> nodesCpuInfoHashMap = new HashMap<>(hosts.size());
-		HashMap<String, CommandExecuteResult> nodesCpuInfo = new HashMap<>(hosts.size());
+		HashMap<String, CommandExecuteResult> NodesCpuInfo = new HashMap<>(hosts.size());
 		try{
-			nodesCpuInfo=GlobalCacheSdk.getNodesCpuInfo(hosts);
+			NodesCpuInfo=GlobalCacheSdk.getNodesCpuInfo(hosts);
 		} catch (ThreadPoolRuntimeException e) {
 			System.out.println("运行时线程池发生故障，主线程意外死亡");
 		}
-		for (Map.Entry<String, CommandExecuteResult> entry : nodesCpuInfo.entrySet()) {
+		for (Map.Entry<String, CommandExecuteResult> entry : NodesCpuInfo.entrySet()) {
 			if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
 				nodesCpuInfoHashMap.put(entry.getKey(), (CpuInfo) entry.getValue().getData());
 			}
