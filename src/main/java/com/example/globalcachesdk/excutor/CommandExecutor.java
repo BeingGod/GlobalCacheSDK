@@ -1,6 +1,7 @@
 package com.example.globalcachesdk.excutor;
 
 import cn.hutool.extra.ssh.JschUtil;
+import com.example.globalcachesdk.entity.GeneralOperationResult;
 import com.example.globalcachesdk.entity.MemInfo;
 import com.example.globalcachesdk.entity.CpuInfo;
 import com.example.globalcachesdk.exception.CommandExecFailedException;
@@ -27,6 +28,21 @@ public class CommandExecutor {
      * 节点CPU信息正则表达式
      */
     private static final Pattern CPU_INFO_PATTERN = Pattern.compile("\\d+\\.\\d+");
+
+    /**
+     * 节点zookeeperClean信息正则表达式
+     */
+    private static final Pattern ZOOKEEPER_CLEAN_PATTERN = Pattern.compile("\\d+\\.\\d+");
+
+    /**
+     * 节点gcServiceControl信息正则表达式
+     */
+    private static final Pattern GC_SERVICE_CONTROL_PATTERN = Pattern.compile("\\d+\\.\\d+");
+
+    /**
+     * 节点bdmInit信息正则表达式
+     */
+    private static final Pattern BDM_INIT_PATTERN = Pattern.compile("\\d+\\.\\d+");
 
     /**
      * 执行命令
@@ -123,4 +139,69 @@ public class CommandExecutor {
 
         return cpuInfo;
     }
+
+    /**
+     * 清理zookeeper信息
+     *
+     * @param sshSession ssh对话
+     * @return 命令执行结果
+     * @throws CommandExecFailedException 命令执行失败抛出此异常
+     */
+    public static GeneralOperationResult zookeeperClean(Session sshSession) throws CommandExecFailedException{
+        String command = "sh /home/GlobalCacheScripts/utils/zookeeper_clean.sh";
+
+        String returnValue = exec(sshSession, command);
+
+        Matcher matcher = ZOOKEEPER_CLEAN_PATTERN.matcher(returnValue);
+
+        GeneralOperationResult generalOperationResult=new GeneralOperationResult();
+        while (matcher.find()){
+            generalOperationResult.addReturnValue(matcher.group(0));
+        }
+        return generalOperationResult;
+    }
+
+    /**
+     * 管理gc状态
+     *
+     * @param sshSession ssh对话
+     * @param parameter 附加参数
+     * @return 命令执行结果
+     * @throws CommandExecFailedException 命令执行失败抛出此异常
+     */
+    public static GeneralOperationResult gcServiceControl(Session sshSession ,String parameter) throws CommandExecFailedException{
+        String command = "sh /home/GlobalCacheScripts/utils/gc_service_control.sh "+parameter;
+
+        String returnValue = exec(sshSession, command);
+
+        Matcher matcher = GC_SERVICE_CONTROL_PATTERN.matcher(returnValue);
+
+        GeneralOperationResult generalOperationResult=new GeneralOperationResult();
+        while (matcher.find()){
+            generalOperationResult.addReturnValue(matcher.group(0));
+        }
+        return generalOperationResult;
+    }
+
+    /**
+     * 初始化bdm
+     *
+     * @param sshSession ssh对话
+     * @return 命令执行结果
+     * @throws CommandExecFailedException 命令执行失败抛出此异常
+     */
+    public static GeneralOperationResult bdmInit(Session sshSession) throws CommandExecFailedException{
+        String command = "sh /home/GlobalCacheScripts/utils/bdm_init.sh";
+
+        String returnValue = exec(sshSession, command);
+
+        Matcher matcher = BDM_INIT_PATTERN.matcher(returnValue);
+
+        GeneralOperationResult generalOperationResult=new GeneralOperationResult();
+        while (matcher.find()){
+            generalOperationResult.addReturnValue(matcher.group(0));
+        }
+        return generalOperationResult;
+    }
+
 }
