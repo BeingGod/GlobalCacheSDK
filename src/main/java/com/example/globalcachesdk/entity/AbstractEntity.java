@@ -4,5 +4,5 @@ package com.example.globalcachesdk.entity;
  * 数据实体抽象类
  * @author 章睿彬
  */
-public class AbstractEntity {
+public abstract class AbstractEntity {
 }

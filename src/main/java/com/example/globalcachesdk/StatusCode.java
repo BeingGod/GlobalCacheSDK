@@ -19,6 +19,10 @@ public enum StatusCode {
      */
     EXEC_COMMAND_FAILED,
     /**
+     * 执行命令超时
+     */
+    EXEC_COMMAND_TIMEOUT,
+    /**
      * SSH连接超时
      */
     CONN_TIMEOUT,

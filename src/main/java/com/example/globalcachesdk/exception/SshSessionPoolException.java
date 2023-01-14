@@ -1,23 +1,25 @@
 package com.example.globalcachesdk.exception;
 
 /**
- * 命令执行失败异常
+ * SSH会话池异常
  * @author 章睿彬
  */
-public class CommandExecFailedException extends Exception {
+public class SshSessionPoolException extends Exception {
 
     /**
      * 构造函数
      * @param message 异常信息
      */
-    public CommandExecFailedException(String message) {super(message);}
+    public SshSessionPoolException(String message) {
+        super(message);
+    }
 
     /**
      * 构造函数
      * @param message 异常信息
      * @param cause 异常原因
      */
-    public CommandExecFailedException(String message, Throwable cause) {
+    public SshSessionPoolException(String message, Throwable cause) {
         super(message, cause);
     }
 }

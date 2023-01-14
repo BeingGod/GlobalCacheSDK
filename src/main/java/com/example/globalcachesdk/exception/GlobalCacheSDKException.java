@@ -1,16 +1,17 @@
 package com.example.globalcachesdk.exception;
 
+
 /**
- * SSH连接不存在异常
+ * Global Cache SDK 异常
  * @author 章睿彬
  */
-public class SessionNotExistException extends Exception {
+public class GlobalCacheSDKException extends Exception {
 
     /**
      * 构造函数
      * @param message 异常信息
      */
-    public SessionNotExistException(String message) {
+    public GlobalCacheSDKException(String message) {
         super(message);
     }
 
@@ -19,7 +20,7 @@ public class SessionNotExistException extends Exception {
      * @param message 异常信息
      * @param cause 异常原因
      */
-    public SessionNotExistException(String message, Throwable cause) {
+    public GlobalCacheSDKException(String message, Throwable cause) {
         super(message, cause);
     }
 }

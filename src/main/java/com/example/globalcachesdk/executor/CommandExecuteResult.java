@@ -1,4 +1,4 @@
-package com.example.globalcachesdk.excutor;
+package com.example.globalcachesdk.executor;
 
 import com.example.globalcachesdk.StatusCode;
 import com.example.globalcachesdk.entity.AbstractEntity;

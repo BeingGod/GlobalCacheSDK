@@ -1,15 +1,16 @@
 package com.example.globalcachesdk.exception;
 
 /**
- * SSH会话不存在异常
+ * SSH会话异常
  * @author 章睿彬
  */
-public class SessionAlreadyExistException extends Exception {
+public class SessionException extends Exception {
+
     /**
      * 构造函数
      * @param message 异常信息
      */
-    public SessionAlreadyExistException(String message) {
+    public SessionException(String message) {
         super(message);
     }
 
@@ -18,7 +19,7 @@ public class SessionAlreadyExistException extends Exception {
      * @param message 异常信息
      * @param cause 异常原因
      */
-    public SessionAlreadyExistException(String message, Throwable cause) {
+    public SessionException(String message, Throwable cause) {
         super(message, cause);
     }
 }
