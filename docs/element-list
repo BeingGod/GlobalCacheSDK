@@ -2,5 +2,6 @@ com.example
 com.example.globalcachesdk
 com.example.globalcachesdk.entity
 com.example.globalcachesdk.exception
-com.example.globalcachesdk.excutor
+com.example.globalcachesdk.executor
 com.example.globalcachesdk.pool
+com.example.globalcachesdk.sdk.info
