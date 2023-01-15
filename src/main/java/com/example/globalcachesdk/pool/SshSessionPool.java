@@ -1,5 +1,6 @@
 package com.example.globalcachesdk.pool;
 
+import cn.hutool.core.lang.Pair;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.exception.*;
@@ -22,8 +23,10 @@ import static com.example.globalcachesdk.StatusCode.*;
 public class SshSessionPool {
     /**
      * 当前连接的节点信息
+     * 由于存在同一节点不同权限用户，需要使用host和user作为键
+     * host, user : session
      */
-    private HashMap<String, Session> hostSessionHashMap = null;
+    private HashMap<Pair<String, String>, Session> hostSessionHashMap = null;
 
     /**
      * 定长线程池
@@ -67,12 +70,12 @@ public class SshSessionPool {
      * @throws SessionException 会话已存在或连接已存在抛出此异常
      */
     public void createSession(String host, String user, String password, int port) throws SessionException {
-        Session session =  hostSessionHashMap.get(host);
+        Session session =  hostSessionHashMap.get(Pair.of(host, user));
         if (session == null) {
             // 当前会话不存在
             try {
                 Session newSession = JschUtil.getSession(host,port,user,password);
-                hostSessionHashMap.put(host, newSession);
+                hostSessionHashMap.put(Pair.of(host, user), newSession);
             } catch (RuntimeException e) {
                 throw new SessionException("连接失败", e);
             }
@@ -87,13 +90,13 @@ public class SshSessionPool {
      * @param host 主机IP
      * @throws SessionException 会话不存在/会话关闭失败抛出此异常
      */
-    public void releaseSession(String host) throws SessionException  {
-        Session session =  hostSessionHashMap.get(host);
+    public void releaseSession(String host, String user) throws SessionException  {
+        Session session =  hostSessionHashMap.get(Pair.of(host, user));
         if (session != null) {
             try {
                 JschUtil.close(session);
                 // 当数据量大，只使用get时采用破坏遍历结构的方式换取最高的执行效率
-                hostSessionHashMap.remove(host);
+                hostSessionHashMap.remove(Pair.of(host, user));
             } catch (RuntimeException e) {
                 throw new SessionException("链接关闭失败", e);
             }
@@ -106,11 +109,12 @@ public class SshSessionPool {
      * 根据host获取session给函数调用使用
      *
      * @param host 需要获取连接session的主机IP
+     * @param user 用户名称
      * @return JSCH会话对象
      * @throws SessionException 会话不存在抛出此异常
      */
-    private Session getSession(String host) throws SessionException {
-        Session session =  hostSessionHashMap.get(host);
+    private Session getSession(String host, String user) throws SessionException {
+        Session session =  hostSessionHashMap.get(Pair.of(host, user));
         if (session != null){
             return session;
         } else {
@@ -124,12 +128,13 @@ public class SshSessionPool {
      * 注意: hosts和args的个数需要一致
      *
      * @param hosts 需要执行命令的节点IP列表
+     * @param users 需要执行命令的用户名列表
      * @param executor 需要执行的方法
      * @param args 命令参数
      * @return 每个节点命令执行结果
      * @throws SshSessionPoolException 线程池发生内部问题抛出此异常
      */
-    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, AbstractCommandExecutor executor, ArrayList<String> args) throws SshSessionPoolException {
+    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor, ArrayList<String> args) throws SshSessionPoolException {
         if (0 == hosts.size()) {
             throw new SshSessionPoolException("节点IP列表为空");
         }
@@ -139,7 +144,7 @@ public class SshSessionPool {
         }
 
         try {
-            return executeInternal(hosts, executor, args);
+            return executeInternal(hosts, users, executor, args);
         } catch (InterruptedException e) {
             throw new SshSessionPoolException("线程执行中断", e);
         }
@@ -151,17 +156,22 @@ public class SshSessionPool {
      * 注意: hosts和args的个数需要一致
      *
      * @param hosts 需要执行命令的节点IP列表
+     * @param users 需要执行命令的用户名列表
      * @param executor 需要执行的方法
      * @return 每个节点命令执行结果
      * @throws SshSessionPoolException 线程池发生内部问题抛出此异常
      */
-    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, AbstractCommandExecutor executor) throws SshSessionPoolException {
+    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor) throws SshSessionPoolException {
         if (0 == hosts.size()) {
             throw new SshSessionPoolException("节点IP列表为空");
         }
 
+        if (users.size() != hosts.size()) {
+            throw new SshSessionPoolException("节点IP数量与用户数量不一致");
+        }
+
         try {
-            return executeInternal(hosts, executor, null);
+            return executeInternal(hosts, users, executor, null);
         } catch (InterruptedException e) {
             throw new SshSessionPoolException("线程执行中断", e);
         }
@@ -172,12 +182,13 @@ public class SshSessionPool {
      * 利用连接池和线程池获取各节点的信息存到hashmap中
      *
      * @param hosts  需要执行命令的主机列表
+     * @param users 需要执行命令的用户名列表
      * @param executor 需要执行的方法
      * @param args 命令参数
      * @return 每个结点的运行结果
      * @throws InterruptedException 线程意外中断抛出此异常
      */
-    public HashMap<String, CommandExecuteResult> executeInternal(ArrayList<String> hosts, AbstractCommandExecutor executor, ArrayList<String> args) throws InterruptedException {
+    public HashMap<String, CommandExecuteResult> executeInternal(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor, ArrayList<String> args) throws InterruptedException {
         // 初始化一个哈希表存放运行结果
         HashMap<String, CommandExecuteResult> commandExecuteResultHashMap = new HashMap<>(hosts.size());
         //设置信号量，节点数
@@ -189,7 +200,7 @@ public class SshSessionPool {
                 CommandExecuteResult commandExecuteResult = new CommandExecuteResult();
                 try {
                     // 每个线程一个Session
-                    Session session = getSession(hosts.get(finalI));
+                    Session session = getSession(hosts.get(finalI), users.get(finalI));
                     // 执行命令
                     AbstractEntity abstractEntity = executor.exec(session, executor.getDes().isWithArgs() ? args.get(finalI) : "");
                     commandExecuteResult.setData(abstractEntity);

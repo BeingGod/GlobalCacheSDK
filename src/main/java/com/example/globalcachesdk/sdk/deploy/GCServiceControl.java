@@ -1,5 +1,7 @@
 package com.example.globalcachesdk.sdk.deploy;
 
+import com.example.globalcachesdk.ExecuteNode;
+import com.example.globalcachesdk.ExecutePrivilege;
 import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.entity.ErrorCodeEntity;
 import com.example.globalcachesdk.exception.CommandExecException;
@@ -47,8 +49,8 @@ public class GCServiceControl extends AbstractCommandExecutor {
         // @TODO: 支持从XML中反转生成
         CommandExecutorDescription des = new CommandExecutorDescription();
         des.setClassPath("com.example.globalcachesdk.sdk.deploy.GCServiceControl");
-        des.setExecuteNode(CommandExecutorDescription.ExecuteNode.ALL_NODES);
-        des.setExecutePrivilege(CommandExecutorDescription.ExecutePrivilege.ROOT);
+        des.setExecuteNode(ExecuteNode.ALL_CEPH_NOES);
+        des.setExecutePrivilege(ExecutePrivilege.ROOT);
         des.setWithArgs(true);
         des.setTimeout(60);
 

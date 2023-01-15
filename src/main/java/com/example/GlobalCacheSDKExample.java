@@ -53,7 +53,7 @@ public class GlobalCacheSDKExample {
 
 		for (String host : hosts) {
 			try {
-				GlobalCacheSDK.releaseSession(host);
+				GlobalCacheSDK.releaseSession(host, "globalcachesdk");
 				System.out.println(host + " SSH会话释放成功");
 			} catch (GlobalCacheSDKException e) {
 				System.out.println(host + " SSH会话释放失败");
@@ -108,7 +108,7 @@ public class GlobalCacheSDKExample {
 
 		for (String host : hosts) {
 			try {
-				GlobalCacheSDK.releaseSession(host);
+				GlobalCacheSDK.releaseSession(host, "globalcachesdk");
 				System.out.println(host + " SSH会话释放成功");
 			} catch (GlobalCacheSDKException e) {
 				System.out.println(host + " SSH会话释放失败");
@@ -163,7 +163,7 @@ public class GlobalCacheSDKExample {
 
 		for (String host : hosts) {
 			try {
-				GlobalCacheSDK.releaseSession(host);
+				GlobalCacheSDK.releaseSession(host, "globalcachesdk");
 				System.out.println(host + " SSH会话释放成功");
 			} catch (GlobalCacheSDKException e) {
 				System.out.println(host + " SSH会话释放失败");
@@ -220,7 +220,7 @@ public class GlobalCacheSDKExample {
 
 		for (String host : hosts) {
 			try {
-				GlobalCacheSDK.releaseSession(host);
+				GlobalCacheSDK.releaseSession(host, "root");
 				System.out.println(host + " SSH会话释放成功");
 			} catch (GlobalCacheSDKException e) {
 				System.out.println(host + " SSH会话释放失败");
@@ -246,10 +246,10 @@ public class GlobalCacheSDKExample {
 	}
 
 	public static void main(String[] args) {
-//		sessionDemo();
-//		queryCpuInfoDemo();
-//		queryMemInfoDemo();
-//		setCommandTimeoutDemo();
+		sessionDemo();
+		queryCpuInfoDemo();
+		queryMemInfoDemo();
+		setCommandTimeoutDemo();
 		gcServiceControlDemo();
 	}
 }

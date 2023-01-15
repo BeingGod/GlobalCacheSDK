@@ -1,7 +1,5 @@
 package com.example.globalcachesdk;
 
-import cn.hutool.Hutool;
-import cn.hutool.extra.ssh.JschUtil;
 import com.example.globalcachesdk.exception.GlobalCacheSDKException;
 import com.example.globalcachesdk.exception.SessionException;
 import com.example.globalcachesdk.exception.SshSessionPoolException;
@@ -12,9 +10,9 @@ import com.example.globalcachesdk.pool.SshSessionPool;
 import com.example.globalcachesdk.sdk.deploy.GCServiceControl;
 import com.example.globalcachesdk.sdk.info.QueryCpuInfo;
 import com.example.globalcachesdk.sdk.info.QueryMemInfo;
+import com.example.globalcachesdk.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -36,9 +34,9 @@ public class GlobalCacheSDK {
      * 在调用功能接口之前，需要调用该接口创建SSH会话
      * 创建SSH会话需要建立SSH连接，该过程较慢，建议在初始化的功能中一次性建立所有连接
      *
-     * @param host 需要创建会话的主机IP
+     * @param host     需要创建会话的主机IP
      * @param password 需要创建会话的主机密码
-     * @param port 需要创建会话的主机端口
+     * @param port     需要创建会话的主机端口
      * @throws GlobalCacheSDKException 会话创建失败抛出此异常
      */
     public static void createSession(String host, String user, String password, int port) throws GlobalCacheSDKException {
@@ -54,11 +52,12 @@ public class GlobalCacheSDK {
      * 当已不需要一个会话的时候，可以调用该接口移除SSH会话
      *
      * @param host 需要移除会话的主机IP
+     * @param user 需要移除会话的用户名
      * @throws GlobalCacheSDKException 会话关闭失败/会话不存在抛出此异常
      */
-    public static void releaseSession(String host) throws GlobalCacheSDKException {
+    public static void releaseSession(String host, String user) throws GlobalCacheSDKException {
         try {
-            getInstance().sshSessionPool.releaseSession(host);
+            getInstance().sshSessionPool.releaseSession(host, user);
         } catch (SessionException e) {
             throw new GlobalCacheSDKException("会话异常", e);
         }
@@ -79,7 +78,12 @@ public class GlobalCacheSDK {
     public static HashMap<String, CommandExecuteResult> queryMemInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_MEM_INFO);
         try {
-            return getInstance().sshSessionPool.execute(hosts, executor);
+            ArrayList<String> users = new ArrayList<>(hosts.size());
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            for (String host : hosts) {
+                users.add(user);
+            }
+            return getInstance().sshSessionPool.execute(hosts, users, executor);
         } catch (SshSessionPoolException e) {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
         }
@@ -98,7 +102,12 @@ public class GlobalCacheSDK {
     public static HashMap<String, CommandExecuteResult> queryCpuInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CPU_INFO);
         try {
-            return getInstance().sshSessionPool.execute(hosts, executor);
+            ArrayList<String> users = new ArrayList<>(hosts.size());
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            for (String host : hosts) {
+                users.add(user);
+            }
+            return getInstance().sshSessionPool.execute(hosts, users, executor);
         } catch (SshSessionPoolException e) {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
         }
@@ -131,10 +140,13 @@ public class GlobalCacheSDK {
                 AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.GC_SERVICE_CONTROL);
                 try {
                     ArrayList<String> args = new ArrayList<>(hosts.size());
+                    ArrayList<String> users = new ArrayList<>(hosts.size());
+                    String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
                     for (String host : hosts) {
                         args.add(op);
+                        users.add(user);
                     }
-                    return getInstance().sshSessionPool.execute(hosts, executor, args);
+                    return getInstance().sshSessionPool.execute(hosts, users, executor, args);
                 } catch (SshSessionPoolException e) {
                     throw new GlobalCacheSDKException("SSH会话池异常", e);
                 }
@@ -180,6 +192,40 @@ public class GlobalCacheSDK {
         }
 
         commandExecutorFactory.getCommandExecutor(supportedCommand).getDes().setTimeout(timeout);
+    }
+
+    /**
+     * 获取命令执行接口类型
+     * 可以使用该接口确定调用该接口需要传入哪些hosts
+     *
+     * @param supportedCommand 命令枚举
+     * @return 命令需要执行的节点枚举
+     * @throws GlobalCacheSDKException 当命令未注册时抛出此异常
+     */
+    public static ExecuteNode getCommandExecuteNode(SupportedCommand supportedCommand) throws GlobalCacheSDKException {
+        CommandExecutorFactory commandExecutorFactory = getInstance().commandExecutorFactory;
+        if (null == commandExecutorFactory.getCommandExecutor(supportedCommand)) {
+            throw new GlobalCacheSDKException("命令未注册");
+        }
+
+        return commandExecutorFactory.getCommandExecutor(supportedCommand).getDes().getExecuteNode();
+    }
+
+    /**
+     * 获取命令执行接口类型
+     * 可以使用该接口确定调用该接口需要session
+     *
+     * @param supportedCommand 命令枚举
+     * @return 命令需要的权限枚举
+     * @throws GlobalCacheSDKException 当命令未注册时抛出此异常
+     */
+    public static ExecuteNode getCommandPrivilege(SupportedCommand supportedCommand) throws GlobalCacheSDKException {
+        CommandExecutorFactory commandExecutorFactory = getInstance().commandExecutorFactory;
+        if (null == commandExecutorFactory.getCommandExecutor(supportedCommand)) {
+            throw new GlobalCacheSDKException("命令未注册");
+        }
+
+        return commandExecutorFactory.getCommandExecutor(supportedCommand).getDes().getExecuteNode();
     }
 
     /* ===============================================================私有方法===============================================================*/

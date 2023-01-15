@@ -1,5 +1,7 @@
 package com.example.globalcachesdk.sdk.info;
 
+import com.example.globalcachesdk.ExecuteNode;
+import com.example.globalcachesdk.ExecutePrivilege;
 import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.entity.MemInfo;
 import com.example.globalcachesdk.exception.CommandExecException;
@@ -58,8 +60,8 @@ public class QueryMemInfo extends AbstractCommandExecutor {
         CommandExecutorDescription des = new CommandExecutorDescription();
         // 需要类的完整路径
         des.setClassPath("com.example.globalcachesdk.sdk.info.QueryMemInfo");
-        des.setExecuteNode(CommandExecutorDescription.ExecuteNode.ALL_NODES);
-        des.setExecutePrivilege(CommandExecutorDescription.ExecutePrivilege.USER);
+        des.setExecuteNode(ExecuteNode.ALL_NODES);
+        des.setExecutePrivilege(ExecutePrivilege.USER);
         des.setWithArgs(false);
         des.setTimeout(2);
 

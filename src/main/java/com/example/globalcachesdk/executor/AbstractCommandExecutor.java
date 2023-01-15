@@ -1,6 +1,7 @@
 package com.example.globalcachesdk.executor;
 
 import cn.hutool.extra.ssh.JschUtil;
+import com.example.globalcachesdk.ExecutePrivilege;
 import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.exception.CommandExecException;
 import com.jcraft.jsch.Session;
@@ -54,7 +55,7 @@ public abstract class AbstractCommandExecutor {
             throw new CommandExecException("参数为空");
         }
 
-        if (des.getExecutePrivilege() == CommandExecutorDescription.ExecutePrivilege.ROOT) {
+        if (des.getExecutePrivilege() == ExecutePrivilege.ROOT) {
             // 校验权限
             final String root = "root";
             if (!root.equals(whoami(sshSession))) {
@@ -62,7 +63,7 @@ public abstract class AbstractCommandExecutor {
             }
         }
 
-        if (des.getExecutePrivilege() == CommandExecutorDescription.ExecutePrivilege.GLOBAL_CACHE_OP) {
+        if (des.getExecutePrivilege() == ExecutePrivilege.GLOBAL_CACHE_OP) {
             // 校验权限
             final String globalcacheop = "globalcacheop";
             if (!globalcacheop.equals(whoami(sshSession))) {

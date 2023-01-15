@@ -1,5 +1,7 @@
 package com.example.globalcachesdk.sdk.info;
 
+import com.example.globalcachesdk.ExecuteNode;
+import com.example.globalcachesdk.ExecutePrivilege;
 import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.entity.CpuInfo;
 import com.example.globalcachesdk.exception.CommandExecException;
@@ -63,8 +65,8 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
         // @TODO: 支持从XML中反转生成
         CommandExecutorDescription des = new CommandExecutorDescription();
         des.setClassPath("com.example.globalcachesdk.sdk.info.QueryCpuInfo");
-        des.setExecuteNode(CommandExecutorDescription.ExecuteNode.ALL_NODES);
-        des.setExecutePrivilege(CommandExecutorDescription.ExecutePrivilege.USER);
+        des.setExecuteNode(ExecuteNode.ALL_NODES);
+        des.setExecutePrivilege(ExecutePrivilege.USER);
         des.setWithArgs(false);
         des.setTimeout(2);
 
