@@ -115,7 +115,7 @@ public abstract class AbstractCommandExecutor {
                 System.err.print(errMsg);
             }
         };
-        String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset(), newErrStream);
+        String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset(), newErrStream).trim();
         if (flag[0] == 0) {
             throw new CommandExecException("命令执行失败");
         } else {

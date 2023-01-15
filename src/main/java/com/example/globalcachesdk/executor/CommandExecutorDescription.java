@@ -54,6 +54,12 @@ public class CommandExecutorDescription {
     }
 
     /**
+     * 是否为异步调用接口（默认同步）
+     * for future
+     */
+    private boolean isAsync = false;
+
+    /**
      * 是否携带参数
      */
     private boolean withArgs;
@@ -78,6 +84,14 @@ public class CommandExecutorDescription {
      * 单位：秒
      */
     private int timeout;
+
+    public boolean isAsync() {
+        return isAsync;
+    }
+
+    public void setAsync(boolean async) {
+        isAsync = async;
+    }
 
     public boolean isWithArgs() {
         return withArgs;
@@ -123,6 +137,7 @@ public class CommandExecutorDescription {
     public String toString() {
         return "====================\n" +
                 "命令名称: " + classPath + "\n" +
+                "是否异步: " + (isAsync ? "Yes" : "No") + "\n" +
                 "携带参数: " + (withArgs ? "Yes" : "No") + "\n" +
                 "执行节点: " + executeNode.toString() + "\n" +
                 "需求权限: " + executePrivilege.toString() + "\n" +

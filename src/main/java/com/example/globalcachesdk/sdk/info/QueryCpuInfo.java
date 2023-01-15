@@ -37,7 +37,7 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
      */
     @Override
     public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "sh /home/GlobalCacheScripts/SDK/cpu_usage.sh " + args;
+        String command = "bash /home/GlobalCacheScripts/SDK/cpu_usage.sh " + args;
 
         String returnValue = execInternal(sshSession, command, args);
 
@@ -60,6 +60,7 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
     }
 
      public static CommandExecutorDescription defaultDes() {
+        // @TODO: 支持从XML中反转生成
         CommandExecutorDescription des = new CommandExecutorDescription();
         des.setClassPath("com.example.globalcachesdk.sdk.info.QueryCpuInfo");
         des.setExecuteNode(CommandExecutorDescription.ExecuteNode.ALL_NODES);

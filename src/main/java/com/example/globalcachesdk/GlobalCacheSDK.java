@@ -1,5 +1,7 @@
 package com.example.globalcachesdk;
 
+import cn.hutool.Hutool;
+import cn.hutool.extra.ssh.JschUtil;
 import com.example.globalcachesdk.exception.GlobalCacheSDKException;
 import com.example.globalcachesdk.exception.SessionException;
 import com.example.globalcachesdk.exception.SshSessionPoolException;
@@ -7,10 +9,12 @@ import com.example.globalcachesdk.executor.AbstractCommandExecutor;
 import com.example.globalcachesdk.executor.CommandExecuteResult;
 import com.example.globalcachesdk.executor.CommandExecutorFactory;
 import com.example.globalcachesdk.pool.SshSessionPool;
+import com.example.globalcachesdk.sdk.deploy.GCServiceControl;
 import com.example.globalcachesdk.sdk.info.QueryCpuInfo;
 import com.example.globalcachesdk.sdk.info.QueryMemInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -73,7 +77,7 @@ public class GlobalCacheSDK {
      * @see com.example.globalcachesdk.entity.MemInfo
      */
     public static HashMap<String, CommandExecuteResult> queryMemInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.GET_MEM_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_MEM_INFO);
         try {
             return getInstance().sshSessionPool.execute(hosts, executor);
         } catch (SshSessionPoolException e) {
@@ -92,15 +96,53 @@ public class GlobalCacheSDK {
      * @see com.example.globalcachesdk.entity.CpuInfo
      */
     public static HashMap<String, CommandExecuteResult> queryCpuInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
-
-
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.GET_CPU_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CPU_INFO);
         try {
             return getInstance().sshSessionPool.execute(hosts, executor);
         } catch (SshSessionPoolException e) {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
         }
     }
+
+    /* ===============================================================自动化部署接口===============================================================*/
+
+    /**
+     * 控制GlobalCache服务
+     * 注意: 该命令需要ROOT权限才能执行
+     *
+     * @param hosts 主机IP列表
+     * @param op 操作，说明如下：
+     *           start: 第一次启动GlobalCache服务
+     *           restart: 重启GlobalCache服务（也可用作开启GlobalCache服务）
+     *           stop: 停止GlobalCache服务
+     *           clean: 清理zookeeper
+     *           init: bdm初始化
+     * @return 每个节点命令执行错误码, 错误码不为0表示执行失败
+     * @throws GlobalCacheSDKException op不支持/执行失败抛出此异常
+     * @see com.example.globalcachesdk.entity.ErrorCodeEntity
+     */
+    public static HashMap<String, CommandExecuteResult> gcServiceControl(ArrayList<String> hosts, String op) throws GlobalCacheSDKException {
+        switch (op) {
+            case "start":
+            case "restart":
+            case "stop":
+            case "clean":
+            case "init":
+                AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.GC_SERVICE_CONTROL);
+                try {
+                    ArrayList<String> args = new ArrayList<>(hosts.size());
+                    for (String host : hosts) {
+                        args.add(op);
+                    }
+                    return getInstance().sshSessionPool.execute(hosts, executor, args);
+                } catch (SshSessionPoolException e) {
+                    throw new GlobalCacheSDKException("SSH会话池异常", e);
+                }
+            default:
+                throw new GlobalCacheSDKException("不支持的操作");
+        }
+    }
+
 
     /* ===============================================================辅助配置接口===============================================================*/
 
@@ -154,13 +196,18 @@ public class GlobalCacheSDK {
         sshSessionPool = new SshSessionPool();
         commandExecutorFactory = new CommandExecutorFactory();
 
-        if (!commandExecutorFactory.registryCommandExecutor(SupportedCommand.GET_CPU_INFO, QueryCpuInfo.defaultDes())) {
-            throw new GlobalCacheSDKException("GET_CPU_INFO注册失败");
+        // 注册所有的命令类
+        // @TODO: 支持采用注解进行注册
+        if (!commandExecutorFactory.registryCommandExecutor(SupportedCommand.QUERY_CPU_INFO, QueryCpuInfo.defaultDes())) {
+            throw new GlobalCacheSDKException("QueryCpuINfo注册失败");
         }
 
-        if (!commandExecutorFactory.registryCommandExecutor(SupportedCommand.GET_MEM_INFO,QueryMemInfo.defaultDes())) {
-            throw new GlobalCacheSDKException("GET_MEM_INFO注册失败");
+        if (!commandExecutorFactory.registryCommandExecutor(SupportedCommand.QUERY_MEM_INFO, QueryMemInfo.defaultDes())) {
+            throw new GlobalCacheSDKException("QueryMemInfo注册失败");
         }
 
+        if (!commandExecutorFactory.registryCommandExecutor(SupportedCommand.GC_SERVICE_CONTROL, GCServiceControl.defaultDes())) {
+            throw new GlobalCacheSDKException("GCServiceConrtol注册失败");
+        }
     }
 }

@@ -34,7 +34,7 @@ public class QueryMemInfo extends AbstractCommandExecutor {
      */
     @Override
     public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "sh /home/GlobalCacheScripts/SDK/mem_usage.sh " + args;
+        String command = "bash /home/GlobalCacheScripts/SDK/mem_usage.sh " + args;
 
         String returnValue = execInternal(sshSession, command, args);
 
@@ -54,6 +54,7 @@ public class QueryMemInfo extends AbstractCommandExecutor {
     }
 
     public static CommandExecutorDescription defaultDes() {
+        // @TODO: 支持从XML中反转生成
         CommandExecutorDescription des = new CommandExecutorDescription();
         // 需要类的完整路径
         des.setClassPath("com.example.globalcachesdk.sdk.info.QueryMemInfo");

@@ -3,6 +3,7 @@ package com.example;
 import com.example.globalcachesdk.GlobalCacheSDK;
 import com.example.globalcachesdk.StatusCode;
 import com.example.globalcachesdk.SupportedCommand;
+import com.example.globalcachesdk.entity.ErrorCodeEntity;
 import com.example.globalcachesdk.entity.MemInfo;
 import com.example.globalcachesdk.entity.CpuInfo;
 import com.example.globalcachesdk.exception.GlobalCacheSDKException;
@@ -100,7 +101,7 @@ public class GlobalCacheSDKExample {
 				}
 			}
 		} catch (GlobalCacheSDKException e) {
-			System.out.println("请求CPU信息失败");
+			System.out.println("接口调用失败");
 			e.printStackTrace();
 		}
 		System.out.println(nodesCpuInfoHashMap);
@@ -155,10 +156,67 @@ public class GlobalCacheSDKExample {
 				}
 			}
 		} catch (GlobalCacheSDKException e) {
-			System.out.println("请求内存信息失败");
+			System.out.println("接口调用失败");
 			e.printStackTrace();
 		}
 		System.out.println(nodesMemInfoHashMap);
+
+		for (String host : hosts) {
+			try {
+				GlobalCacheSDK.releaseSession(host);
+				System.out.println(host + " SSH会话释放成功");
+			} catch (GlobalCacheSDKException e) {
+				System.out.println(host + " SSH会话释放失败");
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void gcServiceControlDemo() {
+		System.out.println("==============gcServiceControl Demo==============");
+
+		ArrayList<String> hosts = new ArrayList<>();
+		hosts.add("175.34.8.36");
+		hosts.add("175.34.8.37");
+		hosts.add("175.34.8.38");
+
+		ArrayList<String> users = new ArrayList<>();
+		users.add("root");
+		users.add("root");
+		users.add("root");
+
+		ArrayList<String> passwords = new ArrayList<>();
+		passwords.add("75=bYmdmMu");
+		passwords.add("75=bYmdmMu");
+		passwords.add("75=bYmdmMu");
+
+		for (int i = 0;i < hosts.size(); i++) {
+			try {
+				GlobalCacheSDK.createSession(hosts.get(i), users.get(i), passwords.get(i), 22);
+				System.out.println(hosts.get(i) + " SSH会话创建成功");
+			} catch (GlobalCacheSDKException e) {
+				System.out.println(hosts.get(i) + " SSH会话创建失败");
+				e.printStackTrace();
+			}
+		}
+
+		try {
+			for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.gcServiceControl(hosts, "restart").entrySet()) {
+				if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
+					ErrorCodeEntity errorCodeEntity = (ErrorCodeEntity) entry.getValue().getData();
+					if (0 == errorCodeEntity.getErrorCode()) {
+						System.out.println("节点:" + entry + " 重启GC成功");
+					} else {
+						System.out.println("节点:" + entry + " 重启GC失败");
+					}
+				} else {
+					System.out.println("接口调用失败");
+				}
+			}
+		} catch (GlobalCacheSDKException e) {
+			System.out.println("接口调用失败");
+			e.printStackTrace();
+		}
 
 		for (String host : hosts) {
 			try {
@@ -177,10 +235,10 @@ public class GlobalCacheSDKExample {
 		int timeout = 3;
 		try {
 			System.out.println("修改前配置...");
-			GlobalCacheSDK.printCommandConf(SupportedCommand.GET_CPU_INFO);
-			GlobalCacheSDK.setCommandTimeout(SupportedCommand.GET_CPU_INFO, timeout);
+			GlobalCacheSDK.printCommandConf(SupportedCommand.QUERY_CPU_INFO);
+			GlobalCacheSDK.setCommandTimeout(SupportedCommand.QUERY_CPU_INFO, timeout);
 			System.out.println("修改后配置...");
-			GlobalCacheSDK.printCommandConf(SupportedCommand.GET_CPU_INFO);
+			GlobalCacheSDK.printCommandConf(SupportedCommand.QUERY_CPU_INFO);
 		} catch (GlobalCacheSDKException e) {
 			System.out.println("命令未注册");
 			e.printStackTrace();
@@ -188,9 +246,10 @@ public class GlobalCacheSDKExample {
 	}
 
 	public static void main(String[] args) {
-		sessionDemo();
-		queryCpuInfoDemo();
-		queryMemInfoDemo();
-		setCommandTimeoutDemo();
+//		sessionDemo();
+//		queryCpuInfoDemo();
+//		queryMemInfoDemo();
+//		setCommandTimeoutDemo();
+		gcServiceControlDemo();
 	}
 }
