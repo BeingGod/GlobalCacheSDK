@@ -5,6 +5,7 @@ import com.example.globalcachesdk.exception.SessionException;
 import com.example.globalcachesdk.exception.SshSessionPoolException;
 import com.example.globalcachesdk.executor.AbstractCommandExecutor;
 import com.example.globalcachesdk.executor.CommandExecuteResult;
+import com.example.globalcachesdk.executor.CommandExecutorDescription;
 import com.example.globalcachesdk.executor.CommandExecutorFactory;
 import com.example.globalcachesdk.pool.SshSessionPool;
 import com.example.globalcachesdk.sdk.deploy.GCServiceControl;
@@ -162,15 +163,16 @@ public class GlobalCacheSDK {
      * 打印当前命令的配置信息
      *
      * @param supportedCommand 命令枚举
+     * @return 命令参数配置信息
      * @throws GlobalCacheSDKException 当命令未注册时抛出此异常
      */
-    public static void printCommandConf(SupportedCommand supportedCommand) throws GlobalCacheSDKException {
+    public static CommandExecutorDescription getCommandConf(SupportedCommand supportedCommand) throws GlobalCacheSDKException {
         CommandExecutorFactory commandExecutorFactory = getInstance().commandExecutorFactory;
         if (null == commandExecutorFactory.getCommandExecutor(supportedCommand)) {
             throw new GlobalCacheSDKException("命令未注册");
         }
 
-        System.out.println(commandExecutorFactory.getCommandExecutor(supportedCommand).getDes().toString());
+        return commandExecutorFactory.getCommandExecutor(supportedCommand).getDes();
     }
 
     /**
@@ -203,23 +205,6 @@ public class GlobalCacheSDK {
      * @throws GlobalCacheSDKException 当命令未注册时抛出此异常
      */
     public static ExecuteNode getCommandExecuteNode(SupportedCommand supportedCommand) throws GlobalCacheSDKException {
-        CommandExecutorFactory commandExecutorFactory = getInstance().commandExecutorFactory;
-        if (null == commandExecutorFactory.getCommandExecutor(supportedCommand)) {
-            throw new GlobalCacheSDKException("命令未注册");
-        }
-
-        return commandExecutorFactory.getCommandExecutor(supportedCommand).getDes().getExecuteNode();
-    }
-
-    /**
-     * 获取命令执行接口类型
-     * 可以使用该接口确定调用该接口需要session
-     *
-     * @param supportedCommand 命令枚举
-     * @return 命令需要的权限枚举
-     * @throws GlobalCacheSDKException 当命令未注册时抛出此异常
-     */
-    public static ExecuteNode getCommandPrivilege(SupportedCommand supportedCommand) throws GlobalCacheSDKException {
         CommandExecutorFactory commandExecutorFactory = getInstance().commandExecutorFactory;
         if (null == commandExecutorFactory.getCommandExecutor(supportedCommand)) {
             throw new GlobalCacheSDKException("命令未注册");

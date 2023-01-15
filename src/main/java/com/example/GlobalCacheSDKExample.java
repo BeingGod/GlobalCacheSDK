@@ -235,10 +235,10 @@ public class GlobalCacheSDKExample {
 		int timeout = 3;
 		try {
 			System.out.println("修改前配置...");
-			GlobalCacheSDK.printCommandConf(SupportedCommand.QUERY_CPU_INFO);
+			System.out.println(GlobalCacheSDK.getCommandConf(SupportedCommand.QUERY_CPU_INFO));
 			GlobalCacheSDK.setCommandTimeout(SupportedCommand.QUERY_CPU_INFO, timeout);
 			System.out.println("修改后配置...");
-			GlobalCacheSDK.printCommandConf(SupportedCommand.QUERY_CPU_INFO);
+			System.out.println(GlobalCacheSDK.getCommandConf(SupportedCommand.QUERY_CPU_INFO));
 		} catch (GlobalCacheSDKException e) {
 			System.out.println("命令未注册");
 			e.printStackTrace();
