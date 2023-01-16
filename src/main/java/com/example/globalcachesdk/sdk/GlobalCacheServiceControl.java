@@ -1,4 +1,4 @@
-package com.example.globalcachesdk.sdk.deploy;
+package com.example.globalcachesdk.sdk;
 
 import com.example.globalcachesdk.ExecuteNode;
 import com.example.globalcachesdk.ExecutePrivilege;
@@ -16,14 +16,14 @@ import java.util.regex.Pattern;
  * Global Cache 服务控制
  * @author 章睿彬
  */
-public class GCServiceControl extends AbstractCommandExecutor {
+public class GlobalCacheServiceControl extends AbstractCommandExecutor {
 
     /**
      * 节点gcServiceControl信息正则表达式
      */
     private static final Pattern GC_SERVICE_CONTROL_PATTERN = Pattern.compile("\\d+");
 
-    public GCServiceControl() {
+    public GlobalCacheServiceControl() {
         super();
         des = defaultDes();
     }
@@ -48,7 +48,6 @@ public class GCServiceControl extends AbstractCommandExecutor {
     public static CommandExecutorDescription defaultDes() {
         // @TODO: 支持从XML中反转生成
         CommandExecutorDescription des = new CommandExecutorDescription();
-        des.setClassPath("com.example.globalcachesdk.sdk.deploy.GCServiceControl");
         des.setExecuteNode(ExecuteNode.ALL_CEPH_NOES);
         des.setExecutePrivilege(ExecutePrivilege.ROOT);
         des.setWithArgs(true);

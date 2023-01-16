@@ -27,4 +27,31 @@ public class Utils {
                 throw new GlobalCacheSDKException("未知的用户权限");
         }
     }
+
+    /**
+     * 将以下划线命名的类枚举类型名称反转为完整类路径
+     *
+     * @param prefix 类前缀
+     * @param enumName 枚举名称
+     * @return 完整类路径
+     */
+    public static String enumFullClassPath(String prefix, String enumName) {
+        StringBuilder stringBuilder = new StringBuilder(prefix);
+        boolean isUpper = true;
+        for (int i = 0; i < enumName.length(); ++i) {
+            Character c = enumName.charAt(i);
+            if (isUpper) {
+                stringBuilder.append(c);
+                isUpper = false;
+            } else {
+                if (c == '_') {
+                    isUpper = true;
+                } else {
+                    stringBuilder.append(Character.toLowerCase(c));
+                }
+            }
+        }
+
+        return stringBuilder.toString();
+    }
 }

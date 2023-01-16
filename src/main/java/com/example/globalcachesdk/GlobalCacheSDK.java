@@ -1,5 +1,6 @@
 package com.example.globalcachesdk;
 
+import com.example.globalcachesdk.exception.CommandExecutorFactoryException;
 import com.example.globalcachesdk.exception.GlobalCacheSDKException;
 import com.example.globalcachesdk.exception.SessionException;
 import com.example.globalcachesdk.exception.SshSessionPoolException;
@@ -8,9 +9,9 @@ import com.example.globalcachesdk.executor.CommandExecuteResult;
 import com.example.globalcachesdk.executor.CommandExecutorDescription;
 import com.example.globalcachesdk.executor.CommandExecutorFactory;
 import com.example.globalcachesdk.pool.SshSessionPool;
-import com.example.globalcachesdk.sdk.deploy.GCServiceControl;
-import com.example.globalcachesdk.sdk.info.QueryCpuInfo;
-import com.example.globalcachesdk.sdk.info.QueryMemInfo;
+import com.example.globalcachesdk.sdk.GlobalCacheServiceControl;
+import com.example.globalcachesdk.sdk.QueryCpuInfo;
+import com.example.globalcachesdk.sdk.QueryMemInfo;
 import com.example.globalcachesdk.utils.Utils;
 
 import java.util.ArrayList;
@@ -138,7 +139,7 @@ public class GlobalCacheSDK {
             case "stop":
             case "clean":
             case "init":
-                AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.GC_SERVICE_CONTROL);
+                AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.GLOBAL_CACHE_SERVICE_CONTROL);
                 try {
                     ArrayList<String> args = new ArrayList<>(hosts.size());
                     ArrayList<String> users = new ArrayList<>(hosts.size());
@@ -225,20 +226,10 @@ public class GlobalCacheSDK {
 
     private GlobalCacheSDK() throws GlobalCacheSDKException {
         sshSessionPool = new SshSessionPool();
-        commandExecutorFactory = new CommandExecutorFactory();
-
-        // 注册所有的命令类
-        // @TODO: 支持采用注解进行注册
-        if (!commandExecutorFactory.registryCommandExecutor(SupportedCommand.QUERY_CPU_INFO, QueryCpuInfo.defaultDes())) {
-            throw new GlobalCacheSDKException("QueryCpuINfo注册失败");
-        }
-
-        if (!commandExecutorFactory.registryCommandExecutor(SupportedCommand.QUERY_MEM_INFO, QueryMemInfo.defaultDes())) {
-            throw new GlobalCacheSDKException("QueryMemInfo注册失败");
-        }
-
-        if (!commandExecutorFactory.registryCommandExecutor(SupportedCommand.GC_SERVICE_CONTROL, GCServiceControl.defaultDes())) {
-            throw new GlobalCacheSDKException("GCServiceConrtol注册失败");
+        try {
+            commandExecutorFactory = new CommandExecutorFactory();
+        } catch (CommandExecutorFactoryException e) {
+            throw new GlobalCacheSDKException("命令注册失败", e);
         }
     }
 }

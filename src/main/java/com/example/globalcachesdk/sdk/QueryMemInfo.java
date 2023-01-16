@@ -1,4 +1,4 @@
-package com.example.globalcachesdk.sdk.info;
+package com.example.globalcachesdk.sdk;
 
 import com.example.globalcachesdk.ExecuteNode;
 import com.example.globalcachesdk.ExecutePrivilege;
@@ -58,8 +58,6 @@ public class QueryMemInfo extends AbstractCommandExecutor {
     public static CommandExecutorDescription defaultDes() {
         // @TODO: 支持从XML中反转生成
         CommandExecutorDescription des = new CommandExecutorDescription();
-        // 需要类的完整路径
-        des.setClassPath("com.example.globalcachesdk.sdk.info.QueryMemInfo");
         des.setExecuteNode(ExecuteNode.ALL_NODES);
         des.setExecutePrivilege(ExecutePrivilege.USER);
         des.setWithArgs(false);

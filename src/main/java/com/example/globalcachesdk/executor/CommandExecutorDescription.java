@@ -31,11 +31,6 @@ public class CommandExecutorDescription {
     private ExecutePrivilege executePrivilege;
 
     /**
-     * 方法名称
-     */
-    private String classPath;
-
-    /**
      * 接口超时时间
      * 单位：秒
      */
@@ -73,14 +68,6 @@ public class CommandExecutorDescription {
         this.executePrivilege = executePrivilege;
     }
 
-    public String getClassPath() {
-        return classPath;
-    }
-
-    public void setClassPath(String classPath) {
-        this.classPath = classPath;
-    }
-
     public int getTimeout() {
         return timeout;
     }
@@ -92,7 +79,7 @@ public class CommandExecutorDescription {
     @Override
     public String toString() {
         return "====================\n" +
-                "命令名称: " + classPath + "\n" +
+                "命令名称: " + this.getClass().getName() + "\n" +
                 "是否异步: " + (isAsync ? "Yes" : "No") + "\n" +
                 "携带参数: " + (withArgs ? "Yes" : "No") + "\n" +
                 "执行节点: " + executeNode.toString() + "\n" +
