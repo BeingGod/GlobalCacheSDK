@@ -1,12 +1,10 @@
 package com.example.globalcachesdk.sdk;
 
-import com.example.globalcachesdk.ExecuteNode;
-import com.example.globalcachesdk.ExecutePrivilege;
 import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.entity.CpuInfo;
 import com.example.globalcachesdk.exception.CommandExecException;
 import com.example.globalcachesdk.executor.AbstractCommandExecutor;
-import com.example.globalcachesdk.executor.CommandExecutorDescription;
+import com.example.globalcachesdk.executor.Configure;
 import com.jcraft.jsch.Session;
 
 import java.util.ArrayList;
@@ -17,6 +15,7 @@ import java.util.regex.Pattern;
  * 请求CPU信息
  * @author 章睿彬
  */
+@Configure(path= "/configure/QueryCpuInfo.xml")
 public class QueryCpuInfo extends AbstractCommandExecutor {
 
     /**
@@ -25,8 +24,7 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
     private static final Pattern CPU_INFO_PATTERN = Pattern.compile("\\d+\\.\\d+");
 
     public QueryCpuInfo() {
-        super();
-        des = defaultDes();
+        super(QueryCpuInfo.class);
     }
 
     /**
@@ -59,16 +57,5 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
         cpuInfo.setCoreUsage(coreUsage);
 
         return cpuInfo;
-    }
-
-     public static CommandExecutorDescription defaultDes() {
-        // @TODO: 支持从XML中反转生成
-        CommandExecutorDescription des = new CommandExecutorDescription();
-        des.setExecuteNode(ExecuteNode.ALL_NODES);
-        des.setExecutePrivilege(ExecutePrivilege.USER);
-        des.setWithArgs(false);
-        des.setTimeout(2);
-
-        return des;
     }
 }

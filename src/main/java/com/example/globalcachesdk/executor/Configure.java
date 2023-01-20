@@ -6,10 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 注册CommandExecutor
+ * 配置CommandExecutor默认XML配置路径
  * @author 章睿彬
  */
-@Target({ElementType.FIELD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Registry {
+public @interface Configure {
+    String path();
 }

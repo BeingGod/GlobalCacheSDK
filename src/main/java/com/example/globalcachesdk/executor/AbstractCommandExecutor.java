@@ -1,13 +1,18 @@
 package com.example.globalcachesdk.executor;
 
 import cn.hutool.extra.ssh.JschUtil;
+import com.example.globalcachesdk.ExecuteNode;
 import com.example.globalcachesdk.ExecutePrivilege;
 import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.exception.CommandExecException;
+import com.example.globalcachesdk.exception.ConfParserException;
+import com.example.globalcachesdk.utils.ConfigureParser;
 import com.jcraft.jsch.Session;
 
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+
+import static cn.hutool.core.io.resource.ResourceUtil.getResource;
 
 /**
  * Shell命令调用
@@ -19,6 +24,33 @@ public abstract class AbstractCommandExecutor {
      * 命令配置信息
      */
     protected CommandExecutorDescription des = null;
+
+    public AbstractCommandExecutor(Class<?> class_) {
+        if (!class_.isAnnotationPresent(Configure.class)) {
+            return;
+        }
+
+        Configure conf = class_.getAnnotation(Configure.class);
+        String path = conf.path();
+        java.net.URL resource = this.getClass().getResource(conf.path());
+
+        if (resource == null) {
+            System.err.println("未找到配置文件");
+            // 采用默认配置
+            this.des = new CommandExecutorDescription();
+            return;
+        }
+
+        String realPath = resource.getPath();
+        try {
+            // 解析对应注解的接口配置文件
+            this.des = ConfigureParser.parse(realPath);
+        } catch (ConfParserException e) {
+            System.err.println("未知的命令配置文件");
+            // 采用默认配置
+            this.des = new CommandExecutorDescription();
+        }
+    }
 
     /**
      * 统一执行命令接口

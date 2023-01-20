@@ -10,6 +10,11 @@ import com.example.globalcachesdk.ExecutePrivilege;
 public class CommandExecutorDescription {
 
     /**
+     * 命令名称
+     */
+    private String name = "Unknown";
+
+    /**
      * 是否为异步调用接口（默认同步）
      * for future
      */
@@ -18,23 +23,31 @@ public class CommandExecutorDescription {
     /**
      * 是否携带参数
      */
-    private boolean withArgs;
+    private boolean withArgs = false;
 
     /**
      * 当前命令需要在哪些节点执行
      */
-    private ExecuteNode executeNode;
+    private ExecuteNode executeNode = ExecuteNode.ALL_NODES;
 
     /**
      * 当前命令需要的执行权限
      */
-    private ExecutePrivilege executePrivilege;
+    private ExecutePrivilege executePrivilege = ExecutePrivilege.USER;
 
     /**
      * 接口超时时间
      * 单位：秒
      */
-    private int timeout;
+    private int timeout = 1;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public boolean isAsync() {
         return isAsync;
@@ -79,7 +92,7 @@ public class CommandExecutorDescription {
     @Override
     public String toString() {
         return "====================\n" +
-                "命令名称: " + this.getClass().getName() + "\n" +
+                "命令名称: " + name + "\n" +
                 "是否异步: " + (isAsync ? "Yes" : "No") + "\n" +
                 "携带参数: " + (withArgs ? "Yes" : "No") + "\n" +
                 "执行节点: " + executeNode.toString() + "\n" +

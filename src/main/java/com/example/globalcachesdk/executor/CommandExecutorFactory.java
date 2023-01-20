@@ -7,7 +7,6 @@ import com.example.globalcachesdk.utils.Utils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -59,7 +58,7 @@ public class CommandExecutorFactory {
             // 通过构造器对象的newInstance方法进行对象的初始化
             try {
                 AbstractCommandExecutor abstractCommandExecutor = (AbstractCommandExecutor) constructor.newInstance();
-                registriedCommandExecutor.put(SupportedCommand.valueOf(field.getName()), (AbstractCommandExecutor) abstractCommandExecutor);
+                registriedCommandExecutor.put(SupportedCommand.valueOf(field.getName()), abstractCommandExecutor);
             } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
                 throw new CommandExecutorFactoryException("类初始化失败", e);
 

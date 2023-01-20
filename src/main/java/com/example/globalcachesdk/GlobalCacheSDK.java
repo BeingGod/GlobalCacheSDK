@@ -3,15 +3,12 @@ package com.example.globalcachesdk;
 import com.example.globalcachesdk.exception.CommandExecutorFactoryException;
 import com.example.globalcachesdk.exception.GlobalCacheSDKException;
 import com.example.globalcachesdk.exception.SessionException;
-import com.example.globalcachesdk.exception.SshSessionPoolException;
+import com.example.globalcachesdk.exception.SSHSessionPoolException;
 import com.example.globalcachesdk.executor.AbstractCommandExecutor;
 import com.example.globalcachesdk.executor.CommandExecuteResult;
 import com.example.globalcachesdk.executor.CommandExecutorDescription;
 import com.example.globalcachesdk.executor.CommandExecutorFactory;
-import com.example.globalcachesdk.pool.SshSessionPool;
-import com.example.globalcachesdk.sdk.GlobalCacheServiceControl;
-import com.example.globalcachesdk.sdk.QueryCpuInfo;
-import com.example.globalcachesdk.sdk.QueryMemInfo;
+import com.example.globalcachesdk.pool.SSHSessionPool;
 import com.example.globalcachesdk.utils.Utils;
 
 import java.util.ArrayList;
@@ -25,7 +22,7 @@ public class GlobalCacheSDK {
 
     private static GlobalCacheSDK instance = null;
 
-    private SshSessionPool sshSessionPool = null;
+    private SSHSessionPool sshSessionPool = null;
 
     private CommandExecutorFactory commandExecutorFactory = null;
 
@@ -86,7 +83,7 @@ public class GlobalCacheSDK {
                 users.add(user);
             }
             return getInstance().sshSessionPool.execute(hosts, users, executor);
-        } catch (SshSessionPoolException e) {
+        } catch (SSHSessionPoolException e) {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
         }
     }
@@ -110,7 +107,7 @@ public class GlobalCacheSDK {
                 users.add(user);
             }
             return getInstance().sshSessionPool.execute(hosts, users, executor);
-        } catch (SshSessionPoolException e) {
+        } catch (SSHSessionPoolException e) {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
         }
     }
@@ -149,7 +146,7 @@ public class GlobalCacheSDK {
                         users.add(user);
                     }
                     return getInstance().sshSessionPool.execute(hosts, users, executor, args);
-                } catch (SshSessionPoolException e) {
+                } catch (SSHSessionPoolException e) {
                     throw new GlobalCacheSDKException("SSH会话池异常", e);
                 }
             default:
@@ -225,7 +222,7 @@ public class GlobalCacheSDK {
     }
 
     private GlobalCacheSDK() throws GlobalCacheSDKException {
-        sshSessionPool = new SshSessionPool();
+        sshSessionPool = new SSHSessionPool();
         try {
             commandExecutorFactory = new CommandExecutorFactory();
         } catch (CommandExecutorFactoryException e) {

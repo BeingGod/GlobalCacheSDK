@@ -246,10 +246,10 @@ public class GlobalCacheSDKExample {
 	}
 
 	public static void main(String[] args) {
-		sessionDemo();
-		queryCpuInfoDemo();
-		queryMemInfoDemo();
+//		sessionDemo();
+//		queryCpuInfoDemo();
+//		queryMemInfoDemo();
 		setCommandTimeoutDemo();
-		gcServiceControlDemo();
+//		gcServiceControlDemo();
 	}
 }

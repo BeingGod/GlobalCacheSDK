@@ -20,7 +20,7 @@ import static com.example.globalcachesdk.StatusCode.*;
  * 用于持久化SSH连接和并发SSH请求
  * @author 章睿彬
  */
-public class SshSessionPool {
+public class SSHSessionPool {
     /**
      * 当前连接的节点信息
      * 由于存在同一节点不同权限用户，需要使用host和user作为键
@@ -38,7 +38,7 @@ public class SshSessionPool {
      * 1. 获取当前运行环境的系统处理器个数，并初始化定长的线程池
      * 2. 初始化HashMap
      */
-    public SshSessionPool() {
+    public SSHSessionPool() {
         // 获取系统处理器个数，作为线程池数量
         int nThreads = Runtime.getRuntime().availableProcessors();
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().build();
@@ -132,21 +132,21 @@ public class SshSessionPool {
      * @param executor 需要执行的方法
      * @param args 命令参数
      * @return 每个节点命令执行结果
-     * @throws SshSessionPoolException 线程池发生内部问题抛出此异常
+     * @throws SSHSessionPoolException 线程池发生内部问题抛出此异常
      */
-    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor, ArrayList<String> args) throws SshSessionPoolException {
+    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor, ArrayList<String> args) throws SSHSessionPoolException {
         if (0 == hosts.size()) {
-            throw new SshSessionPoolException("节点IP列表为空");
+            throw new SSHSessionPoolException("节点IP列表为空");
         }
 
         if (executor.getDes().isWithArgs() && hosts.size() != args.size()) {
-            throw new SshSessionPoolException("节点个数与输出参数不匹配");
+            throw new SSHSessionPoolException("节点个数与输出参数不匹配");
         }
 
         try {
             return executeInternal(hosts, users, executor, args);
         } catch (InterruptedException e) {
-            throw new SshSessionPoolException("线程执行中断", e);
+            throw new SSHSessionPoolException("线程执行中断", e);
         }
     }
 
@@ -159,21 +159,21 @@ public class SshSessionPool {
      * @param users 需要执行命令的用户名列表
      * @param executor 需要执行的方法
      * @return 每个节点命令执行结果
-     * @throws SshSessionPoolException 线程池发生内部问题抛出此异常
+     * @throws SSHSessionPoolException 线程池发生内部问题抛出此异常
      */
-    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor) throws SshSessionPoolException {
+    public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor) throws SSHSessionPoolException {
         if (0 == hosts.size()) {
-            throw new SshSessionPoolException("节点IP列表为空");
+            throw new SSHSessionPoolException("节点IP列表为空");
         }
 
         if (users.size() != hosts.size()) {
-            throw new SshSessionPoolException("节点IP数量与用户数量不一致");
+            throw new SSHSessionPoolException("节点IP数量与用户数量不一致");
         }
 
         try {
             return executeInternal(hosts, users, executor, null);
         } catch (InterruptedException e) {
-            throw new SshSessionPoolException("线程执行中断", e);
+            throw new SSHSessionPoolException("线程执行中断", e);
         }
     }
 

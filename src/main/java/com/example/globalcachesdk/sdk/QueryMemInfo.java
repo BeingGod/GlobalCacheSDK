@@ -1,12 +1,10 @@
 package com.example.globalcachesdk.sdk;
 
-import com.example.globalcachesdk.ExecuteNode;
-import com.example.globalcachesdk.ExecutePrivilege;
 import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.entity.MemInfo;
 import com.example.globalcachesdk.exception.CommandExecException;
 import com.example.globalcachesdk.executor.AbstractCommandExecutor;
-import com.example.globalcachesdk.executor.CommandExecutorDescription;
+import com.example.globalcachesdk.executor.Configure;
 import com.jcraft.jsch.Session;
 
 import java.util.regex.Matcher;
@@ -16,6 +14,7 @@ import java.util.regex.Pattern;
  * 请求内存信息
  * @author 章睿彬
  */
+@Configure(path= "/configure/QueryMemInfo.xml")
 public class QueryMemInfo extends AbstractCommandExecutor {
     /**
      * 节点内存信息正则表达式
@@ -23,8 +22,7 @@ public class QueryMemInfo extends AbstractCommandExecutor {
     private static final Pattern MEM_INFO_PATTERN = Pattern.compile("\\d+");
 
     public QueryMemInfo() {
-        super();
-        des = defaultDes();
+        super(QueryMemInfo.class);
     }
 
     /**
@@ -53,16 +51,5 @@ public class QueryMemInfo extends AbstractCommandExecutor {
         }
 
         return memInfo;
-    }
-
-    public static CommandExecutorDescription defaultDes() {
-        // @TODO: 支持从XML中反转生成
-        CommandExecutorDescription des = new CommandExecutorDescription();
-        des.setExecuteNode(ExecuteNode.ALL_NODES);
-        des.setExecutePrivilege(ExecutePrivilege.USER);
-        des.setWithArgs(false);
-        des.setTimeout(2);
-
-        return des;
     }
 }
