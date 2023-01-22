@@ -1,4 +1,4 @@
-package com.example.globalcachesdk.sdk;
+package com.example.globalcachesdk.executorImpl;
 
 import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.entity.CpuInfo;

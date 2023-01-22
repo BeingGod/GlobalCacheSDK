@@ -60,8 +60,6 @@ public class SSHSessionPool {
 
     /**
      * 创建SSH连接, 并将其添加到hostSessionHashMap中，没有任何异常则表示执行成功
-     * 如果链接失败需要抛出ConnectFailedException异常
-     * 如果链接已存在抛出SessionAlreadyExistException异常
      *
      * @param host 主机IP
      * @param user 用户名
@@ -75,6 +73,31 @@ public class SSHSessionPool {
             // 当前会话不存在
             try {
                 Session newSession = JschUtil.getSession(host,port,user,password);
+                hostSessionHashMap.put(Pair.of(host, user), newSession);
+            } catch (RuntimeException e) {
+                throw new SessionException("连接失败", e);
+            }
+        } else {
+            throw new SessionException("当前链接已存在");
+        }
+    }
+
+    /**
+     * 创建SSH连接, 并将其添加到hostSessionHashMap中，没有任何异常则表示执行成功
+     *
+     * @param host 主机IP
+     * @param user 用户名
+     * @param privateKeyPath 私钥路径
+     * @param passphrase 私钥密码
+     * @param port 端口号
+     * @throws SessionException 会话已存在或连接已存在抛出此异常
+     */
+    public void createSession(String host, String user, String privateKeyPath, byte[] passphrase, int port) throws SessionException {
+        Session session =  hostSessionHashMap.get(Pair.of(host, user));
+        if (session == null) {
+            // 当前会话不存在
+            try {
+                Session newSession = JschUtil.getSession(host,port,user,privateKeyPath,passphrase);
                 hostSessionHashMap.put(Pair.of(host, user), newSession);
             } catch (RuntimeException e) {
                 throw new SessionException("连接失败", e);

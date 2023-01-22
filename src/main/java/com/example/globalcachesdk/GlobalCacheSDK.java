@@ -37,10 +37,30 @@ public class GlobalCacheSDK {
      * @param password 需要创建会话的主机密码
      * @param port     需要创建会话的主机端口
      * @throws GlobalCacheSDKException 会话创建失败抛出此异常
+     * @deprecated 传入方式密码不安全，建议仅在测试时使用
      */
     public static void createSession(String host, String user, String password, int port) throws GlobalCacheSDKException {
         try {
             getInstance().sshSessionPool.createSession(host, user, password, port);
+        } catch (SessionException e) {
+            throw new GlobalCacheSDKException("会话异常", e);
+        }
+    }
+
+    /**
+     * 创建一个SSH会话，若未抛出异常则表示执行成功
+     * 在调用功能接口之前，需要调用该接口创建SSH会话
+     * 创建SSH会话需要建立SSH连接，该过程较慢，建议在初始化的功能中一次性建立所有连接
+     *
+     * @param host     需要创建会话的主机IP
+     * @param privateKeyPath 私钥路径
+     * @param passphrase 私钥密码
+     * @param port     需要创建会话的主机端口
+     * @throws GlobalCacheSDKException 会话创建失败抛出此异常
+     */
+    public static void createSession(String host, String user,  String privateKeyPath, byte[] passphrase, int port) throws GlobalCacheSDKException {
+        try {
+            getInstance().sshSessionPool.createSession(host, user, privateKeyPath, passphrase, port);
         } catch (SessionException e) {
             throw new GlobalCacheSDKException("会话异常", e);
         }
