@@ -1,11 +1,10 @@
 package com.example.globalcachesdk.executor;
 
 import cn.hutool.extra.ssh.JschUtil;
-import com.example.globalcachesdk.ExecuteNode;
 import com.example.globalcachesdk.ExecutePrivilege;
 import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.exception.CommandExecException;
-import com.example.globalcachesdk.exception.ConfParserException;
+import com.example.globalcachesdk.exception.ConfigureParserException;
 import com.example.globalcachesdk.utils.ConfigureParser;
 import com.jcraft.jsch.Session;
 
@@ -45,7 +44,7 @@ public abstract class AbstractCommandExecutor {
         try {
             // 解析对应注解的接口配置文件
             this.des = ConfigureParser.parse(realPath);
-        } catch (ConfParserException e) {
+        } catch (ConfigureParserException e) {
             System.err.println("未知的命令配置文件");
             // 采用默认配置
             this.des = new CommandExecutorDescription();

@@ -2,7 +2,7 @@ package com.example.globalcachesdk.utils;
 
 import com.example.globalcachesdk.ExecuteNode;
 import com.example.globalcachesdk.ExecutePrivilege;
-import com.example.globalcachesdk.exception.ConfParserException;
+import com.example.globalcachesdk.exception.ConfigureParserException;
 import com.example.globalcachesdk.executor.CommandExecutorDescription;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -23,9 +23,9 @@ public class ConfigureParser {
      * XML配置文件解析器
      * @param path 文件路径
      * @return CommandExecutorDescription
-     * @throws ConfParserException 解析失败抛出此异常
+     * @throws ConfigureParserException 解析失败抛出此异常
      */
-    public static CommandExecutorDescription parse(String path) throws ConfParserException {
+    public static CommandExecutorDescription parse(String path) throws ConfigureParserException {
         File f = new File(path);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         Document doc = null;
@@ -33,7 +33,7 @@ public class ConfigureParser {
             DocumentBuilder builder = factory.newDocumentBuilder();
             doc = builder.parse(f);
         } catch (ParserConfigurationException | IOException | SAXException e) {
-            throw new ConfParserException("解析失败", e);
+            throw new ConfigureParserException("解析失败", e);
         }
 
         if (doc.getElementsByTagName("name").getLength() != 1 ||
@@ -43,7 +43,7 @@ public class ConfigureParser {
             doc.getElementsByTagName("privilege").getLength() != 1 ||
             doc.getElementsByTagName("timeout").getLength() != 1
         ) {
-            throw new ConfParserException("配置文件格式错误");
+            throw new ConfigureParserException("配置文件格式错误");
         }
 
         CommandExecutorDescription des = new CommandExecutorDescription();
