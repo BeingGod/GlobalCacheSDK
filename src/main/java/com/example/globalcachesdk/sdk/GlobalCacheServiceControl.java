@@ -1,4 +1,4 @@
-package com.example.globalcachesdk.executorImpl;
+package com.example.globalcachesdk.sdk;
 
 import com.example.globalcachesdk.entity.AbstractEntity;
 import com.example.globalcachesdk.entity.ErrorCodeEntity;
