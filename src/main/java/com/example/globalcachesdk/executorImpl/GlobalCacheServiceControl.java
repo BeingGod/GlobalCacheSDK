@@ -31,7 +31,7 @@ public class GlobalCacheServiceControl extends AbstractCommandExecutor {
         // @TODO: 命令执行时间较长，用异步避免阻塞
         String command = "bash /home/GlobalCacheScripts/utils/gc_service_control.sh " + args + " > /dev/null && echo $?";
 
-        String returnValue = execInternal(sshSession, command, args);
+        String returnValue = execInternal(sshSession, command);
 
         Matcher matcher = GC_SERVICE_CONTROL_PATTERN.matcher(returnValue);
 

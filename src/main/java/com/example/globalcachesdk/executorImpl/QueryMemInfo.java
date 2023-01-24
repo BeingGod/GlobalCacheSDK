@@ -34,9 +34,9 @@ public class QueryMemInfo extends AbstractCommandExecutor {
      */
     @Override
     public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "bash /home/GlobalCacheScripts/SDK/mem_usage.sh " + args;
+        String command = "bash /home/GlobalCacheScripts/SDK/mem_usage.sh";
 
-        String returnValue = execInternal(sshSession, command, args);
+        String returnValue = execInternal(sshSession, command);
 
         Matcher matcher = MEM_INFO_PATTERN.matcher(returnValue);
         MemInfo memInfo = new MemInfo();

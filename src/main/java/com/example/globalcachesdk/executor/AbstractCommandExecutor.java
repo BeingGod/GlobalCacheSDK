@@ -76,16 +76,10 @@ public abstract class AbstractCommandExecutor {
      *
      * @param sshSession SSH会话
      * @param command 需要执行的命令
-     * @param args 命令参数
      * @return 命令执行结果
      * @throws CommandExecException 命令执行失败抛出此异常
      */
-    protected String execInternal(Session sshSession, String command, String args) throws CommandExecException {
-        if (des.isWithArgs() && 0 == args.length()) {
-            // 校验参数
-            throw new CommandExecException("参数为空");
-        }
-
+    protected String execInternal(Session sshSession, String command) throws CommandExecException {
         if (des.getExecutePrivilege() == ExecutePrivilege.ROOT) {
             // 校验权限
             final String root = "root";
@@ -119,7 +113,7 @@ public abstract class AbstractCommandExecutor {
                 System.err.print(errMsg);
             }
         };
-        String returnValue = JschUtil.exec(sshSession, command + " " + args, Charset.defaultCharset(), newErrStream);
+        String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset(), newErrStream);
         if (flag[0] == 0) {
             throw new CommandExecException("命令执行失败");
         } else {

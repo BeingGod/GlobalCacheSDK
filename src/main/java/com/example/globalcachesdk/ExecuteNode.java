@@ -18,7 +18,7 @@ public enum ExecuteNode {
      */
     ALL_CLIENT_NODES,
     /**
-     * 集群人体Ceph节点
+     * 集群任意Ceph节点
      */
     ANY_CEPH_NOES,
     /**

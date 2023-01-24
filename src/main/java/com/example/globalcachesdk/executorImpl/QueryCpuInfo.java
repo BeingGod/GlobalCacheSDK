@@ -37,9 +37,9 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
      */
     @Override
     public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "bash /home/GlobalCacheScripts/SDK/cpu_usage.sh " + args;
+        String command = "bash /home/GlobalCacheScripts/SDK/cpu_usage.sh";
 
-        String returnValue = execInternal(sshSession, command, args);
+        String returnValue = execInternal(sshSession, command);
 
         Matcher matcher = CPU_INFO_PATTERN.matcher(returnValue);
         CpuInfo cpuInfo = new CpuInfo();
