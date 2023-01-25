@@ -88,8 +88,6 @@ public class GlobalCacheSDK {
 
     /**
      * 获取节点的内存信息
-     * 内存信息包括：总内存，可用内存，空闲内存
-     * 所有内存信息的单位均为 Byte
      *
      * @param hosts 需要获取主机IP列表
      * @return 每个节点内存信息查询结果
@@ -112,8 +110,6 @@ public class GlobalCacheSDK {
 
     /**
      * 获取节点的CPU信息
-     * CPU信息包括：CPU总体利用率，每个逻辑核心的利用率
-     * CPU的利用率以百分比为单位
      *
      * @param hosts 需要获取主机IP列表
      * @return 每个节点CPU信息查询结果
@@ -122,6 +118,28 @@ public class GlobalCacheSDK {
      */
     public static HashMap<String, CommandExecuteResult> queryCpuInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CPU_INFO);
+        try {
+            ArrayList<String> users = new ArrayList<>(hosts.size());
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            for (String host : hosts) {
+                users.add(user);
+            }
+            return getInstance().sshSessionPool.execute(hosts, users, executor);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
+    }
+
+    /**
+     * 获取节点的运行时间
+     *
+     * @param hosts 需要获取主机IP列表
+     * @return 每个节点运行时间查询结果
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.example.globalcachesdk.entity.UptimeInfo
+     */
+    public static HashMap<String, CommandExecuteResult> queryUptime(ArrayList<String> hosts) throws GlobalCacheSDKException {
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_UPTIME_INFO);
         try {
             ArrayList<String> users = new ArrayList<>(hosts.size());
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());

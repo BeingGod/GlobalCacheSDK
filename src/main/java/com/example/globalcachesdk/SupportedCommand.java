@@ -22,4 +22,10 @@ public enum SupportedCommand {
      */
     @Registry
     GLOBAL_CACHE_SERVICE_CONTROL,
+    /**
+     * 获取节点运行时间
+     */
+    @Registry
+    QUERY_UPTIME_INFO,
+
 }

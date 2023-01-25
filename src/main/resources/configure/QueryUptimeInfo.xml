@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<description>
+    <name>QueryUptimeInfo</name>
+    <async>false</async>
+    <args>false</args>
+    <execute>ALL_NODES</execute>
+    <privilege>USER</privilege>
+    <timeout>2</timeout>
+    <comment>获取节点运行时间信息</comment>
+</description>
