@@ -22,4 +22,9 @@ public enum SupportedCommand {
      */
     @Registry
     GLOBAL_CACHE_SERVICE_CONTROL,
+    /**
+     * 获取节点磁盘信息
+     */
+    @Registry
+    QUERY_DISK_INFO,
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<description>
+    <name>QueryDiskInfo</name>
+    <async>false</async>
+    <args>false</args>
+    <execute>ANY_NODES</execute>
+    <privilege>USER</privilege>
+    <timeout>2</timeout>
+    <comment>获取节点磁盘信息</comment>
+</description>
