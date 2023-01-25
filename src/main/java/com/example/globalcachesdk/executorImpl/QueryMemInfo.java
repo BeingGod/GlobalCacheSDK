@@ -7,19 +7,12 @@ import com.example.globalcachesdk.executor.AbstractCommandExecutor;
 import com.example.globalcachesdk.executor.Configure;
 import com.jcraft.jsch.Session;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * 请求内存信息
  * @author 章睿彬
  */
 @Configure(path= "/configure/QueryMemInfo.xml")
 public class QueryMemInfo extends AbstractCommandExecutor {
-    /**
-     * 节点内存信息正则表达式
-     */
-    private static final Pattern MEM_INFO_PATTERN = Pattern.compile("\\d+");
 
     public QueryMemInfo() {
         super(QueryMemInfo.class);
@@ -38,17 +31,14 @@ public class QueryMemInfo extends AbstractCommandExecutor {
 
         String returnValue = execInternal(sshSession, command);
 
-        Matcher matcher = MEM_INFO_PATTERN.matcher(returnValue);
+        String[] returnValueList = returnValue.split("\n");
+
         MemInfo memInfo = new MemInfo();
-        if (matcher.find()) {
-            memInfo.setTotal(Long.parseLong(matcher.group(0)));
-        }
-        if (matcher.find()) {
-            memInfo.setFree(Long.parseLong(matcher.group(0)));
-        }
-        if (matcher.find()) {
-            memInfo.setAvail(Long.parseLong(matcher.group(0)));
-        }
+        memInfo.setTotal(Long.parseLong(returnValueList[0]));
+        memInfo.setUsed(Long.parseLong(returnValueList[1]));
+        memInfo.setFree(Long.parseLong(returnValueList[2]));
+        memInfo.setCache(Long.parseLong(returnValueList[4]));
+        memInfo.setAvail(Long.parseLong(returnValueList[5]));
 
         return memInfo;
     }
