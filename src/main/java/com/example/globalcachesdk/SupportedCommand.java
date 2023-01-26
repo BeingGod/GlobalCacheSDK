@@ -22,4 +22,6 @@ public enum SupportedCommand {
      */
     @Registry
     GLOBAL_CACHE_SERVICE_CONTROL,
+    @Registry
+    QUERY_CLUSTER_STATUS_INFO,
 }
