@@ -134,6 +134,28 @@ public class GlobalCacheSDK {
         }
     }
 
+    /**
+     * 获取集群状态
+     *
+     * @param host Ceph1节点IP
+     * @return 集群状态查询结果
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.example.globalcachesdk.entity.ClusterStatusInfo
+     */
+    public static HashMap<String, CommandExecuteResult> queryClusterStatusInfo(String host) throws GlobalCacheSDKException {
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CPU_INFO);
+        try {
+            ArrayList<String> users = new ArrayList<>(1);
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            users.add(user);
+            ArrayList<String> hosts = new ArrayList<>(1);
+            hosts.add(host);
+            return getInstance().sshSessionPool.execute(hosts, users, executor);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
+    }
+
     /* ===============================================================自动化部署接口===============================================================*/
 
     /**
