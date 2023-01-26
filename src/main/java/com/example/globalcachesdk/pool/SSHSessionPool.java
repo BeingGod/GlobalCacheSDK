@@ -179,9 +179,36 @@ public class SSHSessionPool {
     }
 
     /**
-     * 执行无参命令
+     * 执行带参命令
      * 根据type的值, 在hosts的所有节点执行命令
      * 注意: hosts和args的个数需要一致
+     *
+     * @param host 需要执行命令的节点IP
+     * @param user 需要执行命令的用户名
+     * @param executor 需要执行的方法
+     * @param arg 命令参数
+     * @return 每个节点命令执行结果
+     * @throws SSHSessionPoolException 线程池发生内部问题抛出此异常
+     */
+    public HashMap<String, CommandExecuteResult> execute(String host, String user, AbstractCommandExecutor executor, String arg) throws SSHSessionPoolException {
+        try {
+            ArrayList<String> hosts = new ArrayList<>(1);
+            ArrayList<String> users = new ArrayList<>(1);
+            ArrayList<String> args = new ArrayList<>(1);
+
+            hosts.add(host);
+            users.add(user);
+            args.add(arg);
+            
+            return executeInternal(hosts, users, executor, args);
+        } catch (InterruptedException e) {
+            throw new SSHSessionPoolException("线程执行中断", e);
+        }
+    }
+
+    /**
+     * 执行无参命令
+     * 根据type的值, 在hosts的所有节点执行命令
      *
      * @param hosts 需要执行命令的节点IP列表
      * @param users 需要执行命令的用户名列表
@@ -199,6 +226,30 @@ public class SSHSessionPool {
         }
 
         try {
+            return executeInternal(hosts, users, executor, null);
+        } catch (InterruptedException e) {
+            throw new SSHSessionPoolException("线程执行中断", e);
+        }
+    }
+
+    /**
+     * 执行无参命令
+     * 根据type的值, 在host的节点执行命令
+     *
+     * @param host 需要执行命令的节点IP
+     * @param user 需要执行命令的用户名
+     * @param executor 需要执行的方法
+     * @return 每个节点命令执行结果
+     * @throws SSHSessionPoolException 线程池发生内部问题抛出此异常
+     */
+    public HashMap<String, CommandExecuteResult> execute(String host, String user, AbstractCommandExecutor executor) throws SSHSessionPoolException {
+        try {
+            ArrayList<String> hosts = new ArrayList<>(1);
+            ArrayList<String> users = new ArrayList<>(1);
+
+            hosts.add(host);
+            users.add(user);
+
             return executeInternal(hosts, users, executor, null);
         } catch (InterruptedException e) {
             throw new SSHSessionPoolException("线程执行中断", e);
