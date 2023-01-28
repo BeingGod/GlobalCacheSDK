@@ -35,12 +35,12 @@ public class QueryUptimeInfo extends AbstractCommandExecutor {
             }
             int hourNum=returnValue.indexOf(":");
             if(hourNum==1){
-                hour=Integer.parseInt(returnValue.substring(hourNum-1,hourNum).trim());
+                hour=Integer.parseInt(returnValue.substring(0,1).trim());
             }else{
                 hour=Integer.parseInt(returnValue.substring(hourNum-2,hourNum).trim());
             }
             min=Integer.parseInt(returnValue.substring(hourNum+1).trim());
-            uptimeInfo.setUptime(date*24*60+hour*60+min);
+            uptimeInfo.setUptime((long) date *24*60+hour* 60L +min);
         }
         return uptimeInfo;
     }
