@@ -6,6 +6,7 @@ import com.example.globalcachesdk.SupportedCommand;
 import com.example.globalcachesdk.entity.ErrorCodeEntity;
 import com.example.globalcachesdk.entity.MemInfo;
 import com.example.globalcachesdk.entity.CpuInfo;
+import com.example.globalcachesdk.entity.UptimeInfo;
 import com.example.globalcachesdk.exception.GlobalCacheSDKException;
 import com.example.globalcachesdk.executor.CommandExecuteResult;
 
@@ -245,11 +246,69 @@ public class GlobalCacheSDKExample {
 		}
 	}
 
+	public static void queryUptimeInfoDemo() {
+		System.out.println("==============queryUptimeInfo Demo==============");
+
+		ArrayList<String> hosts = new ArrayList<>();
+		hosts.add("175.34.8.36");
+		hosts.add("175.34.8.37");
+		hosts.add("175.34.8.38");
+		hosts.add("175.34.8.39");
+
+		ArrayList<String> users = new ArrayList<>();
+		users.add("globalcachesdk");
+		users.add("globalcachesdk");
+		users.add("globalcachesdk");
+		users.add("globalcachesdk");
+
+		ArrayList<String> passwords = new ArrayList<>();
+		passwords.add("globalcachesdk");
+		passwords.add("globalcachesdk");
+		passwords.add("globalcachesdk");
+		passwords.add("globalcachesdk");
+
+		for (int i = 0;i < hosts.size(); i++) {
+			try {
+				GlobalCacheSDK.createSession(hosts.get(i), users.get(i), passwords.get(i), 22);
+				System.out.println(hosts.get(i) + " SSH会话创建成功");
+			} catch (GlobalCacheSDKException e) {
+				System.out.println(hosts.get(i) + " SSH会话创建失败");
+				e.printStackTrace();
+			}
+		}
+
+		Map<String, UptimeInfo> nodesUptimeInfoHashMap = new HashMap<>(hosts.size());
+		try {
+			for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryUptime(hosts).entrySet()) {
+				if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
+					nodesUptimeInfoHashMap.put(entry.getKey(), (UptimeInfo) entry.getValue().getData());
+				}
+			}
+		} catch (GlobalCacheSDKException e) {
+			System.out.println("接口调用失败");
+			e.printStackTrace();
+		}
+		System.out.println(nodesUptimeInfoHashMap);
+
+		for (String host : hosts) {
+			try {
+				GlobalCacheSDK.releaseSession(host, "globalcachesdk");
+				System.out.println(host + " SSH会话释放成功");
+			} catch (GlobalCacheSDKException e) {
+				System.out.println(host + " SSH会话释放失败");
+				e.printStackTrace();
+			}
+		}
+	}
+
+
 	public static void main(String[] args) {
 //		sessionDemo();
 //		queryCpuInfoDemo();
 //		queryMemInfoDemo();
+		queryUptimeInfoDemo();
 //		setCommandTimeoutDemo();
 //		gcServiceControlDemo();
+		return;
 	}
 }
