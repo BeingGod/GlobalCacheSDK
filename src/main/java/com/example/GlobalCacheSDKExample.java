@@ -249,7 +249,7 @@ public class GlobalCacheSDKExample {
 //		sessionDemo();
 //		queryCpuInfoDemo();
 //		queryMemInfoDemo();
-		setCommandTimeoutDemo();
+//		setCommandTimeoutDemo();
 //		gcServiceControlDemo();
 	}
 }
