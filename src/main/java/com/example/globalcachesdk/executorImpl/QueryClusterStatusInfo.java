@@ -1,6 +1,7 @@
 package com.example.globalcachesdk.executorImpl;
 
 import com.example.globalcachesdk.entity.AbstractEntity;
+import com.example.globalcachesdk.entity.ClusterStatusInfo;
 import com.example.globalcachesdk.exception.CommandExecException;
 import com.example.globalcachesdk.executor.AbstractCommandExecutor;
 import com.example.globalcachesdk.executor.Configure;
@@ -18,6 +19,13 @@ public class QueryClusterStatusInfo extends AbstractCommandExecutor {
 
     @Override
     public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        return null;
+        String command = "bash /home/GlobalCacheScripts/SDK/cluster_status/cluster_status.sh";
+
+        String returnValue = execInternal(sshSession, command);
+
+        ClusterStatusInfo clusterStatusInfo = new ClusterStatusInfo();
+        clusterStatusInfo.setClusterStatus(ClusterStatusInfo.ClusterStatus.valueOf(returnValue.substring(0,returnValue.length()-1)));
+
+        return clusterStatusInfo;
     }
 }
