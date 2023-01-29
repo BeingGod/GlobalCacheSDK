@@ -27,5 +27,9 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_UPTIME_INFO,
-
+    /**
+     * 获取节点运行状态
+     */
+    @Registry
+    QUERY_CLUSTER_STATUS_INFO,
 }
