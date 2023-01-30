@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 @Configure(path="/configure/QueryDiskInfo.xml")
 public class QueryDiskInfo extends AbstractCommandExecutor {
 
-    private static final Pattern DISK_INFO_PATTERN = Pattern.compile("\\d+\\.\\d+");
+    private static final Pattern DISK_INFO_PATTERN = Pattern.compile("[a-z].*");
     private static final Pattern DISK_ROTA_PATTERN = Pattern.compile("^sd.");
     private static final Pattern DISK_NVME_PATTERN = Pattern.compile("^nvme.");
     public QueryDiskInfo() {
@@ -31,10 +31,8 @@ public class QueryDiskInfo extends AbstractCommandExecutor {
         String returnValue = execInternal(sshSession, command);
         DiskInfo diskInfo = new DiskInfo();
 
-        // System.out.println(returnValue);
         Matcher matcher = DISK_INFO_PATTERN.matcher(returnValue);
         ArrayList<DiskInfo.Disk> diskList = new ArrayList<>();
-        // matcher rotaMatcher = DISK_ROTA_PATTERN.matcher()
         while (matcher.find()) {
             DiskInfo.Disk disk = diskInfo.new Disk();
             disk.setName("/dev/" + matcher.group(0));

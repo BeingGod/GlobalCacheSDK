@@ -47,6 +47,9 @@ public class DiskInfo extends AbstractEntity {
         public void setType(DiskType type) {
             this.type = type;
         }
+        public String toString() {
+            return name + ' ' + type;
+        }
     }
 
     /**
