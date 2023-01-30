@@ -23,6 +23,11 @@ public enum SupportedCommand {
     @Registry
     GLOBAL_CACHE_SERVICE_CONTROL,
     /**
+     * 获取节点磁盘信息
+     */
+    @Registry
+    QUERY_DISK_INFO,
+    /**
      * 获取节点运行时间
      */
     @Registry
@@ -32,9 +37,4 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_CLUSTER_STATUS_INFO,
-    /**
-     * 获取节点磁盘信息
-     */
-    @Registry
-    QUERY_DISK_INFO,
 }
