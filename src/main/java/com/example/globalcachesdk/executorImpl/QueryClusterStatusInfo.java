@@ -22,9 +22,12 @@ public class QueryClusterStatusInfo extends AbstractCommandExecutor {
         String command = "bash /home/GlobalCacheScripts/SDK/cluster_status/cluster_status.sh";
 
         String returnValue = execInternal(sshSession, command);
+        String[] returnValueList = returnValue.split("\n");
+
+        String clusterStatusStr = returnValueList[1].substring(0,returnValueList[1].length()-1);
 
         ClusterStatusInfo clusterStatusInfo = new ClusterStatusInfo();
-        clusterStatusInfo.setClusterStatus(ClusterStatusInfo.ClusterStatus.valueOf(returnValue.substring(0,returnValue.length()-1)));
+        clusterStatusInfo.setClusterStatus(ClusterStatusInfo.ClusterStatus.valueOf(clusterStatusStr));
 
         return clusterStatusInfo;
     }
