@@ -16,7 +16,7 @@ public enum ExecuteNode {
     /**
      * 集群所有Ceph节点
      */
-    ALL_CEPH_NOES,
+    ALL_CEPH_NODES,
     /**
      * 集群所有Client节点
      */
@@ -24,7 +24,7 @@ public enum ExecuteNode {
     /**
      * 集群任意Ceph节点
      */
-    ANY_CEPH_NOES,
+    ANY_CEPH_NODES,
     /**
      * 集群任意Client节点
      */
