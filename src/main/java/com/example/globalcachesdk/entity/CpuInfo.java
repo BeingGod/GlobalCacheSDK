@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * 节点CPU信息
  * @author 蔡润培
  */
-public class CpuInfo extends AbstractEntity {
+public class  CpuInfo extends AbstractEntity {
 
     /**
      * 节点CPU整体占用率

@@ -10,7 +10,7 @@ public class DiskInfo extends AbstractEntity {
     /**
      * 磁盘类型
      */
-    enum DiskType {
+    public enum DiskType {
         /**
          * SATA硬盘
          */
