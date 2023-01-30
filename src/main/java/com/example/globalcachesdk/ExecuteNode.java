@@ -10,6 +10,10 @@ public enum ExecuteNode {
      */
     ALL_NODES,
     /**
+     * 集群任意节点
+     */
+    ANY_NODES,
+    /**
      * 集群所有Ceph节点
      */
     ALL_CEPH_NOES,
