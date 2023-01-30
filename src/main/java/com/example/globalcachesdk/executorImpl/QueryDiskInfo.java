@@ -27,7 +27,7 @@ public class QueryDiskInfo extends AbstractCommandExecutor {
 
     @Override
     public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "lsblk | grep \"^[a-z].*\" | cut -d ' ' -f 1";
+        String command = "bash /home/GlobalCacheScripts/SDK/disk_info.sh";
         String returnValue = execInternal(sshSession, command);
         DiskInfo diskInfo = new DiskInfo();
 
