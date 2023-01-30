@@ -37,4 +37,10 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_CLUSTER_STATUS_INFO,
+    /**
+     * 获取节点数据盘分区信息
+     */
+    @Registry
+    QUERY_DATA_DISK_PART_INFO,
+
 }
