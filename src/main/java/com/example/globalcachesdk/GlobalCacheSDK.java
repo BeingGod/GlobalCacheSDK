@@ -131,6 +131,29 @@ public class GlobalCacheSDK {
     }
 
     /**
+     * 获取GlobalCache缓存盘信息
+     *
+     * @param host Ceph1节点IP
+     * @return CLI查询结果
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.example.globalcachesdk.entity.CacheDiskInfo
+     */
+    public static HashMap<String, CommandExecuteResult> queryCacheDiskInfo(String host) throws GlobalCacheSDKException {
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CPU_INFO);
+        try {
+            ArrayList<String> users = new ArrayList<>(1);
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            users.add(user);
+            ArrayList<String> hosts = new ArrayList<>(1);
+            hosts.add(host);
+
+            return getInstance().sshSessionPool.execute(hosts, users, executor);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
+    }
+
+    /**
      * 获取节点的磁盘信息
      *
      * @param host 需要获取主机IP
