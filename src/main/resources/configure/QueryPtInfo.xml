@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<description>
+    <name>QueryPtInfo</name>
+    <async>false</async>
+    <args>false</args>
+    <execute>CEPH1_ONLY</execute>
+    <privilege>GLOBAL_CACHE_OP</privilege>
+    <timeout>2</timeout>
+    <comment>获取PT信息</comment>
+</description>
