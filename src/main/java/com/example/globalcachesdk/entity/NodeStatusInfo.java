@@ -34,7 +34,7 @@ public class NodeStatusInfo extends AbstractEntity {
         NODE_STATE_OUT,
     }
 
-    public class Node {
+    public static class Node {
         /**
          * 节点ID
          */
