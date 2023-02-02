@@ -9,6 +9,8 @@ import com.example.globalcachesdk.executor.Configure;
 import com.jcraft.jsch.Session;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 请求节点数据盘分区信息
@@ -17,34 +19,15 @@ import java.util.ArrayList;
 @Configure(path="/configure/QueryDataDiskPartInfo.xml")
 public class QueryDataDiskPartInfo extends AbstractCommandExecutor {
 
+    private static final Pattern DATA_DISK_PART_INFO_PATTERN = Pattern.compile("/var/lib/ceph/osd/ceph(.*)");
 
     public QueryDataDiskPartInfo() {
         super(QueryDataDiskPartInfo.class);
     }
 
-    /*public long SubstringStr(String str){
-        int length=str.length();
-        String numberStr=str.substring(0,length-1);
-        String charStr=str.substring(str.length()-1);
-        long by=0;
-        if(charStr.equals('K')){
-            by=Long.parseLong(numberStr)*1024;
-        }
-        else if(charStr.equals('M')){
-            by=Long.parseLong(numberStr)*1024*1024;
-        }
-        else if(charStr.equals('G')){
-            by=Long.parseLong(numberStr)*1024*1024*1024;
-        }
-        else if(charStr.equals('T')){
-            by=Long.parseLong(numberStr)*1024*1024*1024*1024;
-        }
-        return by;
-
-    }*/
-
     @Override
     public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
+
         String command = "bash /home/GlobalCacheScripts/SDK/datadiskpart.sh";
 
         String returnValue = execInternal(sshSession, command);
@@ -55,31 +38,20 @@ public class QueryDataDiskPartInfo extends AbstractCommandExecutor {
 
         DataDiskPartInfo dataDiskPartInfo = new DataDiskPartInfo();
 
-        DataDiskPartInfo.Part part=dataDiskPartInfo.new Part();
-
         for(int i=0;i<returnValueList.length;i++){
+
             String [] str=returnValueList[i].split("\\s+");
-            part.setDiskName(str[0]);
-            part.setCapacity(Long.parseLong(str[1]));
-            part.setUsed(Long.parseLong(str[2]));
-            part.setAvail(Long.parseLong(str[3]));
+            DataDiskPartInfo.Part part=dataDiskPartInfo.new Part();
+            Matcher matcher=DATA_DISK_PART_INFO_PATTERN.matcher(str[5]);
+            if(matcher.find()){
+                part.setDiskName(str[5]);
+                part.setCapacity(Long.parseLong(str[1]));
+                part.setUsed(Long.parseLong(str[2]));
+                part.setAvail(Long.parseLong(str[3]));
+                partList.add(part);
+            }
         }
-
-
-
-        //String[] returnValueList={"I am   a    loser","You are   a    loser"};
-        //String sentence = "I am   a    loser";
-       // String[] words = returnValueList[0].split("\\s+");
-        //System.out.println(Arrays.toString(words)); // [I, am, a, loser]
-
-
-        //DataDiskPartInfo.Part part=dataDiskPartInfo.new Part();
-        //part.setDiskName(returnValueList[0]);
-        //part.setCapacity(Long.parseLong(returnValueList[1]));
-        //part.setUsed(Long.parseLong(returnValueList[2]));
-        //part.setAvail(Long.parseLong(returnValueList[3]));
-
         return dataDiskPartInfo;
-        //return null;
+
     }
 }
