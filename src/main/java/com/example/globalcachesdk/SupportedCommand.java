@@ -37,4 +37,9 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_CLUSTER_STATUS_INFO,
+    /**
+     * 获取缓存盘状态
+     */
+    @Registry
+    QUERY_CACHE_DISK_INFO,
 }

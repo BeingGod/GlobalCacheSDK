@@ -139,7 +139,7 @@ public class GlobalCacheSDK {
      * @see com.example.globalcachesdk.entity.CacheDiskInfo
      */
     public static HashMap<String, CommandExecuteResult> queryCacheDiskInfo(String host) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CPU_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CACHE_DISK_INFO);
         try {
             ArrayList<String> users = new ArrayList<>(1);
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
