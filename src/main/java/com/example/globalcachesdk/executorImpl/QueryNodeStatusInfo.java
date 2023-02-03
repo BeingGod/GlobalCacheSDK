@@ -79,18 +79,23 @@ public class QueryNodeStatusInfo extends AbstractCommandExecutor {
      * @return 状态码
      */
     private NodeStatusInfo.NodeState checkNodeState(String state) {
-        if (Objects.equals(state, "NODE_STATE_RUNNING")) {
-            return NodeStatusInfo.NodeState.NODE_STATE_RUNNING;
-        } else if (Objects.equals(state, "NODE_STATE_UP")) {
-            return NodeStatusInfo.NodeState.NODE_STATE_UP;
-        } else if (Objects.equals(state, "NODE_STATE_INVALID")) {
-            return NodeStatusInfo.NodeState.NODE_STATE_INVALID;
-        } else if (Objects.equals(state, "NODE_STATE_IN")) {
-            return NodeStatusInfo.NodeState.NODE_STATE_IN;
-        } else if (Objects.equals(state, "NODE_STATE_OUT")) {
-            return NodeStatusInfo.NodeState.NODE_STATE_OUT;
-        } else if (Objects.equals(state, "NODE_STATE_DOWN")) {
-            return NodeStatusInfo.NodeState.NODE_STATE_DOWN;
+        if(state!=null){
+            switch (state) {
+                case "NODE_STATE_RUNNING":
+                    return NodeStatusInfo.NodeState.NODE_STATE_RUNNING;
+                case "NODE_STATE_UP":
+                    return NodeStatusInfo.NodeState.NODE_STATE_UP;
+                case "NODE_STATE_INVALID":
+                    return NodeStatusInfo.NodeState.NODE_STATE_INVALID;
+                case "NODE_STATE_IN":
+                    return NodeStatusInfo.NodeState.NODE_STATE_IN;
+                case "NODE_STATE_OUT":
+                    return NodeStatusInfo.NodeState.NODE_STATE_OUT;
+                case "NODE_STATE_DOWN":
+                    return NodeStatusInfo.NodeState.NODE_STATE_DOWN;
+                default:
+                    return null;
+            }
         }
         return null;
     }
