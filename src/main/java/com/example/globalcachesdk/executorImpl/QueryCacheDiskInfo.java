@@ -17,27 +17,34 @@ import java.util.regex.Pattern;
  */
 @Configure(path="/configure/QueryCacheDiskInfo.xml")
 public class QueryCacheDiskInfo extends AbstractCommandExecutor {
-    private static final Pattern CACHE_INFO_PATTERN = Pattern.compile("^.*\\n");
+    private static final Pattern CACHE_INFO_PATTERN = Pattern.compile(".*\\n");
     public QueryCacheDiskInfo() {
         super(QueryCacheDiskInfo.class);
     }
 
     @Override
     public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        System.out.println("exec"); // ## DEBUG ##
         String command = "bash /home/GlobalCacheScripts/SDK/cache_disk_info.sh | grep diskId";
         String returnValue = execInternal(sshSession, command);
 
         CacheDiskInfo cacheDiskInfo = new CacheDiskInfo();
-
         Matcher matcher = CACHE_INFO_PATTERN.matcher(returnValue);
         ArrayList<CacheDiskInfo.CacheDisk> cacheDiskList = new ArrayList<>();
         while (matcher.find()) {
             CacheDiskInfo.CacheDisk cacheDisk = cacheDiskInfo.new CacheDisk();
-            String value = matcher.group(0);
-            cacheDisk.setDiskId(Integer.parseInt(value.substring(value.lastIndexOf("diskId: ") + 1, value.indexOf(", diskName"))));
-            // TO-DO
+            String[] value = matcher.group(0).split("diskId: |, |diskName: |diskSn: |capacity: |state: ");
+
+            cacheDisk.setDiskId(Integer.parseInt(value[1]));
+            cacheDisk.setDiskSn(value[5]);
+            cacheDisk.setCapacity(Integer.parseInt(value[7].split("\\(MB\\)")[0]));
+            if (value[9].trim().equals("VDISK_STATE_UP")) {
+                cacheDisk.setState(CacheDiskInfo.CacheDiskState.VDISK_STATE_UP);
+            } else if (value[9].trim().equals("VDISK_STATE_DOWN")) {
+                cacheDisk.setState(CacheDiskInfo.CacheDiskState.VDISK_STATE_DOWN);
+            }
+            cacheDiskList.add(cacheDisk);
         }
+
         cacheDiskInfo.setDiskList(cacheDiskList);
         return cacheDiskInfo;
     }
