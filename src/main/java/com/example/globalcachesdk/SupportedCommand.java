@@ -37,4 +37,9 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_CLUSTER_STATUS_INFO,
+    /**
+     * 获取节点状态
+     */
+    @Registry
+    QUERY_NODE_STATUS_INFO,
 }
