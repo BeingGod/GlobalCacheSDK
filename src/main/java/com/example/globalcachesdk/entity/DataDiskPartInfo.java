@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author 章睿彬
  */
 public class DataDiskPartInfo extends AbstractEntity {
-    public class Part {
+    public static class Part {
         /**
          * 磁盘名称
          */
@@ -57,10 +57,6 @@ public class DataDiskPartInfo extends AbstractEntity {
             this.avail = avail;
         }
     }
-    /**
-     * 分区数量
-     */
-    private int partNum;
 
     /**
      * 分区信息列表
