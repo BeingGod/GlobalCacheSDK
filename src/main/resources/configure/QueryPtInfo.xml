@@ -2,7 +2,7 @@
 <description>
     <name>QueryPtInfo</name>
     <async>false</async>
-    <args>false</args>
+    <args>true</args>
     <execute>CEPH1_ONLY</execute>
     <privilege>GLOBAL_CACHE_OP</privilege>
     <timeout>2</timeout>
