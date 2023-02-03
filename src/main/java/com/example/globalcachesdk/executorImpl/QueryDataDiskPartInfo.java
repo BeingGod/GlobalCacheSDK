@@ -51,6 +51,8 @@ public class QueryDataDiskPartInfo extends AbstractCommandExecutor {
                 partList.add(part);
             }
         }
+
+        dataDiskPartInfo.setPartList(partList);
         return dataDiskPartInfo;
 
     }

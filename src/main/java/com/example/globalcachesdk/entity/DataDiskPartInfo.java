@@ -57,10 +57,6 @@ public class DataDiskPartInfo extends AbstractEntity {
             this.avail = avail;
         }
     }
-    /**
-     * 分区数量
-     */
-    private int partNum;
 
     /**
      * 分区信息列表
