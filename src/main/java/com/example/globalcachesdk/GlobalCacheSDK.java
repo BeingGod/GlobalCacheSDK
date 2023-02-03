@@ -141,12 +141,8 @@ public class GlobalCacheSDK {
     public static HashMap<String, CommandExecuteResult> queryDiskInfo(String host) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_DISK_INFO);
         try {
-            ArrayList<String> users = new ArrayList<>(1);
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
-            users.add(user);
-            ArrayList<String> hosts = new ArrayList<>(1);
-            hosts.add(host);
-            return getInstance().sshSessionPool.execute(hosts, users, executor);
+            return getInstance().sshSessionPool.execute(host, user, executor);
         } catch (SSHSessionPoolException e) {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
         }
