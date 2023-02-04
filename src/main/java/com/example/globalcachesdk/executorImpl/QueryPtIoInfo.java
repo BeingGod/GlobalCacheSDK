@@ -47,7 +47,7 @@ public class QueryPtIoInfo extends AbstractCommandExecutor {
             ioInfo.setReadCount(Integer.parseInt(nodeInfoList[5].trim()));
             ioInfo.setReadSize(Integer.parseInt(nodeInfoList[7].trim()));
             ioInfo.setWriteSizeCount(Integer.parseInt(nodeInfoList[9].trim()));
-            ioInfo.setWriteSize(Integer.parseInt(nodeInfoList[11].trim()));
+            ioInfo.setWriteSize(Integer.parseInt(nodeInfoList[11].trim().substring(0,nodeInfoList[11].trim().length()-1)));
             pt.setIoInfo(ioInfo);
             nodeArrayList.add(pt);
         }
