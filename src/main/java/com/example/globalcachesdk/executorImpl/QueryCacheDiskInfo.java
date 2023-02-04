@@ -31,7 +31,7 @@ public class QueryCacheDiskInfo extends AbstractCommandExecutor {
         Matcher matcher = CACHE_INFO_PATTERN.matcher(returnValue);
         ArrayList<CacheDiskInfo.CacheDisk> cacheDiskList = new ArrayList<>();
         while (matcher.find()) {
-            CacheDiskInfo.CacheDisk cacheDisk = cacheDiskInfo.new CacheDisk();
+            CacheDiskInfo.CacheDisk cacheDisk = new CacheDiskInfo.CacheDisk();
             String[] value = matcher.group(0).split("diskId: |, |diskName: |diskSn: |capacity: |state: ");
 
             cacheDisk.setDiskId(Integer.parseInt(value[1]));

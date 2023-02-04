@@ -18,7 +18,7 @@ public class CacheDiskInfo extends AbstractEntity {
         VDISK_STATE_DOWN,
     }
 
-    public class CacheDisk {
+    public static class CacheDisk {
         /**
          * 磁盘分区唯一标识Id
          */
