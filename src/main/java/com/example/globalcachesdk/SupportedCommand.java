@@ -47,4 +47,10 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_DATA_DISK_PART_INFO,
+    /**
+     * 查询节点PtIo信息
+     */
+    @Registry
+    QUERY_PT_IO_INFO,
+
 }
