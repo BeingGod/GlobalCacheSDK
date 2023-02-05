@@ -149,4 +149,12 @@ public class PtInfo extends AbstractEntity {
      * PT信息集合
      */
     private ArrayList<Pt> ptList;
+
+    public ArrayList<Pt> getPtList() {
+        return ptList;
+    }
+
+    public void setPtList(ArrayList<Pt> ptList) {
+        this.ptList = ptList;
+    }
 }

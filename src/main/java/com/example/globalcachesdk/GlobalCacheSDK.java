@@ -220,11 +220,11 @@ public class GlobalCacheSDK {
      * @throws GlobalCacheSDKException 执行失败抛出此异常
      * @see com.example.globalcachesdk.entity.ClusterStatusInfo
      */
-    public static HashMap<String, CommandExecuteResult> queryClusterPtInfo(String host) throws GlobalCacheSDKException {
+    public static HashMap<String, CommandExecuteResult> queryAllPtInfo(String host) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
-            String args = "cluster";
+            String args = "all";
             return getInstance().sshSessionPool.execute(host, user, executor, args);
         } catch (SSHSessionPoolException e) {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
@@ -244,7 +244,7 @@ public class GlobalCacheSDK {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
-            String args = "node " + diskId;
+            String args = "disk " + diskId;
             return getInstance().sshSessionPool.execute(host, user, executor, args);
         } catch (SSHSessionPoolException e) {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
