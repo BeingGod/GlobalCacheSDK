@@ -57,4 +57,9 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_CACHE_DISK_INFO,
+    /**
+     * 获取PT信息
+     */
+    @Registry
+    QUERY_PT_INFO,
 }

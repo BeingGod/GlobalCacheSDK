@@ -230,6 +230,45 @@ public class GlobalCacheSDK {
     }
 
     /**
+     * 获取节点PT信息
+     *
+     * @param host Ceph1节点IP
+     * @param nodeId 节点ID
+     * @return 节点PT信息查询结果
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.example.globalcachesdk.entity.ClusterStatusInfo
+     */
+    public static HashMap<String, CommandExecuteResult> queryNodePtInfo(String host, int nodeId) throws GlobalCacheSDKException {
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_INFO);
+        try {
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            String args = "node " + nodeId;
+            return getInstance().sshSessionPool.execute(host, user, executor, args);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
+    }
+
+    /**
+     * 获取集群PT信息
+     *
+     * @param host Ceph1节点IP
+     * @return 集群PT信息查询结果
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.example.globalcachesdk.entity.ClusterStatusInfo
+     */
+    public static HashMap<String, CommandExecuteResult> queryAllPtInfo(String host) throws GlobalCacheSDKException {
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_INFO);
+        try {
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            String args = "all";
+            return getInstance().sshSessionPool.execute(host, user, executor, args);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
+    }
+
+    /**
      * 获取PtIo信息
      *
      * @param host Ceph1节点IP
@@ -264,6 +303,26 @@ public class GlobalCacheSDK {
                 users.add(user);
             }
             return getInstance().sshSessionPool.execute(hosts, users, executor);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
+    }
+
+    /**
+     * 获取磁盘PT信息
+     *
+     * @param host Ceph1节点IP
+     * @param diskId 磁盘ID
+     * @return 集群PT信息查询结果
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.example.globalcachesdk.entity.ClusterStatusInfo
+     */
+    public static HashMap<String, CommandExecuteResult> queryDiskPtInfo(String host, Integer diskId) throws GlobalCacheSDKException {
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_INFO);
+        try {
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            String args = "disk " + diskId;
+            return getInstance().sshSessionPool.execute(host, user, executor, args);
         } catch (SSHSessionPoolException e) {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
         }
