@@ -9,8 +9,6 @@ import com.example.globalcachesdk.executor.Configure;
 import com.jcraft.jsch.Session;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * 查询节点状态
@@ -27,7 +25,7 @@ public class QueryNodeStatusInfo extends AbstractCommandExecutor {
         String command = "bash /home/GlobalCacheScripts/SDK/node_status/node_status.sh";
         //sh脚本执行返回值
         String returnValue = execInternal(sshSession, command);
-        //按行切分
+        //sh脚本执行返回值按行切分
         String[] returnValueList = returnValue.split("\n");
         for (int i=0;i< returnValueList.length;i++){
             returnValueList[i]=returnValueList[i].replaceAll("\t","").trim();
@@ -40,6 +38,9 @@ public class QueryNodeStatusInfo extends AbstractCommandExecutor {
         //返回对象中的Node ArrayList
         ArrayList<NodeStatusInfo.Node> nodeArrayList=new ArrayList<>();
         for (int i = 4; i < returnValueList.length; i++) {
+
+            //获取节点信息
+
             String[] nodeInfoList = returnValueList[i].split(",");
             NodeStatusInfo.Node node = new NodeStatusInfo.Node();
             node.setNodeId(Integer.parseInt(nodeInfoList[0].substring(8)));
@@ -60,12 +61,37 @@ public class QueryNodeStatusInfo extends AbstractCommandExecutor {
             //获取ClusterIp
             node.setClusterIp(nodeInfoList[j+2].substring(13));
 
+            //获取磁盘信息
+
             //磁盘数
             int diskNum= Integer.parseInt(nodeInfoList[j+3].substring(10));
+            //设置节点磁盘数
             node.setDiskNum(diskNum);
-            //跳过接下来的diskNum行读取下一个节点信息
-            i+=diskNum;
-
+            //当前节点磁盘列表
+            ArrayList<NodeStatusInfo.Disk> diskArrayList=new ArrayList<>();
+            //接下来的diskNum行读取下一个节点信息
+            for (j=0;j<diskNum;j++){
+                //行号+1
+                i++;
+                //按行读取磁盘
+                NodeStatusInfo.Disk disk=new NodeStatusInfo.Disk();
+                String[] diskInfoList = returnValueList[i].split(",|:");
+                //diskInfoList第一位（0开始计算）为Id
+                disk.setDiskId(Integer.parseInt(diskInfoList[1].trim()));
+                //第三位为Name
+                disk.setDiskName(diskInfoList[3].trim());
+                //第五位为SN号
+                disk.setDiskSn(diskInfoList[5].trim());
+                //第七位为容量，单位MB
+                disk.setCapacity(Integer.parseInt(diskInfoList[7].substring(1,diskInfoList[7].length()-4)));
+                if("VDISK_STATE_UP".equals(diskInfoList[9].trim())){
+                    disk.setState(NodeStatusInfo.DiskState.VDISK_STATE_UP);
+                }else{
+                    disk.setState(NodeStatusInfo.DiskState.VDISK_STATE_DOWN);
+                }
+                diskArrayList.add(disk);
+            }
+            node.setDisks(diskArrayList);
             node.setStateList(nodeStateArrayList);
             nodeArrayList.add(node);
         }

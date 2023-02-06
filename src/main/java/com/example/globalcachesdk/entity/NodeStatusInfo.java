@@ -34,6 +34,81 @@ public class NodeStatusInfo extends AbstractEntity {
         NODE_STATE_OUT,
     }
 
+    public enum DiskState {
+        /**
+         * 可服务IO状态
+         */
+        VDISK_STATE_UP,
+        /**
+         * 不可服务IO状态
+         */
+        VDISK_STATE_DOWN,
+    }
+
+    public static class Disk{
+        /**
+         * 磁盘ID
+         */
+        private int diskId;
+        /**
+         * 磁盘名称
+         */
+        private String diskName;
+        /**
+         * 磁盘SN号
+         */
+        private String diskSn;
+        /**
+         * 磁盘容量，单位：Mb
+         */
+        private int capacity;
+        /**
+         * 磁盘状态
+         */
+        private DiskState state;
+
+        public int getDiskId() {
+            return diskId;
+        }
+
+        public void setDiskId(int diskId) {
+            this.diskId = diskId;
+        }
+
+        public String getDiskName() {
+            return diskName;
+        }
+
+        public void setDiskName(String diskName) {
+            this.diskName = diskName;
+        }
+
+        public String getDiskSn() {
+            return diskSn;
+        }
+
+        public void setDiskSn(String diskSn) {
+            this.diskSn = diskSn;
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        public void setCapacity(int capacity) {
+            this.capacity = capacity;
+        }
+
+        public DiskState getState() {
+            return state;
+        }
+
+        public void setState(DiskState state) {
+            this.state = state;
+        }
+
+    }
+
     public static class Node {
         /**
          * 节点ID
@@ -56,6 +131,10 @@ public class NodeStatusInfo extends AbstractEntity {
          * 集群内网IP
          */
         private String clusterIp;
+        /**
+         * 当前节点缓存盘列表
+         */
+        private ArrayList<Disk> disks;
 
         public int getNodeId() {
             return nodeId;
@@ -83,6 +162,14 @@ public class NodeStatusInfo extends AbstractEntity {
 
         public String getPublicIp() {
             return publicIp;
+        }
+
+        public ArrayList<Disk> getDisks() {
+            return disks;
+        }
+
+        public void setDisks(ArrayList<Disk> disks) {
+            this.disks = disks;
         }
 
         public void setPublicIp(String publicIp) {
