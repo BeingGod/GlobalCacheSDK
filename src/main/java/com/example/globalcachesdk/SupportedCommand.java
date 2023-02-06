@@ -42,5 +42,10 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_DATA_DISK_PART_INFO,
+    /**
+     * 获取集群异常状态信息
+     */
+    @Registry
+    QUERY_ClUSTER_AlARM_INFO,
 
 }

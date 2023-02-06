@@ -9,46 +9,14 @@ import java.util.ArrayList;
  * @author 章睿彬
  */
 public class ClusterAlarmInfo extends AbstractEntity {
-    public enum AlarmLevel {
-        /**
-         * 错误
-         */
-        ERROR,
-        /**
-         * 警告
-         */
-        WARN,
-    }
 
-    public enum AlarmComponent {
-        /**
-         * 节点异常
-         */
-        NODE,
-        /**
-         * 磁盘异常
-         */
-        DISK,
-        /**
-         * 网络异常
-         */
-        NETWORK,
-        /**
-         * 日志系统异常
-         */
-        LOGSYSTEM,
-    }
 
     public static class AlarmInfo {
-        /**
-         * 告警级别
-         */
-        private AlarmLevel level;
 
         /**
-         * 告警组件
+         * 告警序号
          */
-        private AlarmComponent component;
+        private int alarmNumber;
 
         /**
          * 告警日期
@@ -58,38 +26,22 @@ public class ClusterAlarmInfo extends AbstractEntity {
         /**
          * 告警节点
          */
-        private ArrayList<String> nodeIpList;
+        private String nodeIp;
 
         /**
          * 告警磁盘ID
          */
-        private ArrayList<String> diskIpList;
+        private String diskIp;
 
         /**
          * 告警磁盘SN码
          */
-        private ArrayList<String> diskSnList;
+        private String diskSn;
 
         /**
          * 错误日志
          */
         private String log;
-
-        public AlarmLevel getLevel() {
-            return level;
-        }
-
-        public void setLevel(AlarmLevel level) {
-            this.level = level;
-        }
-
-        public AlarmComponent getComponent() {
-            return component;
-        }
-
-        public void setComponent(AlarmComponent component) {
-            this.component = component;
-        }
 
         public DateTime getTime() {
             return time;
@@ -99,28 +51,36 @@ public class ClusterAlarmInfo extends AbstractEntity {
             this.time = time;
         }
 
-        public ArrayList<String> getNodeIpList() {
-            return nodeIpList;
+        public String getNodeIp() {
+            return nodeIp;
         }
 
-        public void setNodeIpList(ArrayList<String> nodeIpList) {
-            this.nodeIpList = nodeIpList;
+        public void setNodeIp(String nodeIp) {
+            this.nodeIp = nodeIp;
         }
 
-        public ArrayList<String> getDiskIpList() {
-            return diskIpList;
+        public String getDiskIp() {
+            return diskIp;
         }
 
-        public void setDiskIpList(ArrayList<String> diskIpList) {
-            this.diskIpList = diskIpList;
+        public void setDiskIp(String diskIp) {
+            this.diskIp = diskIp;
         }
 
-        public ArrayList<String> getDiskSnList() {
-            return diskSnList;
+        public String getDiskSn() {
+            return diskSn;
         }
 
-        public void setDiskSnList(ArrayList<String> diskSnList) {
-            this.diskSnList = diskSnList;
+        public void setDiskSn(String diskSn) {
+            this.diskSn = diskSn;
+        }
+
+        public int getAlarmNumber() {
+            return alarmNumber;
+        }
+
+        public void setAlarmNumber(int alarmNumber) {
+            this.alarmNumber = alarmNumber;
         }
 
         public String getLog() {

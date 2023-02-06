@@ -131,6 +131,28 @@ public class GlobalCacheSDK {
     }
 
     /**
+     * 获取集群异常状态信息
+     *
+     * @param hosts 需要获取主机IP列表
+     * @return 集群异常状态信息查询结果
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.example.globalcachesdk.entity.CpuInfo
+     */
+    public static HashMap<String, CommandExecuteResult> queryClusterAlarmInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_ClUSTER_AlARM_INFO);
+        try {
+            ArrayList<String> users = new ArrayList<>(hosts.size());
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            for (String host : hosts) {
+                users.add(user);
+            }
+            return getInstance().sshSessionPool.execute(hosts, users, executor);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
+    }
+
+    /**
      * 获取节点的磁盘信息
      *
      * @param host 需要获取主机IP
