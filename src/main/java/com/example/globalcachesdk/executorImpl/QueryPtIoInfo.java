@@ -1,7 +1,6 @@
 package com.example.globalcachesdk.executorImpl;
 
 import com.example.globalcachesdk.entity.AbstractEntity;
-import com.example.globalcachesdk.entity.NodeStatusInfo;
 import com.example.globalcachesdk.entity.PtIoInfo;
 import com.example.globalcachesdk.exception.CommandExecException;
 import com.example.globalcachesdk.executor.AbstractCommandExecutor;
@@ -42,13 +41,13 @@ public class QueryPtIoInfo extends AbstractCommandExecutor {
             String[] nodeInfoList = returnValueList[i].split(",|:");
             PtIoInfo.Pt pt=new PtIoInfo.Pt();
             pt.setPtId(Integer.parseInt(nodeInfoList[1].trim()));
-            PtIoInfo.IoInfo ioInfo=new PtIoInfo.IoInfo();
-            ioInfo.setIoCount(Integer.parseInt(nodeInfoList[3].trim()));
-            ioInfo.setReadCount(Integer.parseInt(nodeInfoList[5].trim()));
-            ioInfo.setReadSize(Integer.parseInt(nodeInfoList[7].trim()));
-            ioInfo.setWriteSizeCount(Integer.parseInt(nodeInfoList[9].trim()));
-            ioInfo.setWriteSize(Integer.parseInt(nodeInfoList[11].trim().substring(0,nodeInfoList[11].trim().length()-1)));
-            pt.setIoInfo(ioInfo);
+            PtIoInfo.PtIo ptIo =new PtIoInfo.PtIo();
+            ptIo.setIoCount(Integer.parseInt(nodeInfoList[3].trim()));
+            ptIo.setReadCount(Integer.parseInt(nodeInfoList[5].trim()));
+            ptIo.setReadSize(Integer.parseInt(nodeInfoList[7].trim()));
+            ptIo.setWriteSizeCount(Integer.parseInt(nodeInfoList[9].trim()));
+            ptIo.setWriteSize(Integer.parseInt(nodeInfoList[11].trim().substring(0,nodeInfoList[11].trim().length()-1)));
+            pt.setIoInfo(ptIo);
             nodeArrayList.add(pt);
         }
         ptIoInfo.setPtArrayList(nodeArrayList);

@@ -5,6 +5,9 @@ package com.example.globalcachesdk.entity;
  * @author 章睿彬
  */
 public class ErrorCodeEntity extends AbstractEntity {
+    /**
+     * 错误码
+     */
     private int errorCode;
 
     public int getErrorCode() {

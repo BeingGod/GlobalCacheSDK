@@ -34,7 +34,7 @@ public class QueryDiskInfo extends AbstractCommandExecutor {
         Matcher matcher = DISK_INFO_PATTERN.matcher(returnValue);
         ArrayList<DiskInfo.Disk> diskList = new ArrayList<>();
         while (matcher.find()) {
-            DiskInfo.Disk disk = diskInfo.new Disk();
+            DiskInfo.Disk disk = new DiskInfo.Disk();
             disk.setName("/dev/" + matcher.group(0));
             if (DISK_ROTA_PATTERN.matcher(matcher.group(0)).find()) {
                 disk.setType(DiskInfo.DiskType.ROTA);

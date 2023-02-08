@@ -7,7 +7,9 @@ import java.util.ArrayList;
  * @author 章睿彬
  */
 public class PgInfo extends AbstractEntity {
-
+    /**
+     * PG状态
+     */
     public enum PgState {
         /**
          *  正常状态，可以服务IO
@@ -35,6 +37,9 @@ public class PgInfo extends AbstractEntity {
         PG_STATE_FAULT,
     }
 
+    /**
+     * PG副本状态
+     */
     public enum CopyState {
         /**
          * 副本处于运行状态
@@ -54,6 +59,9 @@ public class PgInfo extends AbstractEntity {
         PG_COPY_STATE_RECOVERY,
     }
 
+    /**
+     * PG副本
+     */
     public static class PgCopyInfo {
 
         private int nodeId;

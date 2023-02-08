@@ -21,12 +21,14 @@ public class DiskInfo extends AbstractEntity {
         NVME,
     }
 
-    public class Disk {
+    /**
+     * 磁盘
+     */
+    public static class Disk {
         /**
          * 设备名称
          */
         private String name;
-
         /**
          * 设备类型
          */

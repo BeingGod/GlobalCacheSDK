@@ -154,7 +154,7 @@ public class GlobalCacheSDK {
      * @param hosts 需要获取主机IP列表
      * @return 集群异常状态信息查询结果
      * @throws GlobalCacheSDKException 执行失败抛出此异常
-     * @see com.example.globalcachesdk.entity.CpuInfo
+     * @see com.example.globalcachesdk.entity.ClusterAlarmInfo
      */
     public static HashMap<String, CommandExecuteResult> queryClusterAlarmInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CLUSTER_AlARM_INFO);
@@ -275,7 +275,7 @@ public class GlobalCacheSDK {
      * @param nodeId 节点ID
      * @return 节点PT信息查询结果
      * @throws GlobalCacheSDKException 执行失败抛出此异常
-     * @see com.example.globalcachesdk.entity.ClusterStatusInfo
+     * @see com.example.globalcachesdk.entity.PtInfo
      */
     public static HashMap<String, CommandExecuteResult> queryNodePtInfo(String host, int nodeId) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_INFO);
@@ -294,7 +294,7 @@ public class GlobalCacheSDK {
      * @param host Ceph1节点IP
      * @return 集群PT信息查询结果
      * @throws GlobalCacheSDKException 执行失败抛出此异常
-     * @see com.example.globalcachesdk.entity.ClusterStatusInfo
+     * @see com.example.globalcachesdk.entity.PtInfo
      */
     public static HashMap<String, CommandExecuteResult> queryAllPtInfo(String host) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_INFO);
@@ -315,7 +315,7 @@ public class GlobalCacheSDK {
      * @param diskId 磁盘ID
      * @return 磁盘PT信息查询结果
      * @throws GlobalCacheSDKException 执行失败抛出此异常
-     * @see com.example.globalcachesdk.entity.ClusterStatusInfo
+     * @see com.example.globalcachesdk.entity.PtInfo
      */
     public static HashMap<String, CommandExecuteResult> queryDiskPtInfo(String host, Integer diskId) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_INFO);
@@ -334,7 +334,7 @@ public class GlobalCacheSDK {
      * @param host Ceph1节点IP
      * @return 节点状态查询结果
      * @throws GlobalCacheSDKException 执行失败抛出此异常
-     * @see com.example.globalcachesdk.entity.NodeStatusInfo
+     * @see com.example.globalcachesdk.entity.PtIoInfo
      */
     public static HashMap<String, CommandExecuteResult> queryPtIoInfo(String host) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_IO_INFO);
@@ -353,7 +353,7 @@ public class GlobalCacheSDK {
      * @param nodeId 节点ID
      * @return 节点PG信息查询结果
      * @throws GlobalCacheSDKException 执行失败抛出此异常
-     * @see com.example.globalcachesdk.entity.ClusterStatusInfo
+     * @see com.example.globalcachesdk.entity.PgInfo
      */
     public static HashMap<String, CommandExecuteResult> queryNodePgInfo(String host, int nodeId) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PG_INFO);
@@ -372,7 +372,7 @@ public class GlobalCacheSDK {
      * @param host Ceph1节点IP
      * @return 集群PG信息查询结果
      * @throws GlobalCacheSDKException 执行失败抛出此异常
-     * @see com.example.globalcachesdk.entity.ClusterStatusInfo
+     * @see com.example.globalcachesdk.entity.PgInfo
      */
     public static HashMap<String, CommandExecuteResult> queryAllPgInfo(String host) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PG_INFO);
@@ -393,7 +393,7 @@ public class GlobalCacheSDK {
      * @param diskId 磁盘ID
      * @return 磁盘PG信息查询结果
      * @throws GlobalCacheSDKException 执行失败抛出此异常
-     * @see com.example.globalcachesdk.entity.ClusterStatusInfo
+     * @see com.example.globalcachesdk.entity.PgInfo
      */
     public static HashMap<String, CommandExecuteResult> queryDiskPgInfo(String host, Integer diskId) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PG_INFO);

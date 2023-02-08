@@ -5,6 +5,9 @@ package com.example.globalcachesdk.entity;
  * @author 章睿彬
  */
 public class ClusterStatusInfo extends AbstractEntity {
+    /**
+     * 集群状态
+     */
     public enum ClusterStatus {
         /**
          * 集群处于上电状态

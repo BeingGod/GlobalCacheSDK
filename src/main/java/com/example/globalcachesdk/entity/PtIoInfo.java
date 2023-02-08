@@ -3,7 +3,7 @@ package com.example.globalcachesdk.entity;
 import java.util.ArrayList;
 
 /**
- * PtIo信息
+ * PT IO信息
  * @author 李金泽
  */
 public class PtIoInfo extends AbstractEntity {
@@ -12,7 +12,10 @@ public class PtIoInfo extends AbstractEntity {
      */
     private int ptNum;
 
-    public static class IoInfo{
+    /**
+     * PT IO
+     */
+    public static class PtIo {
         /**
          * 总IO个数
          */
@@ -75,7 +78,10 @@ public class PtIoInfo extends AbstractEntity {
         }
     }
 
-    public static class Pt{
+    /**
+     * PT
+     */
+    public static class Pt {
         /**
          * pt唯一标识ID
          */
@@ -83,7 +89,7 @@ public class PtIoInfo extends AbstractEntity {
         /**
          * 当前Pt Io信息
          */
-        IoInfo ioInfo;
+        PtIo ptIo;
 
         public int getPtId() {
             return ptId;
@@ -93,12 +99,12 @@ public class PtIoInfo extends AbstractEntity {
             this.ptId = ptId;
         }
 
-        public IoInfo getIoInfo() {
-            return ioInfo;
+        public PtIo getIoInfo() {
+            return ptIo;
         }
 
-        public void setIoInfo(IoInfo ioInfo) {
-            this.ioInfo = ioInfo;
+        public void setIoInfo(PtIo ptIo) {
+            this.ptIo = ptIo;
         }
     }
 

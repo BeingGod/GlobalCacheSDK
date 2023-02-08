@@ -7,6 +7,9 @@ import java.util.ArrayList;
  * @author 章睿彬
  */
 public class CacheDiskInfo extends AbstractEntity {
+    /**
+     * 缓存盘状态
+     */
     public enum CacheDiskState {
         /**
          * 可服务IO状态
@@ -18,6 +21,9 @@ public class CacheDiskInfo extends AbstractEntity {
         VDISK_STATE_DOWN,
     }
 
+    /**
+     * 缓存盘
+     */
     public static class CacheDisk {
         /**
          * 磁盘分区唯一标识Id

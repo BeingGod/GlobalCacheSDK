@@ -7,9 +7,12 @@ import java.util.ArrayList;
  * @author 章睿彬
  */
 public class DataDiskPartInfo extends AbstractEntity {
+    /**
+     * 数据盘分区
+     */
     public static class Part {
         /**
-         * 磁盘名称
+         * 分区挂载路径
          */
         private String diskName;
         /**

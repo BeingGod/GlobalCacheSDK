@@ -10,7 +10,9 @@ import java.util.ArrayList;
  */
 public class ClusterAlarmInfo extends AbstractEntity {
 
-
+    /**
+     * 告警信息
+     */
     public static class AlarmInfo {
 
         /**

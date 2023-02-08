@@ -7,7 +7,9 @@ import java.util.ArrayList;
  * @author 章睿彬
  */
 public class PtInfo extends AbstractEntity {
-
+    /**
+     * PT状态
+     */
     public enum PtState {
         /**
          * PT处于初始化状态

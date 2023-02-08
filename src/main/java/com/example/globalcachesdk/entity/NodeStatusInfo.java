@@ -7,6 +7,9 @@ import java.util.ArrayList;
  * @author 章睿彬
  */
 public class NodeStatusInfo extends AbstractEntity {
+    /**
+     * 节点状态
+     */
     public enum NodeState {
         /**
          * 非法状态
@@ -34,6 +37,9 @@ public class NodeStatusInfo extends AbstractEntity {
         NODE_STATE_OUT,
     }
 
+    /**
+     * 磁盘状态
+     */
     public enum DiskState {
         /**
          * 可服务IO状态
@@ -45,7 +51,10 @@ public class NodeStatusInfo extends AbstractEntity {
         VDISK_STATE_DOWN,
     }
 
-    public static class Disk{
+    /**
+     * 磁盘
+     */
+    public static class Disk {
         /**
          * 磁盘ID
          */
@@ -109,6 +118,9 @@ public class NodeStatusInfo extends AbstractEntity {
 
     }
 
+    /**
+     * 节点
+     */
     public static class Node {
         /**
          * 节点ID
