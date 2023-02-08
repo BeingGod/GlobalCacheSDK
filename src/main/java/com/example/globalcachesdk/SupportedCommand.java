@@ -67,4 +67,9 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_CLUSTER_AlARM_INFO,
+    /**
+     * 获取PG信息
+     */
+    @Registry
+    QUERY_PG_INFO,
 }
