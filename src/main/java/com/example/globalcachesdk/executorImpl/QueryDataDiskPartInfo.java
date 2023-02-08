@@ -26,16 +26,12 @@ public class QueryDataDiskPartInfo extends AbstractCommandExecutor {
 
     @Override
     public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-
         String command = "bash /home/GlobalCacheScripts/SDK/datadiskpart.sh";
-
         String returnValue = execInternal(sshSession, command);
-
         String[] returnValueList = returnValue.split("\n");
 
         ArrayList<DataDiskPartInfo.Part> partList = new ArrayList<>();
         DataDiskPartInfo dataDiskPartInfo = new DataDiskPartInfo();
-
         for (String s : returnValueList) {
             String[] str = s.split("\\s+");
             DataDiskPartInfo.Part part = new DataDiskPartInfo.Part();

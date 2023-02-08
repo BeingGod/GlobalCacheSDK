@@ -48,6 +48,7 @@ public enum SupportedCommand {
     @Registry
     QUERY_DATA_DISK_PART_INFO,
     /**
+<<<<<<< HEAD
      * 查询节点PtIo信息
      */
     @Registry
@@ -62,4 +63,9 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_PT_INFO,
+    /**
+     * 获取集群异常状态信息
+     */
+    @Registry
+    QUERY_ClUSTER_AlARM_INFO,
 }
