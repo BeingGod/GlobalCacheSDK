@@ -345,6 +345,23 @@ public class GlobalCacheSDK {
         }
     }
 
+    /**
+     * 获取静态网卡信息
+     *
+     * @param host 需查询节点IP
+     * @return 节点状态查询结果
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.example.globalcachesdk.entity.StaticNetInfo
+     */
+    public static HashMap<String, CommandExecuteResult> queryStaticNetInfo(String host) throws GlobalCacheSDKException {
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_STATIC_NET_INFO);
+        try {
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            return getInstance().sshSessionPool.execute(host, user, executor);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
+    }
     /* ===============================================================自动化部署接口===============================================================*/
 
     /**
