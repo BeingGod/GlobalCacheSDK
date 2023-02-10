@@ -346,10 +346,10 @@ public class GlobalCacheSDK {
     }
 
     /**
-     * 获取静态网卡信息
+     * 获取静态网络信息
      *
      * @param host 需查询节点IP
-     * @return 节点状态查询结果
+     * @return 静态网络信息查询结果
      * @throws GlobalCacheSDKException 执行失败抛出此异常
      * @see com.example.globalcachesdk.entity.StaticNetInfo
      */
@@ -362,6 +362,7 @@ public class GlobalCacheSDK {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
         }
     }
+
     /* ===============================================================自动化部署接口===============================================================*/
 
     /**

@@ -2,11 +2,32 @@ package com.example.globalcachesdk.entity;
 
 import java.util.ArrayList;
 
+/**
+ * 静态网络信息
+ * @author 蔡润培
+ */
 public class StaticNetInfo extends AbstractEntity {
+    /**
+     * 网卡信息
+     */
     public static class InterfaceInfo {
+        /**
+         * 网卡名称
+         */
         private String name;
+        /**
+         * 网卡IPV4地址
+         * 注意: 如果网卡没有IPV4地址, 该值为""
+         */
         private String ipv4;
+        /**
+         * 网卡IPV6地址
+         * 注意: 如果网卡没有IPV6地址, 该值为""
+         */
         private String ipv6;
+        /**
+         * 网卡MAC地址
+         */
         private String mac;
 
         public String getName() {

@@ -67,7 +67,6 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_ClUSTER_AlARM_INFO,
-
     /**
      * 获取节点静态网卡信息
      */
