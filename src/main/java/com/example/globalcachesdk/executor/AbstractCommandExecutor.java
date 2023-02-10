@@ -30,14 +30,11 @@ public abstract class AbstractCommandExecutor {
         }
 
         Configure conf = class_.getAnnotation(Configure.class);
-        String path = conf.path();
         java.net.URL resource = this.getClass().getResource(conf.path());
 
         if (resource == null) {
             System.err.println("未找到配置文件");
-            // 采用默认配置
-            this.des = new CommandExecutorDescription();
-            return;
+            System.exit(1);
         }
 
         String realPath = resource.getPath();
@@ -46,8 +43,7 @@ public abstract class AbstractCommandExecutor {
             this.des = ConfigureParser.parse(realPath);
         } catch (ConfigureParserException e) {
             System.err.println("未知的命令配置文件");
-            // 采用默认配置
-            this.des = new CommandExecutorDescription();
+            System.exit(1);
         }
     }
 
