@@ -72,4 +72,9 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_PG_INFO,
+    /**
+     * 获取节点静态网卡信息
+     */
+    @Registry
+    QUERY_STATIC_NET_INFO,
 }

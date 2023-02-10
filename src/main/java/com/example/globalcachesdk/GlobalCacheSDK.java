@@ -269,6 +269,24 @@ public class GlobalCacheSDK {
     }
 
     /**
+     * 获取静态网络信息
+     *
+     * @param host 需查询节点IP
+     * @return 静态网络信息查询结果
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.example.globalcachesdk.entity.StaticNetInfo
+     */
+    public static HashMap<String, CommandExecuteResult> queryStaticNetInfo(String host) throws GlobalCacheSDKException {
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_STATIC_NET_INFO);
+        try {
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            return getInstance().sshSessionPool.execute(host, user, executor);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
+    }
+
+    /**
      * 获取节点PT信息
      *
      * @param host Ceph1节点IP
@@ -306,7 +324,6 @@ public class GlobalCacheSDK {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
         }
     }
-
 
     /**
      * 获取磁盘PT信息
@@ -384,7 +401,6 @@ public class GlobalCacheSDK {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
         }
     }
-
 
     /**
      * 获取磁盘PG信息
