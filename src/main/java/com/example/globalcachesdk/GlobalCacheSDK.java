@@ -69,6 +69,18 @@ public class GlobalCacheSDK {
     }
 
     /**
+     * 判断Session是否存在
+     *
+     * @param host session的主机IP
+     * @param user 用户名称
+     * @return 是否存在
+     * @throws GlobalCacheSDKException GlobalCacheSDK对象为空抛出此异常
+     */
+    public static boolean isSessionExist(String host, String user) throws GlobalCacheSDKException {
+        return getInstance().sshSessionPool.isSessionExist(host, user);
+    }
+
+    /**
      * 移除一个SSH会话，若未抛出异常则表示执行成功
      * 当已不需要一个会话的时候，可以调用该接口移除SSH会话
      *

@@ -134,6 +134,18 @@ public class SSHSessionPool {
     }
 
     /**
+     * 判断Session是否存在
+     *
+     * @param host session的主机IP
+     * @param user 用户名称
+     * @return 是否存在
+     */
+    public boolean isSessionExist(String host, String user) {
+        Session session =  hostSessionHashMap.get(Pair.of(host, user));
+        return session != null;
+    }
+
+    /**
      * 根据host获取session给函数调用使用
      *
      * @param host 需要获取连接session的主机IP
