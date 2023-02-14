@@ -77,4 +77,9 @@ public enum SupportedCommand {
      */
     @Registry
     QUERY_STATIC_NET_INFO,
+    /**
+     * 获取节点磁盘IO状态
+     */
+    @Registry
+    QUERY_DISK_IO_INFO,
 }

@@ -281,6 +281,28 @@ public class GlobalCacheSDK {
     }
 
     /**
+     * 获取节点的磁盘IO信息
+     *
+     * @param hosts 需要获取主机IP列表
+     * @return 每个节点据盘分区信息查询结果
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.example.globalcachesdk.entity.DiskIoInfo
+     */
+    public static HashMap<String, CommandExecuteResult> queryDiskIOInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_DISK_IO_INFO);
+        try {
+            ArrayList<String> users = new ArrayList<>(hosts.size());
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            for (String host : hosts) {
+                users.add(user);
+            }
+            return getInstance().sshSessionPool.execute(hosts, users, executor);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
+    }
+
+    /**
      * 获取静态网络信息
      *
      * @param host 需查询节点IP
