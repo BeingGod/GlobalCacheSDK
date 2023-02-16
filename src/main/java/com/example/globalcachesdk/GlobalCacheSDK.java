@@ -284,11 +284,11 @@ public class GlobalCacheSDK {
      * 获取节点的磁盘IO信息
      *
      * @param hosts 需要获取主机IP列表
-     * @return 每个节点据盘分区信息查询结果
+     * @return 每个节点磁盘分区信息查询结果
      * @throws GlobalCacheSDKException 执行失败抛出此异常
      * @see com.example.globalcachesdk.entity.DiskIoInfo
      */
-    public static HashMap<String, CommandExecuteResult> queryDiskIOInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
+    public static HashMap<String, CommandExecuteResult> queryDiskIoInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_DISK_IO_INFO);
         try {
             ArrayList<String> users = new ArrayList<>(hosts.size());
