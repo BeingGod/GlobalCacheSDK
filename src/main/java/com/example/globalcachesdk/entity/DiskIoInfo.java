@@ -28,15 +28,15 @@ public class DiskIoInfo extends AbstractEntity {
          */
         float kbRead;
         /**
-         * 每秒向设备（drive expressed）写入的数据量；
+         * 每秒向设备（drive expressed）写入的数据量；kB/s
          */
         float kbWrite;
         /**
-         * 读取的总数据量；
+         * 读取的总数据量；kB/s
          */
         String kbReadTotal;
         /**
-         * 写入的总数量数据量；
+         * 写入的总数量数据量；kB/s
          */
         String kbWrittenTotal;
 
