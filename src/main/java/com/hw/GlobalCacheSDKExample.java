@@ -3,10 +3,7 @@ package com.hw;
 import com.hw.globalcachesdk.GlobalCacheSDK;
 import com.hw.globalcachesdk.StatusCode;
 import com.hw.globalcachesdk.SupportedCommand;
-import com.hw.globalcachesdk.entity.ErrorCodeEntity;
-import com.hw.globalcachesdk.entity.MemInfo;
-import com.hw.globalcachesdk.entity.CpuInfo;
-import com.hw.globalcachesdk.entity.UptimeInfo;
+import com.hw.globalcachesdk.entity.*;
 import com.hw.globalcachesdk.exception.GlobalCacheSDKException;
 import com.hw.globalcachesdk.executor.CommandExecuteResult;
 
@@ -301,14 +298,54 @@ public class GlobalCacheSDKExample {
 		}
 	}
 
+	public static void queryAllPgInfoDemo() {
+		System.out.println("==============queryAllPgInfo Demo==============");
+
+		String host = "175.34.8.36";
+		String user = "globalcacheop";
+		String password = "globalcacheop";
+		try {
+			GlobalCacheSDK.createSession(host, user, password, 22);
+			System.out.println(host + " SSH会话创建成功");
+		} catch (GlobalCacheSDKException e) {
+			System.out.println(host + " SSH会话创建失败");
+			e.printStackTrace();
+		}
+
+		int times = 100;
+		for (int i = 0; i< times; ++i) {
+			Map<String, PgInfo> infoMap = new HashMap<>();
+			try {
+				for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryAllPgInfo(host).entrySet()) {
+					if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
+						infoMap.put(entry.getKey(), (PgInfo) entry.getValue().getData());
+					}
+				}
+			} catch (GlobalCacheSDKException e) {
+				System.out.println("接口调用失败");
+				e.printStackTrace();
+			}
+			System.out.println(infoMap.get(host));
+		}
+
+		try {
+			GlobalCacheSDK.releaseSession(host, user);
+			System.out.println(host + " SSH会话释放成功");
+		} catch (GlobalCacheSDKException e) {
+			System.out.println(host + " SSH会话释放失败");
+			e.printStackTrace();
+		}
+	}
+
 
 	public static void main(String[] args) {
 //		sessionDemo();
 //		queryCpuInfoDemo();
 //		queryMemInfoDemo();
-		queryUptimeInfoDemo();
+//		queryUptimeInfoDemo();
 //		setCommandTimeoutDemo();
 //		gcServiceControlDemo();
+		queryAllPgInfoDemo();
 		return;
 	}
 }
