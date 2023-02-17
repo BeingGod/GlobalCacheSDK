@@ -23,7 +23,7 @@ public class CommandExecutorFactory {
     /**
      * 类地址前缀
      */
-    static final String CLASS_PATH_PREFIX = "com.example.globalcachesdk.executorImpl.";
+    static final String CLASS_PATH_PREFIX = "com.hw.globalcachesdk.executorImpl.";
 
     public CommandExecutorFactory() throws CommandExecutorFactoryException {
         this.registriedCommandExecutor = new HashMap<>();
