@@ -1,7 +1,7 @@
-com.example.globalcachesdk
-com.example.globalcachesdk.entity
-com.example.globalcachesdk.exception
-com.example.globalcachesdk.executor
-com.example.globalcachesdk.executorImpl
-com.example.globalcachesdk.pool
-com.example.globalcachesdk.utils
+com.hw.globalcachesdk
+com.hw.globalcachesdk.entity
+com.hw.globalcachesdk.exception
+com.hw.globalcachesdk.executor
+com.hw.globalcachesdk.executorImpl
+com.hw.globalcachesdk.pool
+com.hw.globalcachesdk.utils
