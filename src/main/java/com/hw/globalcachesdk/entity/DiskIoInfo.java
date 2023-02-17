@@ -11,9 +11,12 @@ public class DiskIoInfo extends AbstractEntity {
     /**
      * 本节点全部磁盘IO状态
      */
-    ArrayList<Disk> diskArrayList;
+    ArrayList<DiskIo> diskIoList;
 
-    public static class Disk{
+    /**
+     * 磁盘IO
+     */
+    public static class DiskIo {
         /**
          * 磁盘名称
          */
@@ -89,11 +92,11 @@ public class DiskIoInfo extends AbstractEntity {
         }
     }
 
-    public ArrayList<Disk> getDiskArrayList() {
-        return diskArrayList;
+    public ArrayList<DiskIo> getDiskIoList() {
+        return diskIoList;
     }
 
-    public void setDiskArrayList(ArrayList<Disk> diskArrayList) {
-        this.diskArrayList = diskArrayList;
+    public void setDiskIoList(ArrayList<DiskIo> diskIoList) {
+        this.diskIoList = diskIoList;
     }
 }

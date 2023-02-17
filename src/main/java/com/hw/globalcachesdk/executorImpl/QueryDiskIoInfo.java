@@ -30,23 +30,23 @@ public class QueryDiskIoInfo extends AbstractCommandExecutor {
         //数据返回对象
         DiskIoInfo diskIoInfo=new DiskIoInfo();
         //磁盘列表
-        ArrayList<DiskIoInfo.Disk> disks=new ArrayList<>();
+        ArrayList<DiskIoInfo.DiskIo> diskIos =new ArrayList<>();
         for (int i = 4; i < returnValueList.length; i++) {
-            DiskIoInfo.Disk disk=new DiskIoInfo.Disk();
+            DiskIoInfo.DiskIo diskIo =new DiskIoInfo.DiskIo();
             //消除所有连续的空格，为按空格切分做准备
             while(returnValueList[i].contains("  ")){
                 returnValueList[i]=returnValueList[i].replaceAll("  "," ");
             }
             String[] diskInfoList = returnValueList[i].split(" ");
-            disk.setDiskName(diskInfoList[0]);
-            disk.setTps(Float.parseFloat(diskInfoList[1]));
-            disk.setKbRead(Float.parseFloat(diskInfoList[2]));
-            disk.setKbWrite(Float.parseFloat(diskInfoList[3]));
-            disk.setKbReadTotal(diskInfoList[4]);
-            disk.setKbWrittenTotal(diskInfoList[5]);
-            disks.add(disk);
+            diskIo.setDiskName(diskInfoList[0]);
+            diskIo.setTps(Float.parseFloat(diskInfoList[1]));
+            diskIo.setKbRead(Float.parseFloat(diskInfoList[2]));
+            diskIo.setKbWrite(Float.parseFloat(diskInfoList[3]));
+            diskIo.setKbReadTotal(diskInfoList[4]);
+            diskIo.setKbWrittenTotal(diskInfoList[5]);
+            diskIos.add(diskIo);
         }
-        diskIoInfo.setDiskArrayList(disks);
+        diskIoInfo.setDiskIoList(diskIos);
         return diskIoInfo;
     }
 }
