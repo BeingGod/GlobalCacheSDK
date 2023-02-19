@@ -21,7 +21,6 @@ public class QueryUptimeInfo extends AbstractCommandExecutor {
 
     @Override
     public AbstractEntity parseOf(String returnValue) throws ReturnValueParseException {
-        System.out.println(returnValue);
         UptimeInfo uptimeInfo = new UptimeInfo();
         if (returnValue.length() < 1){
             return null;
