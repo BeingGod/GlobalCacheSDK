@@ -39,7 +39,11 @@ public class QueryUptimeInfo extends AbstractCommandExecutor {
             }else{
                 hour=Integer.parseInt(returnValue.substring(hourNum-2,hourNum).trim());
             }
-            min=Integer.parseInt(returnValue.substring(hourNum+1).trim());
+            if(returnValue.substring(hourNum + 1).contains(",")){
+                min=Integer.parseInt(returnValue.substring(hourNum+1).replaceAll(",","").trim());
+            }else{
+                min=Integer.parseInt(returnValue.substring(hourNum+1).trim());
+            }
             uptimeInfo.setUptime((long) date *24*60+hour* 60L +min);
         }
         return uptimeInfo;
