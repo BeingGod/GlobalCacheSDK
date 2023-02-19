@@ -2,10 +2,10 @@ package com.hw.globalcachesdk.executorImpl;
 
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.DataDiskPartInfo;
-import com.hw.globalcachesdk.exception.CommandExecException;
+import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
 import com.hw.globalcachesdk.executor.Configure;
-import com.jcraft.jsch.Session;
+import com.hw.globalcachesdk.executor.Script;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -13,9 +13,10 @@ import java.util.regex.Pattern;
 
 /**
  * 请求节点数据盘分区信息
- * @author 章睿彬
+ * @author 章睿彬, 杨凤仪
  */
-@Configure(path="/configure/QueryDataDiskPartInfo.xml")
+@Configure(path = "/configure/QueryDataDiskPartInfo.xml")
+@Script(path = "/home/GlobalCacheScripts/SDK/data_disk_part.sh")
 public class QueryDataDiskPartInfo extends AbstractCommandExecutor {
 
     private static final Pattern DATA_DISK_PART_INFO_PATTERN = Pattern.compile("/var/lib/ceph/osd/ceph(.*)");
@@ -25,9 +26,7 @@ public class QueryDataDiskPartInfo extends AbstractCommandExecutor {
     }
 
     @Override
-    public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "bash /home/GlobalCacheScripts/SDK/datadiskpart.sh";
-        String returnValue = execInternal(sshSession, command);
+    public AbstractEntity parseOf(String returnValue) throws ReturnValueParseException {
         String[] returnValueList = returnValue.split("\n");
 
         ArrayList<DataDiskPartInfo.Part> partList = new ArrayList<>();

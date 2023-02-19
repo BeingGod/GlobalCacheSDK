@@ -26,4 +26,8 @@ public enum StatusCode {
      * SSH连接超时
      */
     CONN_TIMEOUT,
+    /**
+     * 返回值解析失败
+     */
+    RETURN_VALUE_PARSE_FAILED
 }

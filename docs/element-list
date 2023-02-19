@@ -1,7 +1,0 @@
-com.hw.globalcachesdk
-com.hw.globalcachesdk.entity
-com.hw.globalcachesdk.exception
-com.hw.globalcachesdk.executor
-com.hw.globalcachesdk.executorImpl
-com.hw.globalcachesdk.pool
-com.hw.globalcachesdk.utils

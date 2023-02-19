@@ -1,6 +1,8 @@
 package com.hw.globalcachesdk.entity;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * PT信息
@@ -63,6 +65,20 @@ public class PtInfo extends AbstractEntity {
 
         public void setVnodeId(int vnodeId) {
             this.vnodeId = vnodeId;
+        }
+
+        public static PtMapInfo parseOf(String str) {
+            Matcher matcher = PT_MAP_INFO_PATTERN.matcher(str);
+
+            PtInfo.PtMapInfo ptMapInfo = new PtInfo.PtMapInfo();
+            if (matcher.find()) {
+                String[] ptMapInfoList = matcher.group(0).split(",");
+                ptMapInfo.setNodeId(Integer.parseInt(ptMapInfoList[0].trim()));
+                ptMapInfo.setDiskId(Integer.parseInt(ptMapInfoList[1].trim()));
+                ptMapInfo.setVnodeId(Integer.parseInt(ptMapInfoList[2].trim()));
+            }
+
+            return ptMapInfo;
         }
     }
 
@@ -147,6 +163,8 @@ public class PtInfo extends AbstractEntity {
         }
     }
 
+    private static final Pattern PT_MAP_INFO_PATTERN = Pattern.compile("[0-9]+, [0-9]+, [0-9]+");
+
     /**
      * PT信息集合
      */
@@ -158,5 +176,33 @@ public class PtInfo extends AbstractEntity {
 
     public void setPtList(ArrayList<Pt> ptList) {
         this.ptList = ptList;
+    }
+
+    public static PtInfo parseOf(String str) {
+        String[] strList = str.split("\n");
+
+        PtInfo ptInfo = new PtInfo();
+        ArrayList<PtInfo.Pt> ptList = new ArrayList<>();
+        for (String s : strList) {
+            String[] temp = s.split("\\|");
+            for (int k = 0; k < temp.length; ++k) {
+                temp[k] = temp[k].trim();
+            }
+
+            PtInfo.Pt pt = new PtInfo.Pt();
+            pt.setPtId(Integer.parseInt(temp[0]));
+            pt.setBv(Integer.parseInt(temp[1]));
+            pt.setState(PtInfo.PtState.valueOf(temp[2]));
+            pt.setIndexInNode(Integer.parseInt(temp[3]));
+            pt.setPtMapInfo(PtMapInfo.parseOf(temp[4]));
+            // TODO: 区分主PT和备份PT
+            pt.setBackupPtMapInfo(PtMapInfo.parseOf(temp[4]));
+
+            ptList.add(pt);
+        }
+
+        ptInfo.setPtList(ptList);
+
+        return ptInfo;
     }
 }

@@ -2,10 +2,10 @@ package com.hw.globalcachesdk.executorImpl;
 
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.DiskIoInfo;
-import com.hw.globalcachesdk.exception.CommandExecException;
+import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
 import com.hw.globalcachesdk.executor.Configure;
-import com.jcraft.jsch.Session;
+import com.hw.globalcachesdk.executor.Script;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,8 @@ import java.util.ArrayList;
  * 请求节点磁盘IO状态
  * @author 李金泽
  */
-@Configure(path= "/configure/QueryDiskIoInfo.xml")
+@Configure(path = "/configure/QueryDiskIoInfo.xml")
+@Script(path = "/home/GlobalCacheScripts/SDK/disk_IO_info.sh")
 public class QueryDiskIoInfo extends AbstractCommandExecutor {
 
     public QueryDiskIoInfo() {
@@ -21,21 +22,18 @@ public class QueryDiskIoInfo extends AbstractCommandExecutor {
     }
 
     @Override
-    public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "bash /home/GlobalCacheScripts/SDK/disk_IO_info.sh";
-        //执行命令
-        String returnValue = execInternal(sshSession, command);
+    public AbstractEntity parseOf(String returnValue) throws ReturnValueParseException {
         //按行切分
         String[] returnValueList = returnValue.split("\n");
         //数据返回对象
-        DiskIoInfo diskIoInfo=new DiskIoInfo();
+        DiskIoInfo diskIoInfo = new DiskIoInfo();
         //磁盘列表
-        ArrayList<DiskIoInfo.DiskIo> diskIos =new ArrayList<>();
+        ArrayList<DiskIoInfo.DiskIo> diskIos = new ArrayList<>();
         for (int i = 4; i < returnValueList.length; i++) {
-            DiskIoInfo.DiskIo diskIo =new DiskIoInfo.DiskIo();
+            DiskIoInfo.DiskIo diskIo = new DiskIoInfo.DiskIo();
             //消除所有连续的空格，为按空格切分做准备
             while(returnValueList[i].contains("  ")){
-                returnValueList[i]=returnValueList[i].replaceAll("  "," ");
+                returnValueList[i] = returnValueList[i].replaceAll("  "," ");
             }
             String[] diskInfoList = returnValueList[i].split(" ");
             diskIo.setDiskName(diskInfoList[0]);
@@ -47,6 +45,7 @@ public class QueryDiskIoInfo extends AbstractCommandExecutor {
             diskIos.add(diskIo);
         }
         diskIoInfo.setDiskIoList(diskIos);
+
         return diskIoInfo;
     }
 }

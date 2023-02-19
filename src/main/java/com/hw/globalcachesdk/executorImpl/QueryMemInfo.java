@@ -2,35 +2,25 @@ package com.hw.globalcachesdk.executorImpl;
 
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.MemInfo;
-import com.hw.globalcachesdk.exception.CommandExecException;
+import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
 import com.hw.globalcachesdk.executor.Configure;
-import com.jcraft.jsch.Session;
+import com.hw.globalcachesdk.executor.Script;
 
 /**
  * 请求内存信息
  * @author 章睿彬
  */
-@Configure(path= "/configure/QueryMemInfo.xml")
+@Configure(path = "/configure/QueryMemInfo.xml")
+@Script(path = "/home/GlobalCacheScripts/SDK/mem_usage.sh")
 public class QueryMemInfo extends AbstractCommandExecutor {
 
     public QueryMemInfo() {
         super(QueryMemInfo.class);
     }
 
-    /**
-     * 请求节点内存信息
-     *
-     * @param sshSession ssh会话
-     * @return 内存信息
-     * @throws CommandExecException 命令执行失败异常
-     */
     @Override
-    public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "bash /home/GlobalCacheScripts/SDK/mem_usage.sh";
-
-        String returnValue = execInternal(sshSession, command);
-
+    public AbstractEntity parseOf(String returnValue) throws ReturnValueParseException {
         String[] returnValueList = returnValue.split("\n");
 
         MemInfo memInfo = new MemInfo();

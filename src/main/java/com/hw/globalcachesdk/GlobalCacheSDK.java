@@ -4,10 +4,7 @@ import com.hw.globalcachesdk.exception.CommandExecutorFactoryException;
 import com.hw.globalcachesdk.exception.GlobalCacheSDKException;
 import com.hw.globalcachesdk.exception.SessionException;
 import com.hw.globalcachesdk.exception.SSHSessionPoolException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
-import com.hw.globalcachesdk.executor.CommandExecuteResult;
-import com.hw.globalcachesdk.executor.CommandExecutorDescription;
-import com.hw.globalcachesdk.executor.CommandExecutorFactory;
+import com.hw.globalcachesdk.executor.*;
 import com.hw.globalcachesdk.pool.SSHSessionPool;
 import com.hw.globalcachesdk.utils.Utils;
 
@@ -107,7 +104,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.MemInfo
      */
     public static HashMap<String, CommandExecuteResult> queryMemInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_MEM_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_MEM_INFO);
         try {
             ArrayList<String> users = new ArrayList<>(hosts.size());
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
@@ -129,7 +126,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.CpuInfo
      */
     public static HashMap<String, CommandExecuteResult> queryCpuInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CPU_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_CPU_INFO);
         try {
             ArrayList<String> users = new ArrayList<>(hosts.size());
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
@@ -151,7 +148,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.CacheDiskInfo
      */
     public static HashMap<String, CommandExecuteResult> queryCacheDiskInfo(String host) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CACHE_DISK_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_CACHE_DISK_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             return getInstance().sshSessionPool.execute(host, user, executor);
@@ -169,7 +166,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.ClusterAlarmInfo
      */
     public static HashMap<String, CommandExecuteResult> queryClusterAlarmInfo(String host) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CLUSTER_AlARM_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_CLUSTER_AlARM_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             return getInstance().sshSessionPool.execute(host, user, executor);
@@ -187,7 +184,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.DiskInfo
      */
     public static HashMap<String, CommandExecuteResult> queryDiskInfo(String host) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_DISK_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_DISK_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             return getInstance().sshSessionPool.execute(host, user, executor);
@@ -205,7 +202,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.UptimeInfo
      */
     public static HashMap<String, CommandExecuteResult> queryUptime(ArrayList<String> hosts) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_UPTIME_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_UPTIME_INFO);
         try {
             ArrayList<String> users = new ArrayList<>(hosts.size());
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
@@ -227,7 +224,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.ClusterStatusInfo
      */
     public static HashMap<String, CommandExecuteResult> queryClusterStatusInfo(String host) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CLUSTER_STATUS_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_CLUSTER_STATUS_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             return getInstance().sshSessionPool.execute(host, user, executor);
@@ -245,7 +242,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.NodeStatusInfo
      */
     public static HashMap<String, CommandExecuteResult> queryNodeStatusInfo(String host) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_NODE_STATUS_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_NODE_STATUS_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             return getInstance().sshSessionPool.execute(host, user, executor);
@@ -263,7 +260,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.DataDiskPartInfo
      */
     public static HashMap<String, CommandExecuteResult> queryDataDiskPartInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_DATA_DISK_PART_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_DATA_DISK_PART_INFO);
         try {
             ArrayList<String> users = new ArrayList<>(hosts.size());
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
@@ -285,7 +282,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.DiskIoInfo
      */
     public static HashMap<String, CommandExecuteResult> queryDiskIoInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_DISK_IO_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_DISK_IO_INFO);
         try {
             ArrayList<String> users = new ArrayList<>(hosts.size());
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
@@ -307,7 +304,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.StaticNetInfo
      */
     public static HashMap<String, CommandExecuteResult> queryStaticNetInfo(String host) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_STATIC_NET_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_STATIC_NET_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             return getInstance().sshSessionPool.execute(host, user, executor);
@@ -326,7 +323,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.PtInfo
      */
     public static HashMap<String, CommandExecuteResult> queryNodePtInfo(String host, int nodeId) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_NODE_PT_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             String args = "node " + nodeId;
@@ -345,7 +342,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.PtInfo
      */
     public static HashMap<String, CommandExecuteResult> queryAllPtInfo(String host) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_ALL_PT_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             String args = "all";
@@ -365,7 +362,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.PtInfo
      */
     public static HashMap<String, CommandExecuteResult> queryDiskPtInfo(String host, Integer diskId) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_DISK_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             String args = "disk " + diskId;
@@ -384,7 +381,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.PtIoInfo
      */
     public static HashMap<String, CommandExecuteResult> queryPtIoInfo(String host) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PT_IO_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_PT_IO_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             return getInstance().sshSessionPool.execute(host, user, executor);
@@ -403,7 +400,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.PgInfo
      */
     public static HashMap<String, CommandExecuteResult> queryNodePgInfo(String host, int nodeId) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PG_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_NODE_PG_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             String args = "node " + nodeId;
@@ -422,7 +419,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.PgInfo
      */
     public static HashMap<String, CommandExecuteResult> queryAllPgInfo(String host) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PG_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_ALL_PG_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             String args = "all";
@@ -442,7 +439,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.PgInfo
      */
     public static HashMap<String, CommandExecuteResult> queryDiskPgInfo(String host, Integer diskId) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_PG_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_DISK_PG_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             String args = "disk " + diskId;
@@ -476,7 +473,7 @@ public class GlobalCacheSDK {
             case "stop":
             case "clean":
             case "init":
-                AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.GLOBAL_CACHE_SERVICE_CONTROL);
+                AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.GLOBAL_CACHE_SERVICE_CONTROL);
                 try {
                     ArrayList<String> args = new ArrayList<>(hosts.size());
                     ArrayList<String> users = new ArrayList<>(hosts.size());
@@ -500,55 +497,55 @@ public class GlobalCacheSDK {
     /**
      * 打印当前命令的配置信息
      *
-     * @param supportedCommand 命令枚举
+     * @param registerExecutor 命令枚举
      * @return 命令参数配置信息
      * @throws GlobalCacheSDKException 当命令未注册时抛出此异常
      */
-    public static CommandExecutorDescription getCommandConf(SupportedCommand supportedCommand) throws GlobalCacheSDKException {
+    public static CommandExecutorDescription getCommandConf(RegisterExecutor registerExecutor) throws GlobalCacheSDKException {
         CommandExecutorFactory commandExecutorFactory = getInstance().commandExecutorFactory;
-        if (null == commandExecutorFactory.getCommandExecutor(supportedCommand)) {
+        if (null == commandExecutorFactory.getCommandExecutor(registerExecutor)) {
             throw new GlobalCacheSDKException("命令未注册");
         }
 
-        return commandExecutorFactory.getCommandExecutor(supportedCommand).getDes();
+        return commandExecutorFactory.getCommandExecutor(registerExecutor).getDes();
     }
 
     /**
      * 设置当前命令的请求超时时间
      *
-     * @param supportedCommand 命令枚举
+     * @param registerExecutor 命令枚举
      * @param timeout 超时时间 单位: 秒
      *                注意：超时时间必须大于0, 且为整数
      * @throws GlobalCacheSDKException 当命令未注册时抛出此异常
      */
-    public static void setCommandTimeout(SupportedCommand supportedCommand, int timeout) throws GlobalCacheSDKException {
+    public static void setCommandTimeout(RegisterExecutor registerExecutor, int timeout) throws GlobalCacheSDKException {
         if (timeout <= 0) {
             throw new GlobalCacheSDKException("超时时间必须大于0");
         }
 
         CommandExecutorFactory commandExecutorFactory = getInstance().commandExecutorFactory;
-        if (null == commandExecutorFactory.getCommandExecutor(supportedCommand)) {
+        if (null == commandExecutorFactory.getCommandExecutor(registerExecutor)) {
             throw new GlobalCacheSDKException("命令未注册");
         }
 
-        commandExecutorFactory.getCommandExecutor(supportedCommand).getDes().setTimeout(timeout);
+        commandExecutorFactory.getCommandExecutor(registerExecutor).getDes().setTimeout(timeout);
     }
 
     /**
      * 获取命令执行接口类型
      * 可以使用该接口确定调用该接口需要传入哪些hosts
      *
-     * @param supportedCommand 命令枚举
+     * @param registerExecutor 命令枚举
      * @return 命令需要执行的节点枚举
      * @throws GlobalCacheSDKException 当命令未注册时抛出此异常
      */
-    public static ExecuteNode getCommandExecuteNode(SupportedCommand supportedCommand) throws GlobalCacheSDKException {
+    public static ExecuteNode getCommandExecuteNode(RegisterExecutor registerExecutor) throws GlobalCacheSDKException {
         CommandExecutorFactory commandExecutorFactory = getInstance().commandExecutorFactory;
-        if (null == commandExecutorFactory.getCommandExecutor(supportedCommand)) {
+        if (null == commandExecutorFactory.getCommandExecutor(registerExecutor)) {
             throw new GlobalCacheSDKException("命令未注册");
         }
 
-        return commandExecutorFactory.getCommandExecutor(supportedCommand).getDes().getExecuteNode();
+        return commandExecutorFactory.getCommandExecutor(registerExecutor).getDes().getExecuteNode();
     }
 
     /* ===============================================================私有方法===============================================================*/

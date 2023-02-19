@@ -5,13 +5,12 @@ import com.hw.globalcachesdk.ExecutePrivilege;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.exception.CommandExecException;
 import com.hw.globalcachesdk.exception.ConfigureParserException;
+import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.utils.ConfigureParser;
 import com.jcraft.jsch.Session;
 
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-
-import static cn.hutool.core.io.resource.ResourceUtil.getResource;
 
 /**
  * Shell命令调用
@@ -52,11 +51,46 @@ public abstract class AbstractCommandExecutor {
      * 注意: 所有子类需要实现该方法
      *
      * @param sshSession SSH会话
-     * @param args 命令参数
-     * @return 装箱后的命令结果
+     * @param args       命令参数
+     * @return 命令返回结果
      * @throws CommandExecException 命令执行失败抛出此异常
      */
-    public abstract AbstractEntity exec(Session sshSession, String args) throws CommandExecException;
+    public String exec(Session sshSession, String args) throws CommandExecException {
+        if (!this.getClass().isAnnotationPresent(Script.class)) {
+            throw new CommandExecException("当前Executor未绑定Shell脚本");
+        }
+
+        Script script = this.getClass().getAnnotation(Script.class);
+        String prefixCommand = script.prefixCommand();
+        String suffixCommand = script.suffixCommand();
+        String path = script.path();
+        String command = "";
+        // TODO: 优化逻辑
+        if ("".equals(prefixCommand) && ! "".equals(suffixCommand)) {
+            command = "bash" + " " + path + " " + args + " " + suffixCommand;
+        }
+        if ("".equals(suffixCommand) && ! "".equals(prefixCommand)) {
+            command = prefixCommand + " " + "bash" + " " + path + " " + args;
+        }
+        if (! "".equals(suffixCommand) && ! "".equals(prefixCommand)) {
+            command = prefixCommand + " " + "bash" + " " + path + " " + args + " " + suffixCommand;
+        }
+        if ("".equals(suffixCommand) && "".equals(prefixCommand)) {
+            command = "bash" + " " + path + " " + args;
+        }
+
+        return execInternal(sshSession, command);
+    }
+
+    /**
+     * 返回结果解析接口
+     * 注意: 所有子类需要实现该方法
+     *
+     * @param returnValue exec执行命令返回结果
+     * @return 装箱后的命令结果
+     * @throws ReturnValueParseException 字符串解析失败时抛出此异常
+     */
+    public abstract AbstractEntity parseOf(String returnValue) throws ReturnValueParseException;
 
     public CommandExecutorDescription getDes() {
         return des;

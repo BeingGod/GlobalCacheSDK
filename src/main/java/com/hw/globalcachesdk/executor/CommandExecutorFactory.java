@@ -1,6 +1,5 @@
 package com.hw.globalcachesdk.executor;
 
-import com.hw.globalcachesdk.SupportedCommand;
 import com.hw.globalcachesdk.exception.CommandExecutorFactoryException;
 import com.hw.globalcachesdk.utils.Utils;
 
@@ -18,7 +17,7 @@ public class CommandExecutorFactory {
     /**
      * 已注册的方法
      */
-    private final HashMap<SupportedCommand, AbstractCommandExecutor> registriedCommandExecutor;
+    private final HashMap<RegisterExecutor, AbstractCommandExecutor> registriedCommandExecutor;
 
     /**
      * 类地址前缀
@@ -28,7 +27,7 @@ public class CommandExecutorFactory {
     public CommandExecutorFactory() throws CommandExecutorFactoryException {
         this.registriedCommandExecutor = new HashMap<>();
 
-        Field[] fields = SupportedCommand.class.getFields();
+        Field[] fields = RegisterExecutor.class.getFields();
 
         // 根据注解的枚举类型, 注册相应的命令类
         for (Field field : fields) {
@@ -58,7 +57,7 @@ public class CommandExecutorFactory {
             // 通过构造器对象的newInstance方法进行对象的初始化
             try {
                 AbstractCommandExecutor abstractCommandExecutor = (AbstractCommandExecutor) constructor.newInstance();
-                registriedCommandExecutor.put(SupportedCommand.valueOf(field.getName()), abstractCommandExecutor);
+                registriedCommandExecutor.put(RegisterExecutor.valueOf(field.getName()), abstractCommandExecutor);
             } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
                 throw new CommandExecutorFactoryException("类初始化失败", e);
 
@@ -72,7 +71,7 @@ public class CommandExecutorFactory {
      * @param command 命令类型
      * @return 需要执行的命令类
      */
-    public AbstractCommandExecutor getCommandExecutor(SupportedCommand command) {
+    public AbstractCommandExecutor getCommandExecutor(RegisterExecutor command) {
         return registriedCommandExecutor.get(command);
     }
 }
