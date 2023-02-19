@@ -2,10 +2,10 @@ package com.hw.globalcachesdk.executorImpl;
 
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.ErrorCodeEntity;
-import com.hw.globalcachesdk.exception.CommandExecException;
+import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
 import com.hw.globalcachesdk.executor.Configure;
-import com.jcraft.jsch.Session;
+import com.hw.globalcachesdk.executor.Script;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
  * Global Cache 服务控制
  * @author 章睿彬
  */
-@Configure(path= "/configure/GlobalCacheServiceControl.xml")
+@Configure(path = "/configure/GlobalCacheServiceControl.xml")
+@Script(path = "/home/GlobalCacheScripts/utils/gc_service_control.sh", suffixCommand = "> /dev/null && echo $?")
 public class GlobalCacheServiceControl extends AbstractCommandExecutor {
 
     /**
@@ -27,12 +28,7 @@ public class GlobalCacheServiceControl extends AbstractCommandExecutor {
     }
 
     @Override
-    public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        // @TODO: 命令执行时间较长，用异步避免阻塞
-        String command = "bash /home/GlobalCacheScripts/utils/gc_service_control.sh " + args + " > /dev/null && echo $?";
-
-        String returnValue = execInternal(sshSession, command);
-
+    public AbstractEntity parseOf(String returnValue) throws ReturnValueParseException {
         Matcher matcher = GC_SERVICE_CONTROL_PATTERN.matcher(returnValue);
 
         ErrorCodeEntity errorCodeEntity = new ErrorCodeEntity();

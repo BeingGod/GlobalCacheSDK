@@ -12,5 +12,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Configure {
+    /**
+     * 设置XML文件路径
+     * @return XML路径
+     */
     String path();
 }

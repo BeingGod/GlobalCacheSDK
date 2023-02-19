@@ -2,10 +2,10 @@ package com.hw.globalcachesdk.executorImpl;
 
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.CpuInfo;
-import com.hw.globalcachesdk.exception.CommandExecException;
+import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
 import com.hw.globalcachesdk.executor.Configure;
-import com.jcraft.jsch.Session;
+import com.hw.globalcachesdk.executor.Script;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -13,9 +13,10 @@ import java.util.regex.Pattern;
 
 /**
  * 请求CPU信息
- * @author 章睿彬
+ * @author 章睿彬, 蔡润培
  */
-@Configure(path= "/configure/QueryCpuInfo.xml")
+@Configure(path = "/configure/QueryCpuInfo.xml")
+@Script(path = "/home/GlobalCacheScripts/SDK/cpu_usage.sh")
 public class QueryCpuInfo extends AbstractCommandExecutor {
 
     /**
@@ -27,20 +28,8 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
         super(QueryCpuInfo.class);
     }
 
-    /**
-     * 请求节点CPU信息
-     *
-     * @param sshSession ssh会话
-     * @param args 参数
-     * @return CPU信息
-     * @throws CommandExecException 命令执行失败抛出此异常
-     */
     @Override
-    public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "bash /home/GlobalCacheScripts/SDK/cpu_usage.sh";
-
-        String returnValue = execInternal(sshSession, command);
-
+    public AbstractEntity parseOf(String returnValue) throws ReturnValueParseException {
         Matcher matcher = CPU_INFO_PATTERN.matcher(returnValue);
         CpuInfo cpuInfo = new CpuInfo();
 

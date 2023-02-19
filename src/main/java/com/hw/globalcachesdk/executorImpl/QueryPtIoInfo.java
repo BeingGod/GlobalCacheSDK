@@ -2,10 +2,10 @@ package com.hw.globalcachesdk.executorImpl;
 
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.PtIoInfo;
-import com.hw.globalcachesdk.exception.CommandExecException;
+import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
 import com.hw.globalcachesdk.executor.Configure;
-import com.jcraft.jsch.Session;
+import com.hw.globalcachesdk.executor.Script;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,8 @@ import java.util.ArrayList;
  * 查询节点PtIo信息
  * @author 李金泽
  */
-@Configure(path="/configure/QueryPtIoInfo.xml")
+@Configure(path = "/configure/QueryPtIoInfo.xml")
+@Script(path = "/home/GlobalCacheScripts/SDK/pt_io_info/pt_io_info.sh")
 public class QueryPtIoInfo extends AbstractCommandExecutor {
 
     public QueryPtIoInfo() {
@@ -21,11 +22,7 @@ public class QueryPtIoInfo extends AbstractCommandExecutor {
     }
 
     @Override
-    public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "bash /home/GlobalCacheScripts/SDK/pt_io_info/pt_io_info.sh";
-
-        //sh脚本执行返回值
-        String returnValue = execInternal(sshSession, command);
+    public AbstractEntity parseOf(String returnValue) throws ReturnValueParseException {
         //按行切分
         String[] returnValueList = returnValue.split("\n");
         for (int i=0;i< returnValueList.length;i++){
@@ -51,6 +48,8 @@ public class QueryPtIoInfo extends AbstractCommandExecutor {
             nodeArrayList.add(pt);
         }
         ptIoInfo.setPtArrayList(nodeArrayList);
+
         return ptIoInfo;
     }
+
 }

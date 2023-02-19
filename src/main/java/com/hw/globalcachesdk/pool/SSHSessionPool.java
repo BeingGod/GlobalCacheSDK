@@ -280,6 +280,8 @@ public class SSHSessionPool {
      * @throws InterruptedException 线程意外中断抛出此异常
      */
     public HashMap<String, CommandExecuteResult> executeInternal(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor, ArrayList<String> args) throws InterruptedException {
+        // 初始化一个哈希表存放中间返回值
+        HashMap<String, String> returnValueHashMap = new HashMap<>(hosts.size());
         // 初始化一个哈希表存放运行结果
         HashMap<String, CommandExecuteResult> commandExecuteResultHashMap = new HashMap<>(hosts.size());
         //设置信号量，节点数
@@ -293,8 +295,10 @@ public class SSHSessionPool {
                     // 每个线程一个Session
                     Session session = getSession(hosts.get(finalI), users.get(finalI));
                     // 执行命令
-                    AbstractEntity abstractEntity = executor.exec(session, executor.getDes().isWithArgs() ? args.get(finalI) : "");
-                    commandExecuteResult.setData(abstractEntity);
+                    String returnValue = executor.exec(session, executor.getDes().isWithArgs() ? args.get(finalI) : "");
+                    // 存入中间结果
+                    setReturnValueResult(returnValueHashMap,"" + hosts.get(finalI), returnValue);
+                    // 命令执行成功，设置状态码
                     commandExecuteResult.setStatusCode(SUCCESS);
                 } catch (SessionException e) {
                     // 连接不存在，设置状态码
@@ -303,8 +307,8 @@ public class SSHSessionPool {
                     // 命令执行失败，设置状态码
                     commandExecuteResult.setStatusCode(EXEC_COMMAND_FAILED);
                 } finally {
-                    // 向总哈希表中添加当前节点运行结果
-                    setCommandExecuteResultHashMap(commandExecuteResultHashMap,"" + hosts.get(finalI), commandExecuteResult);
+                    // 向哈希表中添加当前节点请求状态码
+                    setCommandExecuteResult(commandExecuteResultHashMap,"" + hosts.get(finalI), commandExecuteResult);
                     //信号量减一
                     countDownLatch.countDown();
                 }
@@ -312,6 +316,7 @@ public class SSHSessionPool {
         }
 
         if (!countDownLatch.await(executor.getDes().getTimeout(), TimeUnit.SECONDS)) {
+            // 超时
             for (String host : hosts) {
                 if (null == commandExecuteResultHashMap.get(host)) {
                     CommandExecuteResult commandExecuteResult = new CommandExecuteResult();
@@ -321,17 +326,42 @@ public class SSHSessionPool {
             }
         }
 
+        for (String host : hosts) {
+            // 解析中间结果
+            if (commandExecuteResultHashMap.get(host).getStatusCode() == SUCCESS) {
+                // 如果状态码为SUCESS，说明命令执行成功，解析中间结果
+                try {
+                    AbstractEntity entity = executor.parseOf(returnValueHashMap.get(host));
+                    commandExecuteResultHashMap.get(host).setData(entity);
+                } catch (ReturnValueParseException e) {
+                    // 解析失败，更新状态码
+                    commandExecuteResultHashMap.get(host).setStatusCode(RETURN_VALUE_PARSE_FAILED);
+                }
+            }
+        }
+
         return commandExecuteResultHashMap;
     }
 
     /**
-     * 向Map中存入结果，避免使用lock
+     * 向Map中存入命令执行结果
      *
      * @param commandExecuteResultHashMap 要存入的Map
-     * @param hostName 节点IP
+     * @param host 节点IP
      * @param commandExecuteResult 结果对象
      */
-    private synchronized void setCommandExecuteResultHashMap(HashMap<String, CommandExecuteResult> commandExecuteResultHashMap ,String hostName, CommandExecuteResult commandExecuteResult) {
-        commandExecuteResultHashMap.put(hostName,commandExecuteResult);
+    private synchronized void setCommandExecuteResult(HashMap<String, CommandExecuteResult> commandExecuteResultHashMap ,String host, CommandExecuteResult commandExecuteResult) {
+        commandExecuteResultHashMap.put(host, commandExecuteResult);
+    }
+
+    /**
+     * 向Map中存入结果
+     *
+     * @param returnValueHashMap 要存入的Map
+     * @param host 节点IP
+     * @param returnValue 返回值字符串
+     */
+    private synchronized void setReturnValueResult(HashMap<String, String> returnValueHashMap ,String host, String returnValue) {
+        returnValueHashMap.put(host, returnValue);
     }
 }

@@ -2,28 +2,26 @@ package com.hw.globalcachesdk.executorImpl;
 
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.NodeStatusInfo;
-import com.hw.globalcachesdk.exception.CommandExecException;
+import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
 import com.hw.globalcachesdk.executor.Configure;
-import com.jcraft.jsch.Session;
+import com.hw.globalcachesdk.executor.Script;
 
 import java.util.ArrayList;
 
 /**
  * 查询节点状态
- * @author 章睿彬
+ * @author 章睿彬, 李金泽
  */
-@Configure(path="/configure/QueryClusterStatusInfo.xml")
+@Configure(path = "/configure/QueryClusterStatusInfo.xml")
+@Script(path = "/home/GlobalCacheScripts/SDK/node_status/node_status.sh")
 public class QueryNodeStatusInfo extends AbstractCommandExecutor {
     public QueryNodeStatusInfo() {
         super(QueryNodeStatusInfo.class);
     }
 
     @Override
-    public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "bash /home/GlobalCacheScripts/SDK/node_status/node_status.sh";
-        //sh脚本执行返回值
-        String returnValue = execInternal(sshSession, command);
+    public AbstractEntity parseOf(String returnValue) throws ReturnValueParseException {
         //sh脚本执行返回值按行切分
         String[] returnValueList = returnValue.split("\n");
         for (int i=0;i< returnValueList.length;i++){
@@ -44,12 +42,12 @@ public class QueryNodeStatusInfo extends AbstractCommandExecutor {
             NodeStatusInfo.Node node = new NodeStatusInfo.Node();
             node.setNodeId(Integer.parseInt(nodeInfoList[0].substring(8)));
             ArrayList<NodeStatusInfo.NodeState> nodeStateArrayList=new ArrayList<>();
-            nodeStateArrayList.add(checkNodeState(nodeInfoList[1].substring(8)));
+            nodeStateArrayList.add(NodeStatusInfo.NodeState.valueOf(nodeInfoList[1].substring(8)));
             int j=2;
             //仍然是状态码，继续添加
             for (;j<nodeInfoList.length;j++){
                 if(!"ip".equals(nodeInfoList[j].substring(1, 3))){
-                    nodeStateArrayList.add(checkNodeState(nodeInfoList[j].trim()));
+                    nodeStateArrayList.add(NodeStatusInfo.NodeState.valueOf(nodeInfoList[j].trim()));
                 }else{
                     //退出状态码循环
                     break;
@@ -95,33 +93,7 @@ public class QueryNodeStatusInfo extends AbstractCommandExecutor {
             nodeArrayList.add(node);
         }
         nodeStatusInfo.setNodeList(nodeArrayList);
-        return nodeStatusInfo;
-    }
 
-    /**
-     * 将脚本获取的字符串转码为Node标准状态码，无异常处理能力
-     * @param state 从脚本获取的状态码字符串
-     * @return 状态码
-     */
-    private NodeStatusInfo.NodeState checkNodeState(String state) {
-        if(state!=null){
-            switch (state) {
-                case "NODE_STATE_RUNNING":
-                    return NodeStatusInfo.NodeState.NODE_STATE_RUNNING;
-                case "NODE_STATE_UP":
-                    return NodeStatusInfo.NodeState.NODE_STATE_UP;
-                case "NODE_STATE_INVALID":
-                    return NodeStatusInfo.NodeState.NODE_STATE_INVALID;
-                case "NODE_STATE_IN":
-                    return NodeStatusInfo.NodeState.NODE_STATE_IN;
-                case "NODE_STATE_OUT":
-                    return NodeStatusInfo.NodeState.NODE_STATE_OUT;
-                case "NODE_STATE_DOWN":
-                    return NodeStatusInfo.NodeState.NODE_STATE_DOWN;
-                default:
-                    return null;
-            }
-        }
-        return null;
+        return nodeStatusInfo;
     }
 }

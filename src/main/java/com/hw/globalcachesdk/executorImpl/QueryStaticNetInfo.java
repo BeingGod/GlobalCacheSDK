@@ -2,10 +2,10 @@ package com.hw.globalcachesdk.executorImpl;
 
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.StaticNetInfo;
-import com.hw.globalcachesdk.exception.CommandExecException;
+import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
 import com.hw.globalcachesdk.executor.Configure;
-import com.jcraft.jsch.Session;
+import com.hw.globalcachesdk.executor.Script;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
  * @author 蔡润培
  */
 @Configure(path = "/configure/QueryStaticNetInfo.xml")
+@Script(path = "/home/GlobalCacheScripts/SDK/static_net.sh")
 public class QueryStaticNetInfo extends AbstractCommandExecutor {
 
     private static final Pattern MAC_ADDR_PATTERN = Pattern.compile("(?<=ether )\\S+");
@@ -28,9 +29,8 @@ public class QueryStaticNetInfo extends AbstractCommandExecutor {
     public QueryStaticNetInfo() { super(QueryStaticNetInfo.class); }
 
     @Override
-    public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        String command = "ip addr";
-        String[] returnValueList = execInternal(sshSession, command).split("\\n[0-9]*: |^1: ");
+    public AbstractEntity parseOf(String returnValue) throws ReturnValueParseException {
+        String[] returnValueList = returnValue.split("\\n[0-9]*: |^1: ");
 
         StaticNetInfo staticNetInfo = new StaticNetInfo();
         ArrayList<StaticNetInfo.InterfaceInfo> interfaceInfoList = new ArrayList<>();
