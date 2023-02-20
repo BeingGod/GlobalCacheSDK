@@ -66,20 +66,6 @@ public class PtInfo extends AbstractEntity {
         public void setVnodeId(int vnodeId) {
             this.vnodeId = vnodeId;
         }
-
-        public static PtMapInfo parseOf(String str) {
-            Matcher matcher = PT_MAP_INFO_PATTERN.matcher(str);
-
-            PtInfo.PtMapInfo ptMapInfo = new PtInfo.PtMapInfo();
-            if (matcher.find()) {
-                String[] ptMapInfoList = matcher.group(0).split(",");
-                ptMapInfo.setNodeId(Integer.parseInt(ptMapInfoList[0].trim()));
-                ptMapInfo.setDiskId(Integer.parseInt(ptMapInfoList[1].trim()));
-                ptMapInfo.setVnodeId(Integer.parseInt(ptMapInfoList[2].trim()));
-            }
-
-            return ptMapInfo;
-        }
     }
 
     /**
@@ -194,9 +180,28 @@ public class PtInfo extends AbstractEntity {
             pt.setBv(Integer.parseInt(temp[1]));
             pt.setState(PtInfo.PtState.valueOf(temp[2]));
             pt.setIndexInNode(Integer.parseInt(temp[3]));
-            pt.setPtMapInfo(PtMapInfo.parseOf(temp[4]));
-            // TODO: 区分主PT和备份PT
-            pt.setBackupPtMapInfo(PtMapInfo.parseOf(temp[4]));
+
+            Matcher matcher = PT_MAP_INFO_PATTERN.matcher(str);
+
+            // 主PT
+            PtInfo.PtMapInfo ptMapInfo = new PtInfo.PtMapInfo();
+            if (matcher.find()) {
+                String[] ptMapInfoList = matcher.group(0).split(",");
+                ptMapInfo.setNodeId(Integer.parseInt(ptMapInfoList[0].trim()));
+                ptMapInfo.setDiskId(Integer.parseInt(ptMapInfoList[1].trim()));
+                ptMapInfo.setVnodeId(Integer.parseInt(ptMapInfoList[2].trim()));
+            }
+            pt.setPtMapInfo(ptMapInfo);
+
+            // 备份PT
+            PtInfo.PtMapInfo backupPtMapInfo = new PtInfo.PtMapInfo();
+            if (matcher.find()) {
+                String[] ptMapInfoList = matcher.group(0).split(",");
+                ptMapInfo.setNodeId(Integer.parseInt(ptMapInfoList[0].trim()));
+                ptMapInfo.setDiskId(Integer.parseInt(ptMapInfoList[1].trim()));
+                ptMapInfo.setVnodeId(Integer.parseInt(ptMapInfoList[2].trim()));
+            }
+            pt.setBackupPtMapInfo(backupPtMapInfo);
 
             ptList.add(pt);
         }
