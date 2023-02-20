@@ -218,45 +218,36 @@ public class CpuInfo extends AbstractEntity {
 
 #### Step2：实现命令执行类代码
 
-​	在`executorImpl`目录下创建一个`QueryCpuInfo`类，**该类继承自`AbstractCommandExecutor`**，在子类中，需要**实现子类的构造函数**，**重写父类的`exec`方法**。
+​	在`executorImpl`目录下创建一个`QueryCpuInfo`类，**该类继承自`AbstractCommandExecutor`**，在子类中，需要**实现子类的构造函数**，**重写父类的`parseOf`方法**。
 
 ​	子类构造函数**必须通过`super`调用父类的构造函数**，参数必须为`子类名.class`，以便父类能够通过子类名称，根据XML配置文件反转生成命令的配置。
 
-​	在`exec`中需要完成以下5个工作：
-
-* 对于带参命令，在`exec`中对需要执行的命令和参数进行拼接；
-* 调用`execInternal`，以发起SSH请求；
-
-* 实例化对应的返回结果实体；
-* 对SSH请求的返回结果字符串进行解析，并调用`setter`方法给实体赋值。
+​	在`parseOf`中需要实现对**命令原始返回值结果的装箱**
 
 ```java
 ...
 public class QueryCpuInfo extends AbstractCommandExecutor {
 
+    /**
+     * 节点CPU信息正则表达式
+     */
     private static final Pattern CPU_INFO_PATTERN = Pattern.compile("\\d+\\.\\d+");
 
     public QueryCpuInfo() {
-        // 通过super调用父类的构造函数，参数为"子类名.class"
         super(QueryCpuInfo.class);
     }
 
     @Override
-    public AbstractEntity exec(Session sshSession, String args) throws CommandExecException {
-        // step1 对于带参命令，对需要执行的命令和参数进行拼接
-        String command = "bash /home/GlobalCacheScripts/SDK/cpu_usage.sh";
-			
-      	// step2 调用"execInternal"
-        String returnValue = execInternal(sshSession, command);
-				
-        // step3 实例化对应的返回结果实体
-	      CpuInfo cpuInfo = new CpuInfo();
-  			
-        // step4 对SSH请求的返回结果字符串进行解析，并调用"setter"方法给实体赋值
+    public AbstractEntity parseOf(String returnValue) throws ReturnValueParseException {
         Matcher matcher = CPU_INFO_PATTERN.matcher(returnValue);
+        CpuInfo cpuInfo = new CpuInfo();
+
+        // 整体核心利用率
         if (matcher.find()) {
             cpuInfo.setTotalUsage(100 - Double.parseDouble(matcher.group(0)));
         }
+
+        // 每个逻辑核心的利用率
         ArrayList<Double> coreUsage = new ArrayList<>();
         while (matcher.find()) {
             coreUsage.add(100 - Double.parseDouble(matcher.group(0)));
@@ -266,9 +257,10 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
         return cpuInfo;
     }
 }
+...
 ```
 
-#### Step3：映射命令配置文件
+#### Step3：添加注解
 
 ​	在`resources/configure`目录下创建一个`QueryCpuInfo.xml`文件，**建议该文件名与接口名称一致**。该文件描述了与命令执行有关的信息（**注意：配置文件内容需要根据需求文档进行编写**），文件内容如下，：
 
@@ -296,18 +288,24 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
 ...
 ```
 
+​	在`QueryCpuInfo`类中添加`@Script`注解，注解参数`path`为远程Shell脚本的绝对路径。`prefixCommand`为前缀命令，`suffixCommand`为后缀命令，默认均为空。
+此时，在`SSHSessionPool`中会自动执行SSH请求，并获取返回结果。其中执行的Shell命令格式为:
+```bash
+<prefixCommand> bash <path> <suffixCommand>
+```
+
 #### Step4：注册命令执行类
 
-​	在`SupportedCommand.java`中，添加一个名为`QUERY_CPU_INFO`的枚举值，**枚举值为命令执行类的名称的大写下划线格式**，并为该枚举值添加`@Registry`注解。
+​	在`RegisterExecutor.java`中，添加一个名为`QUERY_CPU_INFO`的枚举值，**枚举值为命令执行类的名称的大写下划线格式**，并为该枚举值添加`@Registry`注解。
 
 **注意：`CommandExecutorFactory`内部通过枚举值反转生成对应的命令执行类，如果名称不一致则找不到相应的命令执行类**
 
 ```java
-public enum SupportedCommand {
-		...
+public enum RegisterExecutor {
+    ...
     @Registry
     QUERY_CPU_INFO,
-		...
+    ...
 }
 ```
 
@@ -317,24 +315,25 @@ public enum SupportedCommand {
 
 ​	在该方法中需要完成以下3个工作：
 
-* 调用`CommandExecutorFactory.getCommandExecutor`，根据对应的`SupportedCommand`获得相应的executor实例
+* 调用`CommandExecutorFactory.getCommandExecutor`，根据对应的`RegisterExecutor`获得相应的executor实例
 * 对于带参命令，将参数按照指定规则拼接为字符串
 * 调用`SSHSessionPool.execute`让内部线程池并发执行executor
 
 ```java
+...
 public static HashMap<String, CommandExecuteResult> queryCpuInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
   // step1 根据"SupportedCommand.QUERY_CPU_INFO"获得QueryCpuInfo的
-	AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CPU_INFO);
+  AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(SupportedCommand.QUERY_CPU_INFO);
   try {
-  	ArrayList<String> users = new ArrayList<>(hosts.size());
-    String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
-    for (String host : hosts) {
-    	users.add(user);
-    }
-    // step3 调用"SSHSessionPool.execute"让内部线程池并发执行QueryCpuInfo的exec方法
-    return getInstance().sshSessionPool.execute(hosts, users, executor);
+      ArrayList<String> users = new ArrayList<>(hosts.size());
+      String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+      for (String host : hosts) {
+    	  users.add(user);
+      }
+      // step3 调用"SSHSessionPool.execute"让内部线程池并发执行QueryCpuInfo的exec方法
+      return getInstance().sshSessionPool.execute(hosts, users, executor);
   } catch (SSHSessionPoolException e) {
-  	throw new GlobalCacheSDKException("SSH会话池异常", e);
+      throw new GlobalCacheSDKException("SSH会话池异常", e);
   }
 }
 ...
