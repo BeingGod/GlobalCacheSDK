@@ -301,13 +301,35 @@ public class GlobalCacheSDK {
      * @param host 需查询节点IP
      * @return 静态网络信息查询结果
      * @throws GlobalCacheSDKException 执行失败抛出此异常
-     * @see com.hw.globalcachesdk.entity.StaticNetInfo
+     * @see com.hw.globalcachesdk.entity.DynamicNetInfo
      */
     public static HashMap<String, CommandExecuteResult> queryStaticNetInfo(String host) throws GlobalCacheSDKException {
         AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_STATIC_NET_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             return getInstance().sshSessionPool.execute(host, user, executor);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
+    }
+
+    /**
+     * 获取动态网络信息
+     *
+     * @param hosts 需要获取主机IP列表
+     * @return 动态网络信息查询结果
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.hw.globalcachesdk.entity.DynamicNetInfo
+     */
+    public static HashMap<String, CommandExecuteResult> queryDynamicNetInfo(ArrayList<String> hosts) throws GlobalCacheSDKException {
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_DYNAMIC_NET_INFO);
+        try {
+            ArrayList<String> users = new ArrayList<>(hosts.size());
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            for (String host : hosts) {
+                users.add(user);
+            }
+            return getInstance().sshSessionPool.execute(hosts, users, executor);
         } catch (SSHSessionPoolException e) {
             throw new GlobalCacheSDKException("SSH会话池异常", e);
         }
