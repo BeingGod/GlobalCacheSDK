@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<description>
+    <name>QueryDynamicNetInfo</name>
+    <async>false</async>
+    <args>false</args>
+    <execute>ANY_NODES</execute>
+    <privilege>USER</privilege>
+    <timeout>2</timeout>
+    <comment>获取动态磁盘信息</comment>
+</description>

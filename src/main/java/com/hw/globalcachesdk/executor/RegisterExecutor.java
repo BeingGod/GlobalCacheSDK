@@ -96,6 +96,11 @@ public enum RegisterExecutor {
     @Registry
     QUERY_STATIC_NET_INFO,
     /**
+     * 获取节点动态网卡信息
+     */
+    @Registry
+    QUERY_DYNAMIC_NET_INFO,
+    /**
      * 获取节点磁盘IO状态
      */
     @Registry
