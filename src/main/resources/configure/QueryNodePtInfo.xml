@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <description>
-    <name>QueryNodeStatusInfo</name>
+    <name>QueryNodePtInfo</name>
     <async>false</async>
-    <args>false</args>
+    <args>true</args>
     <execute>CEPH1_ONLY</execute>
     <privilege>GLOBAL_CACHE_OP</privilege>
-    <timeout>5</timeout>
-    <comment>获取节点状态信息</comment>
+    <timeout>2</timeout>
+    <comment>获取PT信息</comment>
 </description>

@@ -15,8 +15,8 @@ import java.util.regex.Pattern;
  * 查询节点PG信息
  * @author 章睿彬
  */
-@Configure(path = "/configure/QueryPgInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/SDK/pg_info/pg_info.sh")
+@Configure(path = "/configure/QueryNodePgInfo.xml")
+@Script(path = "/home/GlobalCacheScripts/SDK/node_pg_info/pg_info.sh")
 public class QueryNodePgInfo extends AbstractCommandExecutor {
 
     private static final Pattern PG_NUM_PATTERN = Pattern.compile("[0-9]+");

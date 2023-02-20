@@ -11,7 +11,7 @@ import com.hw.globalcachesdk.executor.Script;
  * 查询PT信息
  * @author 章睿彬
  */
-@Configure(path = "/configure/QueryPtInfo.xml")
+@Configure(path = "/configure/QueryAllPtInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/pt_info/pt_info.sh")
 public class QueryAllPtInfo extends AbstractCommandExecutor {
 
