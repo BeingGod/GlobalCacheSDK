@@ -383,7 +383,7 @@ public class GlobalCacheSDK {
      * @see com.hw.globalcachesdk.entity.PtInfo
      */
     public synchronized static HashMap<String, CommandExecuteResult> queryDiskPtInfo(String host, Integer diskId) throws GlobalCacheSDKException {
-        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_DISK_INFO);
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.QUERY_DISK_PT_INFO);
         try {
             String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
             String args = "" + diskId;
