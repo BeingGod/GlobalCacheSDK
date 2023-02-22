@@ -181,7 +181,7 @@ public class PtInfo extends AbstractEntity {
             pt.setState(PtInfo.PtState.valueOf(temp[2]));
             pt.setIndexInNode(Integer.parseInt(temp[3]));
 
-            Matcher matcher = PT_MAP_INFO_PATTERN.matcher(str);
+            Matcher matcher = PT_MAP_INFO_PATTERN.matcher(temp[4]);
 
             // 主PT
             PtInfo.PtMapInfo ptMapInfo = new PtInfo.PtMapInfo();
@@ -197,9 +197,9 @@ public class PtInfo extends AbstractEntity {
             PtInfo.PtMapInfo backupPtMapInfo = new PtInfo.PtMapInfo();
             if (matcher.find()) {
                 String[] ptMapInfoList = matcher.group(0).split(",");
-                ptMapInfo.setNodeId(Integer.parseInt(ptMapInfoList[0].trim()));
-                ptMapInfo.setDiskId(Integer.parseInt(ptMapInfoList[1].trim()));
-                ptMapInfo.setVnodeId(Integer.parseInt(ptMapInfoList[2].trim()));
+                backupPtMapInfo.setNodeId(Integer.parseInt(ptMapInfoList[0].trim()));
+                backupPtMapInfo.setDiskId(Integer.parseInt(ptMapInfoList[1].trim()));
+                backupPtMapInfo.setVnodeId(Integer.parseInt(ptMapInfoList[2].trim()));
             }
             pt.setBackupPtMapInfo(backupPtMapInfo);
 
