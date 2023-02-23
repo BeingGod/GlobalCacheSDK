@@ -33,6 +33,7 @@ public class QueryCacheDiskInfo extends AbstractCommandExecutor {
             String[] value = matcher.group(0).split("diskId: |, |diskName: |diskSn: |capacity: |state: ");
 
             cacheDisk.setDiskId(Integer.parseInt(value[1]));
+            cacheDisk.setDiskName(value[3].replaceAll("/dev/",""));
             cacheDisk.setDiskSn(value[5]);
             cacheDisk.setCapacity(Integer.parseInt(value[7].split("\\(MB\\)")[0]));
             if ("VDISK_STATE_UP".equals(value[9].trim())) {

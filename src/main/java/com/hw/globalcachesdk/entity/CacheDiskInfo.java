@@ -30,6 +30,10 @@ public class CacheDiskInfo extends AbstractEntity {
          */
         private int diskId;
         /**
+         * 磁盘名称
+         */
+        private String diskName;
+        /**
          * 磁盘分区Sn号
          */
         private String diskSn;
@@ -48,6 +52,14 @@ public class CacheDiskInfo extends AbstractEntity {
 
         public void setDiskId(int diskId) {
             this.diskId = diskId;
+        }
+
+        public String getDiskName() {
+            return diskName;
+        }
+
+        public void setDiskName(String diskName) {
+            this.diskName = diskName;
         }
 
         public String getDiskSn() {
