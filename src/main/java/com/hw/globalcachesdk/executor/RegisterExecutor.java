@@ -41,11 +41,6 @@ public enum RegisterExecutor {
     @Registry
     QUERY_NODE_STATUS_INFO,
     /**
-     * 获取节点数据盘分区信息
-     */
-    @Registry
-    QUERY_DATA_DISK_PART_INFO,
-    /**
      * 查询节点PtIo信息
      */
     @Registry
