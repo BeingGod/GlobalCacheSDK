@@ -190,7 +190,7 @@ public class SSHSessionPool {
         }
 
         try {
-            return executeInternal(hosts, users, executor, null);
+            return executeInternal(hosts, users, executor, args);
         } catch (InterruptedException e) {
             throw new SSHSessionPoolException("线程执行中断", e);
         }
@@ -216,7 +216,7 @@ public class SSHSessionPool {
             users.add(user);
             args.add(arg);
 
-            return executeInternal(hosts, users, executor, null);
+            return executeInternal(hosts, users, executor, args);
         } catch (InterruptedException e) {
             throw new SSHSessionPoolException("线程执行中断", e);
         }
