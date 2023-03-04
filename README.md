@@ -14,7 +14,7 @@
 * **自动并发**：对于需要在多个节点上执行的命令，使用内部线程池将其转变为多个节点并发执行。
 * **易配置**：用户可以使用XML文件对接口进行配置，同时也可以调用辅助配置接口在运行时动态修改接口配置。
 * **易拓展**：接口的集成进行了依赖倒转，接口开发者只需要完成输入参数的处理的返回数据的解析，无需关注接口实例化和接口并发细节。
-* **异步请求（todo）**：对于耗时较长的请求，通过异步防止阻塞当前线程，并支持从异步对象获取实时输出。
+* **异步请求**：对于耗时较长的请求，通过异步防止阻塞当前线程，并支持从异步实体获取实时输出。
 
 ![image-20230124191003762](./assets/image-20230124191003762.png)
 
@@ -24,9 +24,9 @@
 
 ![image-20230216162900061](./assets/image-20230216162900061.png)
 
-### 阻塞接口调用
+### 同步接口调用
 
-​	由于数据请求接口调用时间较短，因此将其设计为阻塞接口，即调用完函数即可获得输出。接下来以调用CPU信息请求接口为例，演示如何调用阻塞接口：
+​	由于数据请求接口调用时间较短，因此将其设计为阻塞调用，即调用完函数即可获得输出。接下来以调用CPU信息请求接口为例，演示如何调用阻塞接口：
 
 #### Step1：查看接口配置文件
 
@@ -142,9 +142,102 @@ public static void queryCpuInfoDemo() {
 
 ### 异步接口调用
 
-​	由于自动化部署调用时间较长，因此将其设计为异步接口，其返回一个异步对象，可以从异步对象中获得实时输出。
+​	由于自动化部署调用时间较长，因此将其设计为非阻塞调用，其返回一个异步实体，可以从异步实体中获得实时输出。由于异步接口获取到的是原始输出，如果需要检测命令是否执行成功，需要与对应的阻塞调用接口搭配使用。
 
-待补充...
+​	异步接口调用除**Step3：调用接口**，其他步骤均与同步接口相同，在此不在赘述。
+
+#### Step1：查看接口配置文件
+
+参考同步接口调用
+
+#### Step2：创建Session
+
+参考同步接口调用
+
+#### Step3：调用接口
+
+调用对应的接口，所有接口的返回结果为`Map<String, CommandExecuteResult>`，其中`String`为命令执行节点，`CommandExecuteResult`为节点执行结果。当`CommandExecuteResult.getStatusCode`为`StatusCode.SUCCESS`时表示接口调用成功；接口调用失败时，`CommandExecuteResult.getData`的结果为**未定义**。
+
+```java
+public static void gcServiceControlDemo() {
+		...
+		Map<String, AsyncEntity> entityMap = new HashMap<>(hosts.size());
+		try {
+			for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.gcServiceControl(hosts, "restart").entrySet()) {
+				if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
+					entityMap.put(entry.getKey(), (AsyncEntity) entry.getValue().getData());
+				} else {
+					System.out.println("接口调用失败");
+				}
+			}
+		} catch (GlobalCacheSDKException e) {
+			System.out.println("接口调用失败");
+			e.printStackTrace();
+		}
+  	...
+}
+```
+
+调用所有的异步接口统一返回一个**AsyncEntity对象**，可以调用**readLine方法**从该对象中获取命令的输出。其中，有**实时读取**和**阻塞读取**两种读取方法。
+
+实时读取示例如下：
+
+```java
+public static void gcServiceControlDemo() {
+		...
+		// Example1：获取实时输出
+		// 以查看175.34.8.36的接口的输出为例
+		AsyncEntity entity = entityMap.get("175.34.8.36");
+		while (true) {
+			try {
+				String line = entity.readLine();
+				if (line == null) {
+					// 结果读取完毕
+					break;
+				}
+				System.out.println(line);
+			} catch (AsyncThreadException e) {
+				System.err.println("异步线程异常");
+				break;
+			}
+		}
+		entity.waitFinish(); // 此时线程已经读取完毕，关闭缓冲区和Channel
+		...
+}
+```
+
+阻塞读取示例如下：
+
+```java
+public static void gcServiceControlDemo() {
+		...
+		// Example2：一次性读取全部输出
+		// 以查看175.34.8.36的接口的输出为例
+		entity.waitFinish(); // 阻塞当前线程，等待异步线程执行完毕
+		while (true) {
+			try {
+				String line = entity.readLine();
+				if (line == null) {
+					// 结果读取完毕
+					break;
+				}
+				System.out.println(line);
+			} catch (AsyncThreadException e) {
+				System.err.println("异步线程异常");
+				break;
+			}
+		}
+  	...
+}
+```
+
+使用实时读取可以对读取完的数据进行处理（例如：发送给前端）后再调用**readLine**，因此，建议优先使用实时读取的方式获取脚本输出。
+
+**注意：** waitFinish将会结束异步线程和关闭Channel，因此**该函数仅能调用一次**。
+
+#### Step4：释放Session
+
+参考同步接口调用
 
 ## <span id=develop>开发</span>
 
@@ -182,9 +275,9 @@ src
 </description>
 ```
 
-### 阻塞接口开发
+### 同步接口开发
 
-​	由于数据请求接口调用时间较短，因此将其设计为阻塞接口，即调用完函数即可获得输出。接下来以调用CPU信息请求接口为例，演示如何开发阻塞接口：
+​	由于数据请求接口调用时间较短，因此将其设计为阻塞调用，即调用完函数即可获得输出。接下来以调用CPU信息请求接口为例，演示如何开发阻塞接口：
 
 #### Step1：抽象结果实体
 
@@ -218,7 +311,7 @@ public class CpuInfo extends AbstractEntity {
 
 #### Step2：实现命令执行类代码
 
-​	在`executorImpl`目录下创建一个`QueryCpuInfo`类，**该类继承自`AbstractCommandExecutor`**，在子类中，需要**实现子类的构造函数**，**重写父类的`parseOf`方法**。
+​	在`executorImpl`目录下创建一个`QueryCpuInfo`类，**该类继承自`AbstractCommandExecutorSync`**，在子类中，需要**实现子类的构造函数**，**重写父类的`parseOf`方法**。
 
 ​	子类构造函数**必须通过`super`调用父类的构造函数**，参数必须为`子类名.class`，以便父类能够通过子类名称，根据XML配置文件反转生成命令的配置。
 
@@ -262,7 +355,7 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
 
 #### Step3：添加注解
 
-​	在`resources/configure`目录下创建一个`QueryCpuInfo.xml`文件，**建议该文件名与接口名称一致**。该文件描述了与命令执行有关的信息（**注意：配置文件内容需要根据需求文档进行编写**），文件内容如下，：
+​	在`resources/configure`目录下创建一个`QueryCpuInfo.xml`文件，**建议该文件名与接口名称一致**。该文件描述了与命令执行有关的信息（**注意：配置文件内容需要根据需求文档进行编写**），文件内容如下：
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -279,19 +372,21 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
 
 ​	在`QueryCpuInfo`类中添加`@Configure`注解，注解参数`path`为XML文件的相对路径。此时，该命令执行类的默认配置和对应的XML文件已经进行了映射，可以通过修改XML文件实现修改命令执行类的默认配置。
 
+在`QueryCpuInfo`类中添加`@Script`注解，注解参数`path`为远程Shell脚本的绝对路径。`prefixCommand`为前缀命令，`suffixCommand`为后缀命令，默认均为空。
+此时，在`SSHSessionPool`中会自动执行SSH请求，并获取返回结果。其中执行的Shell命令格式为:
+
+```bash
+<prefixCommand> bash <path> <suffixCommand>
+```
+
 ```java
 ...
 @Configure(path= "/configure/QueryCpuInfo.xml")
-public class QueryCpuInfo extends AbstractCommandExecutor {
+@Script(path = "<remote shell script path>", prefixCommnad=, suffixCommnad=)
+public class QueryCpuInfo extends AbstractCommandExecutorSync {
 ...
 }
 ...
-```
-
-​	在`QueryCpuInfo`类中添加`@Script`注解，注解参数`path`为远程Shell脚本的绝对路径。`prefixCommand`为前缀命令，`suffixCommand`为后缀命令，默认均为空。
-此时，在`SSHSessionPool`中会自动执行SSH请求，并获取返回结果。其中执行的Shell命令格式为:
-```bash
-<prefixCommand> bash <path> <suffixCommand>
 ```
 
 #### Step4：注册命令执行类
@@ -341,11 +436,64 @@ public static HashMap<String, CommandExecuteResult> queryCpuInfo(ArrayList<Strin
 
 ### 异步接口开发
 
-待补充...
+​	由于自动化部署调用时间较长，因此将其设计为非阻塞调用，其返回一个异步实体，可以从异步实体中获得实时输出。由于异步接口获取到的是原始输出，如果需要检测命令是否执行成功，需要与开发对应的同步接口。接下来以开发`GlobalCacheServiceControl`接口为例，演示如何开发异步接口：
 
-## TODO List
+#### Step1：实现命令执行类代码
 
-- [x] 支持动态配置接口
-- [x] 支持接口自动实例化
-- [x] 支持从XML文件反转生成接口配置
-- [ ] 支持异步请求
+​	在`executorImpl`目录下创建一个`QueryCpuInfo`类，**该类继承自`AbstractCommandExecutorAsync`**，子类构造函数**必须通过`super`调用父类的构造函数**，参数必须为`子类名.class`，以便父类能够通过子类名称，根据XML配置文件反转生成命令的配置。
+
+```java
+...
+public class GlobalCacheServiceControl extends AbstractCommandExecutorAsync {
+
+    public GlobalCacheServiceControl() {
+        super(GlobalCacheServiceControl.class);
+    }
+}
+...
+```
+
+#### Step2：添加注解
+
+​	在`resources/configure`目录下创建一个`GlobalCacheServiceControl.xml`文件，**建议该文件名与接口名称一致**。该文件描述了与命令执行有关的信息（**注意：配置文件内容需要根据需求文档进行编写**），文件内容如下：
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<description>
+    <name>GlobalCacheServiceControl</name>
+    <async>true</async>
+    <args>true</args>
+    <execute>ALL_CEPH_NODES</execute>
+    <privilege>ROOT</privilege>
+    <timeout>5</timeout>
+    <comment>控制GlobalCache服务</comment>
+</description>
+```
+
+​	在`GlobalCacheServiceControl`类中添加`@Configure`注解，注解参数`path`为XML文件的相对路径。此时，该命令执行类的默认配置和对应的XML文件已经进行了映射，可以通过修改XML文件实现修改命令执行类的默认配置。
+
+​	在`GlobalCacheServiceControl`类中添加`@Script`注解，注解参数`path`为远程Shell脚本的绝对路径。`prefixCommand`为前缀命令，`suffixCommand`为后缀命令，默认均为空。
+此时，在`SSHSessionPool`中会自动执行SSH请求，并获取返回结果。其中执行的Shell命令格式为:
+
+```bash
+<prefixCommand> bash <path> <suffixCommand>
+```
+
+```java
+...
+@Configure(path = "/configure/GlobalCacheServiceControl.xml")
+@Script(path = "<remote shell script path>", prefixCommnad=, suffixCommnad=)
+public class GlobalCacheServiceControl extends AbstractCommandExecutorAsync {
+    public GlobalCacheServiceControl() {
+        super(GlobalCacheServiceControl.class);
+    }
+}
+```
+
+#### Step3：注册命令执行类
+
+参考同步接口开发
+
+#### Step4：实现接口
+
+参考同步接口开发
