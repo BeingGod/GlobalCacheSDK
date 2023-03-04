@@ -3,6 +3,7 @@ package com.hw;
 import com.hw.globalcachesdk.GlobalCacheSDK;
 import com.hw.globalcachesdk.StatusCode;
 import com.hw.globalcachesdk.entity.*;
+import com.hw.globalcachesdk.exception.AsyncThreadException;
 import com.hw.globalcachesdk.exception.GlobalCacheSDKException;
 import com.hw.globalcachesdk.executor.CommandExecuteResult;
 
@@ -155,15 +156,11 @@ public class GlobalCacheSDKExample {
 			}
 		}
 
+		Map<String, AsyncEntity> entityMap = new HashMap<>(hosts.size());
 		try {
 			for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.gcServiceControl(hosts, "restart").entrySet()) {
 				if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
-					ErrorCodeEntity errorCodeEntity = (ErrorCodeEntity) entry.getValue().getData();
-					if (0 == errorCodeEntity.getErrorCode()) {
-						System.out.println("节点:" + entry + " 重启GC成功");
-					} else {
-						System.out.println("节点:" + entry + " 重启GC失败");
-					}
+					entityMap.put(entry.getKey(), (AsyncEntity) entry.getValue().getData());
 				} else {
 					System.out.println("接口调用失败");
 				}
@@ -172,6 +169,41 @@ public class GlobalCacheSDKExample {
 			System.out.println("接口调用失败");
 			e.printStackTrace();
 		}
+
+		// Example1：获取实时输出
+		// 以查看175.34.8.36的接口的输出为例
+		AsyncEntity entity = entityMap.get("175.34.8.36");
+		while (true) {
+			try {
+				String line = entity.readLine();
+				if (line == null) {
+					// 结果读取完毕
+					break;
+				}
+				System.out.println(line);
+			} catch (AsyncThreadException e) {
+				System.err.println("异步线程异常");
+				break;
+			}
+		}
+		entity.waitFinish(); // 此时线程已经读取完毕，关闭缓冲区和Channel
+
+//		// Example2：一次性读取全部输出
+//		// 以查看175.34.8.36的接口的输出为例
+//		entity.waitFinish(); // 阻塞当前线程，等待异步线程执行完毕
+//		while (true) {
+//			try {
+//				String line = entity.readLine();
+//				if (line == null) {
+//					// 结果读取完毕
+//					break;
+//				}
+//				System.out.println(line);
+//			} catch (AsyncThreadException e) {
+//				System.err.println("异步线程异常");
+//				break;
+//			}
+//		}
 
 		for (String host : hosts) {
 			try {

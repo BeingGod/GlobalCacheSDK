@@ -4,8 +4,6 @@ import com.hw.globalcachesdk.executor.AbstractCommandExecutorAsync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
-import java.util.regex.Pattern;
-
 /**
  * Global Cache 服务控制
  * @author 章睿彬
