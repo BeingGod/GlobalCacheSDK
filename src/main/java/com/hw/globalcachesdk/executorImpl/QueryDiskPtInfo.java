@@ -12,7 +12,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/QueryDiskPtInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/SDK/disk_pt_info/pt_info.sh")
+@Script(path = "/home/GlobalCacheScriptsNew/data/disk_pt/disk_pt.sh")
 public class QueryDiskPtInfo extends AbstractCommandExecutorSync {
 
     public QueryDiskPtInfo() {

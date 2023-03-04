@@ -12,7 +12,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/QueryNodePtInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/SDK/node_pt_info/pt_info.sh")
+@Script(path = "/home/GlobalCacheScriptsNew/data/node_pt/node_pt.sh")
 public class QueryNodePtInfo extends AbstractCommandExecutorSync {
 
     public QueryNodePtInfo() {

@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @author 章睿彬
  */
 @Configure(path = "/configure/QueryNodePgInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/SDK/node_pg_info/pg_info.sh")
+@Script(path = "/home/GlobalCacheScriptsNew/data/node_pg/node_pg.sh")
 public class QueryNodePgInfo extends AbstractCommandExecutorSync {
 
     private static final Pattern PG_NUM_PATTERN = Pattern.compile("[0-9]+");

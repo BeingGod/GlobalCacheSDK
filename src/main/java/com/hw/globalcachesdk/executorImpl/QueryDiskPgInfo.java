@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @author 章睿彬
  */
 @Configure(path = "/configure/QueryDiskPgInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/SDK/disk_pg_info/pg_info.sh")
+@Script(path = "/home/GlobalCacheScriptsNew/data/disk_pg/disk_pg.sh")
 public class QueryDiskPgInfo extends AbstractCommandExecutorSync {
 
     private static final Pattern PG_NUM_PATTERN = Pattern.compile("[0-9]+");

@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @author 章睿彬, 蔡润培
  */
 @Configure(path = "/configure/QueryCpuInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/SDK/cpu_usage.sh")
+@Script(path = "/home/GlobalCacheScriptsNew/data/cpu/cpu.sh")
 public class QueryCpuInfo extends AbstractCommandExecutorSync {
 
     /**

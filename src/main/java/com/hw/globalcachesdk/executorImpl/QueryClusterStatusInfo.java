@@ -12,7 +12,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/QueryClusterStatusInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/SDK/cluster_status/cluster_status.sh")
+@Script(path = "/home/GlobalCacheScriptsNew/data/cluster_status/cluster_status.sh")
 public class QueryClusterStatusInfo extends AbstractCommandExecutorSync {
     public QueryClusterStatusInfo() {
         super(QueryClusterStatusInfo.class);

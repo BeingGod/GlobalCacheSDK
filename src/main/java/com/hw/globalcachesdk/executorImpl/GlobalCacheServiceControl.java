@@ -9,7 +9,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/GlobalCacheServiceControl.xml")
-@Script(path = "/home/GlobalCacheScripts/utils/gc_service_control.sh")
+@Script(path = "/home/GlobalCacheScriptsNew/mgr/gc_service_control.sh")
 public class GlobalCacheServiceControl extends AbstractCommandExecutorAsync {
 
     public GlobalCacheServiceControl() {
