@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.StaticNetInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 @Configure(path = "/configure/QueryStaticNetInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/static_net.sh")
-public class QueryStaticNetInfo extends AbstractCommandExecutor {
+public class QueryStaticNetInfo extends AbstractCommandExecutorSync {
 
     private static final Pattern MAC_ADDR_PATTERN = Pattern.compile("(?<=ether )\\S+");
 

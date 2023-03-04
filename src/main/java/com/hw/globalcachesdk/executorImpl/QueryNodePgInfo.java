@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.PgInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  */
 @Configure(path = "/configure/QueryNodePgInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/node_pg_info/pg_info.sh")
-public class QueryNodePgInfo extends AbstractCommandExecutor {
+public class QueryNodePgInfo extends AbstractCommandExecutorSync {
 
     private static final Pattern PG_NUM_PATTERN = Pattern.compile("[0-9]+");
 

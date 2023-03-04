@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.DiskIoInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 @Configure(path = "/configure/QueryDiskIoInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/disk_IO_info.sh")
-public class QueryDiskIoInfo extends AbstractCommandExecutor {
+public class QueryDiskIoInfo extends AbstractCommandExecutorSync {
 
     public QueryDiskIoInfo() {
         super(QueryDiskIoInfo.class);

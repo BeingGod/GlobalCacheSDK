@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.PtIoInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 @Configure(path = "/configure/QueryPtIoInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/pt_io_info/pt_io_info.sh")
-public class QueryPtIoInfo extends AbstractCommandExecutor {
+public class QueryPtIoInfo extends AbstractCommandExecutorSync {
 
     public QueryPtIoInfo() {
         super(QueryPtIoInfo.class);

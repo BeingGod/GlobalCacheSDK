@@ -5,7 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.ClusterAlarmInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  */
 @Configure(path = "/configure/QueryClusterAlarmInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/cluster_alarm_info.sh")
-public class QueryClusterAlarmInfo extends AbstractCommandExecutor {
+public class QueryClusterAlarmInfo extends AbstractCommandExecutorSync {
 
     private static final Pattern CLUSTER_ALARM_INFO_PATTERN = Pattern.compile("\\((.*?)\\)");
 

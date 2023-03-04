@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.CpuInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  */
 @Configure(path = "/configure/QueryCpuInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/cpu_usage.sh")
-public class QueryCpuInfo extends AbstractCommandExecutor {
+public class QueryCpuInfo extends AbstractCommandExecutorSync {
 
     /**
      * 节点CPU信息正则表达式

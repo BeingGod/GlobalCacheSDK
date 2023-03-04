@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.CacheDiskInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  */
 @Configure(path = "/configure/QueryCacheDiskInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/cache_disk_info.sh", suffixCommand = "| grep diskId")
-public class QueryCacheDiskInfo extends AbstractCommandExecutor {
+public class QueryCacheDiskInfo extends AbstractCommandExecutorSync {
     private static final Pattern CACHE_INFO_PATTERN = Pattern.compile(".*\\n");
     public QueryCacheDiskInfo() {
         super(QueryCacheDiskInfo.class);

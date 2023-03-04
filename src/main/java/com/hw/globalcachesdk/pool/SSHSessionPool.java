@@ -2,13 +2,19 @@ package com.hw.globalcachesdk.pool;
 
 import cn.hutool.core.lang.Pair;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
+import cn.hutool.extra.ssh.ChannelType;
 import com.hw.globalcachesdk.entity.AbstractEntity;
+import com.hw.globalcachesdk.entity.AsyncEntity;
 import com.hw.globalcachesdk.exception.*;
 import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorAsync;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
+import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.Session;
 import cn.hutool.extra.ssh.JschUtil;
 import com.hw.globalcachesdk.executor.CommandExecuteResult;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.*;
@@ -123,7 +129,7 @@ public class SSHSessionPool {
         if (session != null) {
             try {
                 JschUtil.close(session);
-                // 当数据量大，只使用get时采用破坏遍历结构的方式换取最高的执行效率
+                // 当数据量大，只使用get时采用破坏遍历结构的方式换取最高地执行效率
                 hostSessionHashMap.remove(Pair.of(host, user));
             } catch (RuntimeException e) {
                 throw new SessionException("链接关闭失败", e);
@@ -184,7 +190,7 @@ public class SSHSessionPool {
         }
 
         try {
-            return executeInternal(hosts, users, executor, args);
+            return executeInternal(hosts, users, executor, null);
         } catch (InterruptedException e) {
             throw new SSHSessionPoolException("线程执行中断", e);
         }
@@ -192,8 +198,6 @@ public class SSHSessionPool {
 
     /**
      * 执行带参命令
-     * 根据type的值, 在hosts的所有节点执行命令
-     * 注意: hosts和args的个数需要一致
      *
      * @param host 需要执行命令的节点IP
      * @param user 需要执行命令的用户名
@@ -211,8 +215,8 @@ public class SSHSessionPool {
             hosts.add(host);
             users.add(user);
             args.add(arg);
-            
-            return executeInternal(hosts, users, executor, args);
+
+            return executeInternal(hosts, users, executor, null);
         } catch (InterruptedException e) {
             throw new SSHSessionPoolException("线程执行中断", e);
         }
@@ -268,7 +272,6 @@ public class SSHSessionPool {
         }
     }
 
-
     /**
      * 利用连接池和线程池获取各节点的信息存到hashmap中
      *
@@ -279,11 +282,11 @@ public class SSHSessionPool {
      * @return 每个结点的运行结果
      * @throws InterruptedException 线程意外中断抛出此异常
      */
-    public HashMap<String, CommandExecuteResult> executeInternal(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor, ArrayList<String> args) throws InterruptedException {
-        // 初始化一个哈希表存放中间返回值
-        HashMap<String, String> returnValueHashMap = new HashMap<>(hosts.size());
+    public HashMap<String, CommandExecuteResult> executeInternal(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor, ArrayList<String> args) throws InterruptedException, SSHSessionPoolException {
         // 初始化一个哈希表存放运行结果
         HashMap<String, CommandExecuteResult> commandExecuteResultHashMap = new HashMap<>(hosts.size());
+        // 初始化一个哈希表存放中间返回值
+        HashMap<String, String> returnValueHashMap = new HashMap<>(hosts.size());
         //设置信号量，节点数
         final CountDownLatch countDownLatch = new CountDownLatch(hosts.size());
         for (int i = 0; i < hosts.size(); i++) {
@@ -294,12 +297,25 @@ public class SSHSessionPool {
                 try {
                     // 每个线程一个Session
                     Session session = getSession(hosts.get(finalI), users.get(finalI));
-                    // 执行命令
-                    String returnValue = executor.exec(session, executor.getDes().isWithArgs() ? args.get(finalI) : "");
-                    // 存入中间结果
-                    setReturnValueResult(returnValueHashMap,"" + hosts.get(finalI), returnValue);
-                    // 命令执行成功，设置状态码
-                    commandExecuteResult.setStatusCode(SUCCESS);
+                    if (!executor.getDes().isAsync()) {
+                        // 同步命令
+                        AbstractCommandExecutorSync syncExecutor = (AbstractCommandExecutorSync) executor;
+                        // 执行命令
+                        String returnValue = syncExecutor.exec(session, executor.getDes().isWithArgs() ? args.get(finalI) : "");
+                        // 存入中间结果
+                        setReturnValueResult(returnValueHashMap, "" + hosts.get(finalI), returnValue);
+                        // 命令执行成功，设置状态码
+                        commandExecuteResult.setStatusCode(SUCCESS);
+                    } else {
+                        // 异步命令
+                        AbstractCommandExecutorAsync asyncExecutor = (AbstractCommandExecutorAsync)executor;
+                        Channel channel = JschUtil.openChannel(session, ChannelType.SHELL);
+                        // 执行命令 -> 得到Shell结果输出流
+                        InputStream stream = asyncExecutor.exec(channel, executor.getDes().isWithArgs() ? args.get(finalI) : "");
+                        // 命令执行成功，设置状态码
+                        commandExecuteResult.setStatusCode(SUCCESS);
+                        commandExecuteResult.setData(new AsyncEntity(stream, channel));
+                    }
                 } catch (SessionException e) {
                     // 连接不存在，设置状态码
                     commandExecuteResult.setStatusCode(SESSION_NOT_EXIST);
@@ -326,16 +342,20 @@ public class SSHSessionPool {
             }
         }
 
-        for (String host : hosts) {
-            // 解析中间结果
-            if (commandExecuteResultHashMap.get(host).getStatusCode() == SUCCESS) {
-                // 如果状态码为SUCESS，说明命令执行成功，解析中间结果
-                try {
-                    AbstractEntity entity = executor.parseOf(returnValueHashMap.get(host));
-                    commandExecuteResultHashMap.get(host).setData(entity);
-                } catch (ReturnValueParseException e) {
-                    // 解析失败，更新状态码
-                    commandExecuteResultHashMap.get(host).setStatusCode(RETURN_VALUE_PARSE_FAILED);
+        if (!executor.getDes().isAsync()) {
+            // 对于同步命令需要解析其结果
+            AbstractCommandExecutorSync syncExecutor = (AbstractCommandExecutorSync) executor;
+            for (String host : hosts) {
+                // 解析中间结果
+                if (commandExecuteResultHashMap.get(host).getStatusCode() == SUCCESS) {
+                    // 如果状态码为SUCESS，说明命令执行成功，解析中间结果
+                    try {
+                        AbstractEntity entity = syncExecutor.parseOf(returnValueHashMap.get(host));
+                        commandExecuteResultHashMap.get(host).setData(entity);
+                    } catch (ReturnValueParseException e) {
+                        // 解析失败，更新状态码
+                        commandExecuteResultHashMap.get(host).setStatusCode(RETURN_VALUE_PARSE_FAILED);
+                    }
                 }
             }
         }
@@ -364,4 +384,5 @@ public class SSHSessionPool {
     private synchronized void setReturnValueResult(HashMap<String, String> returnValueHashMap ,String host, String returnValue) {
         returnValueHashMap.put(host, returnValue);
     }
+
 }

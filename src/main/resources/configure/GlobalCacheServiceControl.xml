@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <description>
     <name>GlobalCacheServiceControl</name>
-    <async>false</async>
+    <async>true</async>
     <args>true</args>
     <execute>ALL_CEPH_NODES</execute>
     <privilege>ROOT</privilege>
-    <timeout>60</timeout>
+    <timeout>5</timeout>
     <comment>控制GlobalCache服务</comment>
 </description>

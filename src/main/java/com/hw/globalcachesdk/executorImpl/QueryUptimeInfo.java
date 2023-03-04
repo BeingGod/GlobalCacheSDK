@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.UptimeInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -13,7 +13,7 @@ import com.hw.globalcachesdk.executor.Script;
  */
 @Configure(path = "/configure/QueryUptimeInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/uptime.sh")
-public class QueryUptimeInfo extends AbstractCommandExecutor {
+public class QueryUptimeInfo extends AbstractCommandExecutorSync {
 
     public QueryUptimeInfo() {
         super(QueryUptimeInfo.class);

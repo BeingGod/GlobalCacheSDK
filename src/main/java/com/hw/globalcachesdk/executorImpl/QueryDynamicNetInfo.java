@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.DynamicNetInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 @Configure(path = "/configure/QueryDynamicNetInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/dynamic_net.sh")
-public class QueryDynamicNetInfo extends AbstractCommandExecutor {
+public class QueryDynamicNetInfo extends AbstractCommandExecutorSync {
 
     public QueryDynamicNetInfo() {
         super(QueryDynamicNetInfo.class);

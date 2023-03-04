@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.DiskInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  */
 @Configure(path = "/configure/QueryDiskInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/disk_info.sh")
-public class QueryDiskInfo extends AbstractCommandExecutor {
+public class QueryDiskInfo extends AbstractCommandExecutorSync {
 
     private static final Pattern DISK_INFO_PATTERN = Pattern.compile("[a-z].*");
     private static final Pattern DISK_ROTA_PATTERN = Pattern.compile("^sd.");

@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.MemInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -13,7 +13,7 @@ import com.hw.globalcachesdk.executor.Script;
  */
 @Configure(path = "/configure/QueryMemInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/mem_usage.sh")
-public class QueryMemInfo extends AbstractCommandExecutor {
+public class QueryMemInfo extends AbstractCommandExecutorSync {
 
     public QueryMemInfo() {
         super(QueryMemInfo.class);

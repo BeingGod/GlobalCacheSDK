@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.ClusterStatusInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -13,7 +13,7 @@ import com.hw.globalcachesdk.executor.Script;
  */
 @Configure(path = "/configure/QueryClusterStatusInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/cluster_status/cluster_status.sh")
-public class QueryClusterStatusInfo extends AbstractCommandExecutor {
+public class QueryClusterStatusInfo extends AbstractCommandExecutorSync {
     public QueryClusterStatusInfo() {
         super(QueryClusterStatusInfo.class);
     }

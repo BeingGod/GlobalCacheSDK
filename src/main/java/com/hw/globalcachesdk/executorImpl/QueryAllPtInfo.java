@@ -3,7 +3,7 @@ package com.hw.globalcachesdk.executorImpl;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.PtInfo;
 import com.hw.globalcachesdk.exception.ReturnValueParseException;
-import com.hw.globalcachesdk.executor.AbstractCommandExecutor;
+import com.hw.globalcachesdk.executor.AbstractCommandExecutorSync;
 import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
@@ -13,7 +13,7 @@ import com.hw.globalcachesdk.executor.Script;
  */
 @Configure(path = "/configure/QueryAllPtInfo.xml")
 @Script(path = "/home/GlobalCacheScripts/SDK/pt_info/pt_info.sh")
-public class QueryAllPtInfo extends AbstractCommandExecutor {
+public class QueryAllPtInfo extends AbstractCommandExecutorSync {
 
     public QueryAllPtInfo() {
         super(QueryAllPtInfo.class);
