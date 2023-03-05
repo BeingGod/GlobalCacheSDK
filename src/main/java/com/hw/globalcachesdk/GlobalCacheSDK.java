@@ -1,5 +1,8 @@
 package com.hw.globalcachesdk;
 
+import com.hw.globalcachesdk.entity.CephConf;
+import com.hw.globalcachesdk.entity.ClientConf;
+import com.hw.globalcachesdk.entity.ClusterNetworkConf;
 import com.hw.globalcachesdk.exception.CommandExecutorFactoryException;
 import com.hw.globalcachesdk.exception.GlobalCacheSDKException;
 import com.hw.globalcachesdk.exception.SessionException;
@@ -20,6 +23,8 @@ public class GlobalCacheSDK {
     private static GlobalCacheSDK instance = null;
 
     private SSHSessionPool sshSessionPool = null;
+
+    private HashMap<String, String> ip2hostnameTable = null;
 
     private CommandExecutorFactory commandExecutorFactory = null;
 
@@ -448,6 +453,70 @@ public class GlobalCacheSDK {
     }
 
     /* ===============================================================自动化部署接口===============================================================*/
+
+    /**
+     * 初始化集群配置
+     *
+     * @param cephConfs Ceph节点配置信息
+     * @param clientConfs Client节点配置信息
+     * @param clusterNetworkConf 集群网络配置信息
+     * @return
+     */
+    public synchronized static HashMap<String, CommandExecuteResult> initClusterSettings(ArrayList<CephConf> cephConfs, ArrayList<ClientConf> clientConfs, ClusterNetworkConf clusterNetworkConf) {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> checkHardware() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> compileNodeConfigureEnv() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> compileNodeBuildPackages() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> compileNodeDistributePackages() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> cephConfigureEnvironment() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> ntpServerConfigure() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> ntpClientConfigure() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> cephNodeInstallPackages() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> cephNodeDeploy() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> serverNodeConfigureEnvironment() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> clientNodeConfigureEnvironment() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> serverNodeInstallPackages() {
+        return null;
+    }
+
+    public synchronized static HashMap<String, CommandExecuteResult> clientNodeInstallPackages() {
+        return null;
+    }
 
     /**
      * 控制GlobalCache服务
