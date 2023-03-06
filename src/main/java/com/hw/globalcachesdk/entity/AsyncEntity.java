@@ -1,6 +1,7 @@
 package com.hw.globalcachesdk.entity;
 
 import com.hw.globalcachesdk.exception.AsyncThreadException;
+import com.hw.globalcachesdk.pool.AsyncFinishFlag;
 import com.hw.globalcachesdk.pool.AsyncThread;
 import com.jcraft.jsch.Channel;
 
@@ -21,7 +22,8 @@ public class AsyncEntity extends AbstractEntity {
      * @param inputStream Shell结果输入流
      */
     public AsyncEntity(InputStream inputStream, Channel channel) {
-        thread = new AsyncThread(inputStream);
+        AsyncFinishFlag flag = new AsyncFinishFlag();
+        thread = new AsyncThread(inputStream, flag);
         thread.start();
         this.channel = channel;
     }
@@ -37,8 +39,6 @@ public class AsyncEntity extends AbstractEntity {
             thread.join();
             // 关闭缓冲区
             thread.getReader().close();
-            // 关闭线程
-            thread.close();
             if (!channel.isClosed()) {
                 // 关闭channel
                 channel.disconnect();

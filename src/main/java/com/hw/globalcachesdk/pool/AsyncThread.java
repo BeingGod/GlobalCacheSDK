@@ -27,7 +27,7 @@ public class AsyncThread extends Thread {
     /**
      * 当前线程是否执行完毕
      */
-    private boolean finished = false;
+    private AsyncFinishFlag flag = null;
 
     /**
      * 读取字数串队列为空的线程休眠时间
@@ -35,9 +35,10 @@ public class AsyncThread extends Thread {
      */
     private int sleepTime = 10;
 
-    public AsyncThread(InputStream inputStream) {
+    public AsyncThread(InputStream inputStream, AsyncFinishFlag flag) {
         reader = new BufferedReader(new InputStreamReader(inputStream, Charset.defaultCharset()));
         stringQueue = new LinkedBlockingQueue<>();
+        this.flag = flag;
     }
 
     @Override
@@ -55,6 +56,8 @@ public class AsyncThread extends Thread {
                 throw new RuntimeException(e);
             }
         }
+        // 标记线程已完成
+        flag.finish();
     }
 
     public int getSleepTime() {
@@ -65,21 +68,20 @@ public class AsyncThread extends Thread {
         this.sleepTime = sleepTime;
     }
 
-    public void close() {
-        this.finished = true;
-    }
-
     public BufferedReader getReader() {
         return reader;
     }
 
     public String readLine() throws InterruptedException {
-        if (finished && stringQueue.size() == 0) {
+        if (flag.isFinished() && stringQueue.size() == 0) {
             // 线程结束 && 所有数据已从缓冲区中取出 -> 返回null
             return null;
         }
 
-        while (stringQueue.size() == 0 && ! finished) {
+        while (stringQueue.size() == 0) {
+            if (flag.isFinished()) {
+                return null;
+            }
             // 当前缓冲区中没有结果 && 线程未完成 -> 休眠当前线程
             sleep(sleepTime);
         }

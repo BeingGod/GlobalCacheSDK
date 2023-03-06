@@ -133,17 +133,11 @@ public class GlobalCacheSDKExample {
 
 		ArrayList<String> hosts = new ArrayList<>();
 		hosts.add("175.34.8.36");
-		hosts.add("175.34.8.37");
-		hosts.add("175.34.8.38");
 
 		ArrayList<String> users = new ArrayList<>();
 		users.add("root");
-		users.add("root");
-		users.add("root");
 
 		ArrayList<String> passwords = new ArrayList<>();
-		passwords.add("75=bYmdmMu");
-		passwords.add("75=bYmdmMu");
 		passwords.add("75=bYmdmMu");
 
 		for (int i = 0;i < hosts.size(); i++) {
@@ -188,9 +182,8 @@ public class GlobalCacheSDKExample {
 		}
 		entity.waitFinish(); // 此时线程已经读取完毕，关闭缓冲区和Channel
 
-//		// Example2：一次性读取全部输出
-//		// 以查看175.34.8.36的接口的输出为例
-//		entity.waitFinish(); // 阻塞当前线程，等待异步线程执行完毕
+		// Example2：一次性读取全部输出
+//		entity.waitFinish(); // 此时线程已经读取完毕，关闭缓冲区和Channel
 //		while (true) {
 //			try {
 //				String line = entity.readLine();
@@ -468,8 +461,8 @@ public class GlobalCacheSDKExample {
 //		queryNodePgInfoDemo();
 //		queryDiskPgInfoDemo();
 //		queryAllPgInfoDemo();
-		queryAllPtInfoDemo();
-//		gcServiceControlDemo();
+//		queryAllPtInfoDemo();
+		gcServiceControlDemo();
 //		queryDynamicNetInfoDemo();
 	}
 }
