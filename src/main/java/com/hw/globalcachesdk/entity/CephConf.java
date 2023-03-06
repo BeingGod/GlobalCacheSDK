@@ -27,10 +27,6 @@ public class CephConf {
 
     private String rootPasswd;
 
-    private int ptNum;
-
-    private int pgNum;
-
     private ArrayList<String> dataDiskList;
 
     private ArrayList<String> cacheDiskList;
@@ -89,22 +85,6 @@ public class CephConf {
 
     public void setClusterIp(String clusterIp) {
         this.clusterIp = clusterIp;
-    }
-
-    public int getPtNum() {
-        return ptNum;
-    }
-
-    public void setPtNum(int ptNum) {
-        this.ptNum = ptNum;
-    }
-
-    public int getPgNum() {
-        return pgNum;
-    }
-
-    public void setPgNum(int pgNum) {
-        this.pgNum = pgNum;
     }
 
     public ArrayList<String> getDataDiskList() {

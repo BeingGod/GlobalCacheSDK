@@ -2,7 +2,7 @@ package com.hw.globalcachesdk;
 
 import com.hw.globalcachesdk.entity.CephConf;
 import com.hw.globalcachesdk.entity.ClientConf;
-import com.hw.globalcachesdk.entity.ClusterNetworkConf;
+import com.hw.globalcachesdk.entity.ClusterConf;
 import com.hw.globalcachesdk.exception.CommandExecutorFactoryException;
 import com.hw.globalcachesdk.exception.GlobalCacheSDKException;
 import com.hw.globalcachesdk.exception.SessionException;
@@ -462,7 +462,7 @@ public class GlobalCacheSDK {
      * @param clusterNetworkConf 集群网络配置信息
      * @return
      */
-    public synchronized static HashMap<String, CommandExecuteResult> initClusterSettings(ArrayList<CephConf> cephConfs, ArrayList<ClientConf> clientConfs, ClusterNetworkConf clusterNetworkConf) {
+    public synchronized static HashMap<String, CommandExecuteResult> initClusterSettings(ArrayList<CephConf> cephConfs, ArrayList<ClientConf> clientConfs, ClusterConf clusterNetworkConf) {
         return null;
     }
 

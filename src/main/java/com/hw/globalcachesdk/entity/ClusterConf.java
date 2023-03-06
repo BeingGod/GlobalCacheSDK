@@ -1,10 +1,14 @@
 package com.hw.globalcachesdk.entity;
 
 /**
- * 集群网络配置
+ * 集群配置
  * @author 章睿彬
  */
-public class ClusterNetworkConf {
+public class ClusterConf {
+
+    private int ptNum;
+
+    private int pgNum;
 
     private String publicNetwork;
 
@@ -24,5 +28,21 @@ public class ClusterNetworkConf {
 
     public void setClusterNetwork(String clusterNetwork) {
         this.clusterNetwork = clusterNetwork;
+    }
+
+    public int getPtNum() {
+        return ptNum;
+    }
+
+    public void setPtNum(int ptNum) {
+        this.ptNum = ptNum;
+    }
+
+    public int getPgNum() {
+        return pgNum;
+    }
+
+    public void setPgNum(int pgNum) {
+        this.pgNum = pgNum;
     }
 }
