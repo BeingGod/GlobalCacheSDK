@@ -7,8 +7,6 @@ package com.hw.globalcachesdk.entity;
 public class ClientConf {
     private String hostname;
 
-    private boolean isNtpServer;
-
     private String networkMask;
 
     private String publicIp;
@@ -21,14 +19,6 @@ public class ClientConf {
 
     public void setHostname(String hostname) {
         this.hostname = hostname;
-    }
-
-    public boolean isNtpServer() {
-        return isNtpServer;
-    }
-
-    public void setNtpServer(boolean ntpServer) {
-        isNtpServer = ntpServer;
     }
 
     public String getPublicIp() {

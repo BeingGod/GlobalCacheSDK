@@ -100,4 +100,6 @@ public enum RegisterExecutor {
      */
     @Registry
     QUERY_DISK_IO_INFO,
+    @Registry
+    INIT_CLUSTER_SETTINGS,
 }

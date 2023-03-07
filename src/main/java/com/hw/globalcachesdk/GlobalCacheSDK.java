@@ -13,6 +13,8 @@ import com.hw.globalcachesdk.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Global Cache SDK
@@ -24,7 +26,7 @@ public class GlobalCacheSDK {
 
     private SSHSessionPool sshSessionPool = null;
 
-    private HashMap<String, String> ip2hostnameTable = null;
+    private Map<String, String> ip2hostnameTable = null;
 
     private CommandExecutorFactory commandExecutorFactory = null;
 
@@ -459,11 +461,126 @@ public class GlobalCacheSDK {
      *
      * @param cephConfs Ceph节点配置信息
      * @param clientConfs Client节点配置信息
-     * @param clusterNetworkConf 集群网络配置信息
+     * @param clusterConf 集群配置信息
      * @return
+     * @throws GlobalCacheSDKException 执行失败抛出此异常
+     * @see com.hw.globalcachesdk.entity.ClientConf
+     * @see com.hw.globalcachesdk.entity.CephConf
+     * @see com.hw.globalcachesdk.entity.ClusterConf
      */
-    public synchronized static HashMap<String, CommandExecuteResult> initClusterSettings(ArrayList<CephConf> cephConfs, ArrayList<ClientConf> clientConfs, ClusterConf clusterNetworkConf) {
-        return null;
+    public synchronized static HashMap<String, CommandExecuteResult> initClusterSettings(ArrayList<CephConf> cephConfs, ArrayList<ClientConf> clientConfs, ClusterConf clusterConf) throws GlobalCacheSDKException {
+        for (CephConf cephConf : cephConfs) {
+            getInstance().ip2hostnameTable.put(cephConf.getHostname(), cephConf.getPublicIp());
+        }
+
+        for (ClientConf clientConf : clientConfs) {
+            getInstance().ip2hostnameTable.put(clientConf.getHostname(), clientConf.getPublicIp());
+        }
+
+        AbstractCommandExecutor executor = getInstance().commandExecutorFactory.getCommandExecutor(RegisterExecutor.INIT_CLUSTER_SETTINGS);
+        try {
+            ArrayList<String> hosts = new ArrayList<>();
+            for (Map.Entry<String, String> entry : getInstance().ip2hostnameTable.entrySet()) {
+                hosts.add(entry.getKey());
+            }
+
+            ArrayList<String> users = new ArrayList<>(hosts.size());
+            String user = Utils.enumExecutePrivilegeName(executor.getDes().getExecutePrivilege());
+            for (String host : hosts) {
+                users.add(user);
+            }
+
+            // hostnamelist.txt
+            StringBuilder hostnamelistContent = new StringBuilder("");
+            for (Map.Entry<String, String> entry : getInstance().ip2hostnameTable.entrySet()) {
+                // ip hostname
+                hostnamelistContent.append(entry.getKey()).append(" ").append(entry.getValue()).append("\n");
+            }
+
+            // nodelist.txt
+            StringBuilder nodelistContent = new StringBuilder("");
+            int ccmMonitorNodeNum = -1;
+            int zkServerNodeNum = -1;
+            for (CephConf cephConf : cephConfs) {
+                if (cephConf.isCcmMonitor()) {
+                    ccmMonitorNodeNum = cephConf.getNodeNumber();
+                }
+                if (cephConf.isZkServer()) {
+                    zkServerNodeNum = cephConf.getNodeNumber();
+                }
+            }
+
+            for (CephConf cephConf : cephConfs) {
+                // hostname node_number public_ip public_ip local_ip cluster_ip pt_num pg_num <device1> <device2> zk_server ccm_monitor
+                nodelistContent.append(cephConf.getHostname()).append(" ")
+                        .append(cephConf.getNodeNumber()).append(" ")
+                        .append(cephConf.getPublicIp()).append(" ")
+                        .append(cephConf.getPublicIp()).append(" ")
+                        .append(cephConf.getLocalIp()).append(" ")
+                        .append(cephConf.getClusterIp()).append(" ")
+                        .append(clusterConf.getPtNum()).append(" ")
+                        .append(clusterConf.getPtNum()).append(" ")
+                        .append("<device1>").append(" ")
+                        .append("<device2>").append(" ")
+                        .append(zkServerNodeNum).append(" ")
+                        .append(ccmMonitorNodeNum).append("\n")
+                        .append("\n");
+            }
+
+            // script.conf
+            String ntpServer = "";
+            for (CephConf cephConf : cephConfs) {
+                if (cephConf.isNtpServer()) {
+                    ntpServer = cephConf.getPublicIp();
+                }
+            }
+
+            ArrayList<String> scriptConfContents = new ArrayList<>();
+            StringBuilder scriptConfContent = new StringBuilder("");
+            for (CephConf cephConf : cephConfs) {
+                scriptConfContent.append("hostname: ").append(cephConf.getHostname()).append("\n")
+                        .append("ip: ").append(cephConf.getPublicIp()).append("\n")
+                        .append("mask: ").append(cephConf.getNetworkMask()).append("\n")
+                        .append("public_network: ").append(clusterConf.getPublicNetwork()).append("\n")
+                        .append("cluster_network: ").append(clusterConf.getClusterNetwork()).append("\n")
+                        .append("ntp_server: ").append(ntpServer).append("\n")
+                        .append("password: ").append(cephConf.getRootPasswd());
+            }
+
+            for (ClientConf clientConf : clientConfs) {
+                scriptConfContent.append("hostname: ").append(clientConf.getHostname()).append("\n")
+                        .append("ip: ").append(clientConf.getPublicIp()).append("\n")
+                        .append("mask: ").append(clientConf.getNetworkMask()).append("\n")
+                        .append("public_network: ").append(clusterConf.getPublicNetwork()).append("\n")
+                        .append("cluster_network: ").append(clusterConf.getClusterNetwork()).append("\n")
+                        .append("ntp_server: ").append(ntpServer).append("\n")
+                        .append("password: ").append(clientConf.getRootPasswd());
+            }
+            scriptConfContents.add(scriptConfContent.toString());
+
+            // disklist.txt
+            StringBuilder disklistContent = new StringBuilder();
+            for (CephConf cephConf : cephConfs) {
+                for (String dataDisk : cephConf.getDataDiskList()) {
+                    disklistContent.append(dataDisk).append("\n");
+                }
+                for (String cacheDisk : cephConf.getCacheDiskList()) {
+                    disklistContent.append(cacheDisk).append("\n");
+                }
+            }
+
+            ArrayList<String> args = new ArrayList<>();
+            // hostnamelist.txt disklist.txt nodelist.txt script.conf
+            for (int i = 0; i < hosts.size(); ++i) {
+                String arg = hostnamelistContent.toString() + " " + disklistContent.toString() + " "
+                        + nodelistContent.toString() + " " + scriptConfContents.get(i);
+                args.add(arg);
+            }
+
+            return getInstance().sshSessionPool.execute(hosts, users, executor, args);
+        } catch (SSHSessionPoolException e) {
+            throw new GlobalCacheSDKException("SSH会话池异常", e);
+        }
     }
 
     public synchronized static HashMap<String, CommandExecuteResult> checkHardware() {
@@ -626,6 +743,7 @@ public class GlobalCacheSDK {
     }
 
     private GlobalCacheSDK() throws GlobalCacheSDKException {
+        ip2hostnameTable = new Hashtable<>();
         sshSessionPool = new SSHSessionPool();
         try {
             commandExecutorFactory = new CommandExecutorFactory();

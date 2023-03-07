@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<description>
+    <name>InitClusterSettings</name>
+    <async>false</async>
+    <args>true</args>
+    <execute>ALL_NODES</execute>
+    <privilege>ROOT</privilege>
+    <timeout>5</timeout>
+    <comment>初始化集群配置</comment>
+</description>
