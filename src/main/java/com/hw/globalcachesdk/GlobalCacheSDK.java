@@ -555,8 +555,9 @@ public class GlobalCacheSDK {
                         .append("cluster_network: ").append(clusterConf.getClusterNetwork()).append("\n")
                         .append("ntp_server: ").append(ntpServer).append("\n")
                         .append("password: ").append(clientConf.getRootPasswd());
+                scriptConfContents.add(scriptConfContent.toString());
             }
-            scriptConfContents.add(scriptConfContent.toString());
+
 
             // disklist.txt
             StringBuilder disklistContent = new StringBuilder();

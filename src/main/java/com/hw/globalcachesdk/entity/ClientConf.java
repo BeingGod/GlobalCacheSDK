@@ -44,4 +44,11 @@ public class ClientConf {
     public void setNetworkMask(String networkMask) {
         this.networkMask = networkMask;
     }
+
+    public ClientConf(String hostname, String networkMask, String publicIp, String rootPasswd) {
+        this.hostname = hostname;
+        this.networkMask = networkMask;
+        this.publicIp = publicIp;
+        this.rootPasswd = rootPasswd;
+    }
 }

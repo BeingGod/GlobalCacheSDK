@@ -126,4 +126,19 @@ public class CephConf {
     public void setRootPasswd(String rootPasswd) {
         this.rootPasswd = rootPasswd;
     }
+
+    public CephConf(String hostname, int nodeNumber, boolean isZkServer, boolean isNtpServer, boolean isCcmMonitor, String localIp, String publicIp, String clusterIp, String networkMask, String rootPasswd, ArrayList<String> dataDiskList, ArrayList<String> cacheDiskList) {
+        this.hostname = hostname;
+        this.nodeNumber = nodeNumber;
+        this.isZkServer = isZkServer;
+        this.isNtpServer = isNtpServer;
+        this.isCcmMonitor = isCcmMonitor;
+        this.localIp = localIp;
+        this.publicIp = publicIp;
+        this.clusterIp = clusterIp;
+        this.networkMask = networkMask;
+        this.rootPasswd = rootPasswd;
+        this.dataDiskList = dataDiskList;
+        this.cacheDiskList = cacheDiskList;
+    }
 }
