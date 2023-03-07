@@ -20,6 +20,7 @@ public class AsyncEntity extends AbstractEntity {
 
     /**
      * @param inputStream Shell结果输入流
+     * @param channel SSH管道
      */
     public AsyncEntity(InputStream inputStream, Channel channel) {
         AsyncFinishFlag flag = new AsyncFinishFlag();
