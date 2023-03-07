@@ -212,119 +212,49 @@ public class GlobalCacheSDKExample {
 	public static void initClusterSettingsDemo(){
 		System.out.println("==============initClusterSettings Demo==============");
 
-		ArrayList<String> hosts = new ArrayList<>();
-		hosts.add("175.34.8.36");
-
-		ArrayList<String> users = new ArrayList<>();
-		users.add("root");
-
-		ArrayList<String> passwords = new ArrayList<>();
-		passwords.add("75=bYmdmMu");
-
 		ArrayList<CephConf> cephConfs= new ArrayList<>();
 		ArrayList<ClientConf> clientConfs= new ArrayList<>();
 		ClusterConf clusterConf=new ClusterConf();
 
 		ArrayList<String>dataDiskList=new ArrayList<>();
 		ArrayList<String>cacheDiskList=new ArrayList<>();
-		dataDiskList.add("SDA");
-		dataDiskList.add("SDB");
-		dataDiskList.add("SDC");
-		dataDiskList.add("SDE");
-		dataDiskList.add("SDF");
-		dataDiskList.add("SDG");
-		dataDiskList.add("SDH");
-		dataDiskList.add("SDI");
-		dataDiskList.add("SDJ");
-		dataDiskList.add("SDK");
-		dataDiskList.add("SDL");
-		dataDiskList.add("SDM");
-		dataDiskList.add("SDN");
-		dataDiskList.add("SDO");
-		dataDiskList.add("SDP");
-		dataDiskList.add("SDQ");
+		dataDiskList.add("sdb");
+		dataDiskList.add("sdc");
+		dataDiskList.add("sdd");
+		dataDiskList.add("sde");
 
 		cacheDiskList.add("nvme01");
 		cacheDiskList.add("nvme02");
-		cacheDiskList.add("nvme03");
-		cacheDiskList.add("nvme04");
 
 		int num=0;
-		CephConf cephConf=new CephConf("ceph",++num,false,false,false,"192.168.10.7",
-				"192.168.10.7","192.168.10.7","192.168.10.0","ysu@123456",dataDiskList,cacheDiskList);
-		CephConf cephConf1=new CephConf("ceph1",++num,true,true,true,"192.168.10.8",
-				"192.168.10.8","192.168.10.8","192.168.10.0","ysu@123456",dataDiskList,cacheDiskList);
-		CephConf cephConf2=new CephConf("ceph",++num,false,false,false,"192.168.10.9",
-				"192.168.10.9","192.168.10.9","192.168.10.0","ysu@123456",dataDiskList,cacheDiskList);
-		CephConf cephConf3=new CephConf("ceph",++num,false,false,false,"192.168.10.10",
-				"192.168.10.10","192.168.10.10","192.168.10.0","ysu@123456",dataDiskList,cacheDiskList);
-		CephConf cephConf4=new CephConf("ceph",++num,false,false,false,"192.168.10.11",
-				"192.168.10.11","192.168.10.11","192.168.10.0","ysu@123456",dataDiskList,cacheDiskList);
+		CephConf cephConf1=new CephConf("ceph1",++num,true,true,true,"175.34.8.36",
+				"175.34.8.36","175.34.8.36","255.255.192.0","75=bYmdmMu",dataDiskList,cacheDiskList);
+		CephConf cephConf2=new CephConf("ceph2",++num,false,false,false,"175.34.8.37",
+				"175.34.8.37","175.34.8.36","255.255.192.0","75=bYmdmMu",dataDiskList,cacheDiskList);
+		CephConf cephConf3=new CephConf("ceph3",++num,false,false,false,"175.34.8.38",
+				"175.34.8.38","175.34.8.36","255.255.192.0","75=bYmdmMu",dataDiskList,cacheDiskList);
 
-		cephConfs.add(cephConf);
 		cephConfs.add(cephConf1);
 		cephConfs.add(cephConf2);
 		cephConfs.add(cephConf3);
-		cephConfs.add(cephConf4);
 
+		ClientConf clientConf1=new ClientConf("client1","255.255.192.0","175.34.8.39","75=bYmdmMu");
 
-
-		ClientConf clientConf=new ClientConf("ceph","192.168.0.0","192.168.10.7","ysu@123456");
-		ClientConf clientConf1=new ClientConf("ceph1","192.168.0.0","192.168.10.8","ysu@123456");
-		ClientConf clientConf2=new ClientConf("ceph","192.168.0.0","192.168.10.9","ysu@123456");
-		ClientConf clientConf3=new ClientConf("ceph","192.168.0.0","192.168.10.10","ysu@123456");
-		ClientConf clientConf4=new ClientConf("client","192.168.0.0","192.168.10.11","ysu@123456");
-
-		clientConfs.add(clientConf);
 		clientConfs.add(clientConf1);
-		clientConfs.add(clientConf2);
-		clientConfs.add(clientConf3);
-		clientConfs.add(clientConf4);
-
-
 
 		clusterConf.setPtNum(180);
 		clusterConf.setPgNum(180);
-		clusterConf.setPublicNetwork("192.168.0.0");
-		clusterConf.setClusterNetwork("192.168.0.0");
+		clusterConf.setPublicNetwork("175.34.0.0/18");
+		clusterConf.setClusterNetwork("175.34.0.0/18");
 
-
-
-
-		for (int i = 0;i < hosts.size(); i++) {
-			try {
-				GlobalCacheSDK.createSession(hosts.get(i), users.get(i), passwords.get(i), 22);
-				System.out.println(hosts.get(i) + " SSH会话创建成功");
-			} catch (GlobalCacheSDKException e) {
-				System.out.println(hosts.get(i) + " SSH会话创建失败");
-				e.printStackTrace();
-			}
-		}
-
-		Map<String, ErrorCodeEntity> nodesErrorCodeEntityHashMap = new HashMap<>(hosts.size());
 		try {
-			for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.initClusterSettings(cephConfs,clientConfs,clusterConf).entrySet()) {
-				if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
-					nodesErrorCodeEntityHashMap.put(entry.getKey(), (ErrorCodeEntity) entry.getValue().getData());
-				}
-			}
+			GlobalCacheSDK.initClusterSettings(cephConfs, clientConfs, clusterConf);
 		} catch (GlobalCacheSDKException e) {
-			System.out.println("接口调用失败");
+			System.err.println("配置文件初始化失败");
 			e.printStackTrace();
 		}
 
-		System.out.println(nodesErrorCodeEntityHashMap);
-
-		for (String host : hosts) {
-			try {
-				GlobalCacheSDK.releaseSession(host, "root");
-				System.out.println(host + " SSH会话释放成功");
-			} catch (GlobalCacheSDKException e) {
-				System.out.println(host + " SSH会话释放失败");
-				e.printStackTrace();
-			}
-		}
-
+		System.out.println("配置文件初始化成功");
 	}
 
 	public static void queryUptimeInfoDemo() {
