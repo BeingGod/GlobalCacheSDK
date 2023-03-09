@@ -100,4 +100,9 @@ public enum RegisterExecutor {
      */
     @Registry
     QUERY_DISK_IO_INFO,
+    /**
+     * 配置编译节点
+     */
+    @Registry
+    COMPILE_NODE_CONF_ENV,
 }
