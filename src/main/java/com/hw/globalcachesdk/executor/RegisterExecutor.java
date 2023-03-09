@@ -105,4 +105,9 @@ public enum RegisterExecutor {
      */
     @Registry
     ALL_NODE_CEPH_CONF_ENV,
+    /**
+     * 配置编译节点
+     */
+    @Registry
+    COMPILE_NODE_CONF_ENV,
 }
