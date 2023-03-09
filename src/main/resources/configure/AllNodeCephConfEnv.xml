@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<description>
+    <name>AllNodeCephConfEnv</name>
+    <async>true</async>
+    <args>false</args>
+    <execute>ALL_NODES</execute>
+    <privilege>ROOT</privilege>
+    <timeout>30</timeout>
+    <comment>配置所有节点CephConfEnv</comment>
+</description>

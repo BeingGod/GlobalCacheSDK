@@ -100,4 +100,9 @@ public enum RegisterExecutor {
      */
     @Registry
     QUERY_DISK_IO_INFO,
+    /**
+     * 配置所有节点CephConfEnv
+     */
+    @Registry
+    ALL_NODE_CEPH_CONF_ENV,
 }
