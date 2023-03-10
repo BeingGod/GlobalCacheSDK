@@ -110,4 +110,9 @@ public enum RegisterExecutor {
      */
     @Registry
     COMPILE_NODE_CONF_ENV,
+    /**
+     * 配置ntp服务端
+     */
+    @Registry
+    NTP_SERVER_NODE_CONF_ENV,
 }
