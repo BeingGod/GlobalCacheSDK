@@ -502,90 +502,6 @@ public class GlobalCacheSDKExample {
 		}
 	}
 
-	/**
-	 * 配置所有节点CephConfEnv
-	 */
-	public static void allNodeCephConfEnvDemo() {
-		System.out.println("==============allNodeCephConfEnv Demo==============");
-
-		ArrayList<String> hosts = new ArrayList<>();
-		hosts.add("175.34.8.36");
-
-		ArrayList<String> users = new ArrayList<>();
-		users.add("root");
-
-		ArrayList<String> passwords = new ArrayList<>();
-		passwords.add("75=bYmdmMu");
-
-		for (int i = 0;i < hosts.size(); i++) {
-			try {
-				GlobalCacheSDK.createSession(hosts.get(i), users.get(i), passwords.get(i), 22);
-				System.out.println(hosts.get(i) + " SSH会话创建成功");
-			} catch (GlobalCacheSDKException e) {
-				System.out.println(hosts.get(i) + " SSH会话创建失败");
-				e.printStackTrace();
-			}
-		}
-
-		Map<String, AsyncEntity> entityMap = new HashMap<>(hosts.size());
-		try {
-			for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.allNodeCephConfEnv(hosts).entrySet()) {
-				if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
-					entityMap.put(entry.getKey(), (AsyncEntity) entry.getValue().getData());
-				} else {
-					System.out.println("接口调用失败");
-				}
-			}
-		} catch (GlobalCacheSDKException e) {
-			System.out.println("接口调用失败");
-			e.printStackTrace();
-		}
-
-		// Example1：获取实时输出
-		// 以查看175.34.8.36的接口的输出为例
-		AsyncEntity entity = entityMap.get("175.34.8.36");
-		while (true) {
-			try {
-				String line = entity.readLine();
-				if (line == null) {
-					// 结果读取完毕
-					break;
-				}
-				System.out.println(line);
-			} catch (AsyncThreadException e) {
-				System.err.println("异步线程异常");
-				break;
-			}
-		}
-		entity.waitFinish(); // 此时线程已经读取完毕，关闭缓冲区和Channel
-
-		// Example2：一次性读取全部输出
-//		entity.waitFinish(); // 此时线程已经读取完毕，关闭缓冲区和Channel
-//		while (true) {
-//			try {
-//				String line = entity.readLine();
-//				if (line == null) {
-//					// 结果读取完毕
-//					break;
-//				}
-//				System.out.println(line);
-//			} catch (AsyncThreadException e) {
-//				System.err.println("异步线程异常");
-//				break;
-//			}
-//		}
-
-		for (String host : hosts) {
-			try {
-				GlobalCacheSDK.releaseSession(host, "root");
-				System.out.println(host + " SSH会话释放成功");
-			} catch (GlobalCacheSDKException e) {
-				System.out.println(host + " SSH会话释放失败");
-				e.printStackTrace();
-			}
-		}
-	}
-
 	public static void main(String[] args) {
 //		queryCpuInfoDemo();
 //		queryMemInfoDemo();
@@ -596,7 +512,6 @@ public class GlobalCacheSDKExample {
 //		queryAllPtInfoDemo();
 //		gcServiceControlDemo();
 		initClusterSettingsDemo();
-		allNodeCephConfEnvDemo();
 //		queryDynamicNetInfoDemo();
 	}
 }
