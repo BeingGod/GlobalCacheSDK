@@ -8,7 +8,7 @@ import com.hw.globalcachesdk.executor.Script;
  * 配置GC客户端节点环境
  * @author 章睿彬
  */
-@Configure(path = "/configure/ServerodeConfEnv.xml")
+@Configure(path = "/configure/ServerNodeConfEnv.xml")
 @Script(path = "/home/GlobalCacheScripts/envs/configure/client/configure_server_env.sh")
 public class ServerNodeConfEnv extends AbstractCommandExecutorAsync {
     public ServerNodeConfEnv() {

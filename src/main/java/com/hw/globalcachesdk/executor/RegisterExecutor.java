@@ -118,13 +118,16 @@ public enum RegisterExecutor {
     /**
      * 配置GC客户端节点环境
      */
+    @Registry
     CLIENT_NODE_CONF_ENV,
     /**
      * 配置GC服务端节点环境
      */
+    @Registry
     SERVER_NODE_CONF_ENV,
     /**
      * 编译依赖软件包
      */
+    @Registry
     COMPILE_NODE_BUILD_PKGS,
 }
