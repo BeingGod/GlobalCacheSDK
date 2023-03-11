@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<description>
+    <name>ClientNodeInstallPkgs</name>
+    <async>true</async>
+    <args>false</args>
+    <execute>ALL_CLIENT_NODES</execute>
+    <privilege>ROOT</privilege>
+    <timeout>5</timeout>
+    <comment>client节点安装软件包</comment>
+</description>

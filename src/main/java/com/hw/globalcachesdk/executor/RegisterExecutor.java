@@ -140,4 +140,9 @@ public enum RegisterExecutor {
      */
     @Registry
     SERVER_NODE_INSTALL_PKGS,
+    /**
+     * client节点安装软件包
+     */
+    @Registry
+    CLIENT_NODE_INSTALL_PKGS,
 }
