@@ -5,6 +5,6 @@
     <args>false</args>
     <execute>ALL_NODES</execute>
     <privilege>ROOT</privilege>
-    <timeout>30</timeout>
-    <comment>配置所有节点CephConfEnv</comment>
+    <timeout>5</timeout>
+    <comment>配置所有节点Ceph环境</comment>
 </description>
