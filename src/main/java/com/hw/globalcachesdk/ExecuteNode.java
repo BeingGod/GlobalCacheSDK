@@ -33,4 +33,8 @@ public enum ExecuteNode {
      * Ceph1节点
      */
     CEPH1_ONLY,
+    /**
+     * 除Ceph1节点外的节点
+     */
+    EX_CEPH1,
 }
