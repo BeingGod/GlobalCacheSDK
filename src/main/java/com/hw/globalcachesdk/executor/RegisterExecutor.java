@@ -136,6 +136,11 @@ public enum RegisterExecutor {
     @Registry
     CEPH_NODE_INSTALL_PKGS,
     /**
+     * 部署Ceph
+     */
+    @Registry
+    CEPH1_NODE_DEPLOY_CEPH,
+    /**
      * server节点安装软件包
      */
     @Registry
