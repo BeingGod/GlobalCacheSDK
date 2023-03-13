@@ -116,6 +116,11 @@ public enum RegisterExecutor {
     @Registry
     NTP_SERVER_NODE_CONF_ENV,
     /**
+     * 配置ntp客户端
+     */
+    @Registry
+    NTP_CLIENT_NODE_CONF_ENV,
+    /**
      * 配置GC客户端节点环境
      */
     @Registry
