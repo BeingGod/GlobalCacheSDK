@@ -155,4 +155,9 @@ public enum RegisterExecutor {
      */
     @Registry
     CLIENT_NODE_INSTALL_PKGS,
+    /**
+     * 检查节点硬件
+     */
+    @Registry
+    CHECK_HARDWARE,
 }

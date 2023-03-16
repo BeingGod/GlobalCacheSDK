@@ -1184,7 +1184,6 @@ public class GlobalCacheSDKExample {
 //		queryDiskPgInfoDemo();
 //		queryAllPgInfoDemo();
 //		queryAllPtInfoDemo();
-//		gcServiceControlDemo();
 //		queryDynamicNetInfoDemo();
 		autoDeployDemo();
 	}
