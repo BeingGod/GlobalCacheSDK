@@ -522,6 +522,16 @@ public class GlobalCacheSDKExample {
 		passwords.add("75=bYmdmMu");
 		passwords.add("75=bYmdmMu");
 
+		for (int i = 0;i < hosts.size(); i++) {
+			try {
+				GlobalCacheSDK.createSession(hosts.get(i), users.get(i), passwords.get(i), 22);
+				System.out.println(hosts.get(i) + " SSH会话创建成功");
+			} catch (GlobalCacheSDKException e) {
+				System.out.println(hosts.get(i) + " SSH会话创建失败");
+				e.printStackTrace();
+			}
+		}
+
 		// 配置编译节点
 		{
 			Map<String, AsyncEntity> entityMap = new HashMap<>(hosts.size());
@@ -1090,8 +1100,8 @@ public class GlobalCacheSDKExample {
 
 		ArrayList<String> hosts = new ArrayList<>();
 		hosts.add("175.34.8.36");
-		hosts.add("175.34.8.36");
-		hosts.add("175.34.8.36");
+		hosts.add("175.34.8.37");
+		hosts.add("175.34.8.38");
 
 		ArrayList<String> users = new ArrayList<>();
 		users.add("root");
@@ -1159,6 +1169,64 @@ public class GlobalCacheSDKExample {
 		}
 	}
 
+	public static void checkHardwareDemo() {
+		System.out.println("==============checkHardware Demo==============");
+
+		ArrayList<String> hosts = new ArrayList<>();
+		hosts.add("175.34.8.36");
+		hosts.add("175.34.8.37");
+		hosts.add("175.34.8.38");
+		hosts.add("175.34.8.39");
+
+		ArrayList<String> users = new ArrayList<>();
+		users.add("root");
+		users.add("root");
+		users.add("root");
+		users.add("root");
+
+		ArrayList<String> passwords = new ArrayList<>();
+		passwords.add("75=bYmdmMu");
+		passwords.add("75=bYmdmMu");
+		passwords.add("75=bYmdmMu");
+		passwords.add("75=bYmdmMu");
+
+		for (int i = 0;i < hosts.size(); i++) {
+			try {
+				GlobalCacheSDK.createSession(hosts.get(i), users.get(i), passwords.get(i), 22);
+				System.out.println(hosts.get(i) + " SSH会话创建成功");
+			} catch (GlobalCacheSDKException e) {
+				System.out.println(hosts.get(i) + " SSH会话创建失败");
+				e.printStackTrace();
+			}
+		}
+
+		Map<String, ErrorCodeEntity> entityMap = new HashMap<>(hosts.size());
+		try {
+			for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.checkHardware(hosts).entrySet()) {
+				if (entry.getValue().getStatusCode() == StatusCode.SUCCESS) {
+					entityMap.put(entry.getKey(), (ErrorCodeEntity) entry.getValue().getData());
+				} else {
+					System.out.println("接口调用失败");
+					System.out.println(entry.getValue().getStatusCode());
+				}
+			}
+		} catch (GlobalCacheSDKException e) {
+			System.out.println("接口调用失败");
+			e.printStackTrace();
+		}
+		System.out.println(entityMap);
+
+		for (String host : hosts) {
+			try {
+				GlobalCacheSDK.releaseSession(host, "root");
+				System.out.println(host + " SSH会话释放成功");
+			} catch (GlobalCacheSDKException e) {
+				System.out.println(host + " SSH会话释放失败");
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public static void autoDeployDemo() {
 		// 集群配置初始化
 		initClusterSettingsDemo();
@@ -1185,6 +1253,7 @@ public class GlobalCacheSDKExample {
 //		queryAllPgInfoDemo();
 //		queryAllPtInfoDemo();
 //		queryDynamicNetInfoDemo();
+//		checkHardwareDemo();
 		autoDeployDemo();
 	}
 }
