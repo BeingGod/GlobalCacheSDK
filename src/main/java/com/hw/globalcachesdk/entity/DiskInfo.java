@@ -12,7 +12,7 @@ public class DiskInfo extends AbstractEntity {
      */
     public enum DiskType {
         /**
-         * SATA硬盘
+         * ROTA硬盘
          */
         ROTA,
         /**
@@ -50,11 +50,6 @@ public class DiskInfo extends AbstractEntity {
             this.type = type;
         }
     }
-
-    /**
-     * 节点磁盘数目
-     */
-    private int diskNum;
 
     /**
      * 磁盘信息列表
