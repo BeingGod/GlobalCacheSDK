@@ -160,4 +160,24 @@ public enum RegisterExecutor {
      */
     @Registry
     CHECK_HARDWARE,
+    /**
+     * 检查依赖包是否编译成功
+     */
+    @Registry
+    IS_PKGS_BUILD_SUCCESS,
+    /**
+     * 检查Ceph节点是否部署成功
+     */
+    @Registry
+    IS_CEPH_NODE_DEPLOYED,
+    /**
+     * 检查Client节点是否部署成功
+     */
+    @Registry
+    IS_CLIENT_NODE_DEPLOYED,
+    /**
+     * 检查Server节点是否部署成功
+     */
+    @Registry
+    IS_SERVER_NODE_DEPLOYED,
 }
