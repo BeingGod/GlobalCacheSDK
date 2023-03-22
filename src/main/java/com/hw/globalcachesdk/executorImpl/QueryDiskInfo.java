@@ -29,15 +29,15 @@ public class QueryDiskInfo extends AbstractCommandExecutorSync {
 
         ArrayList<DiskInfo.Disk> diskList = new ArrayList<>();
         //返回值按行切分
-        String[] diskListSring = returnValue.split("\n");
-        for (String diskInfoString:diskListSring) {
+        String[] diskListString = returnValue.split("\n");
+        for (String diskInfoString:diskListString) {
             //行内按空格（包含连续空格）切分0为名称1为类型
-            String[] diskInfoListSring = diskInfoString.replaceAll("\\s{2,}", " ").split(" ");
+            String[] diskInfoListString = diskInfoString.replaceAll("\\s{2,}", " ").split(" ");
             DiskInfo.Disk disk = new DiskInfo.Disk();
-            disk.setName(diskInfoListSring[0]);
-            if("0".equals(diskInfoListSring[1])){
+            disk.setName(diskInfoListString[0]);
+            if("0".equals(diskInfoListString[1])){
                 disk.setType(DiskInfo.DiskType.ROTA);
-            } else if ("1".equals(diskInfoListSring[1])) {
+            } else if ("1".equals(diskInfoListString[1])) {
                 disk.setType(DiskInfo.DiskType.NVME);
             }
             diskList.add(disk);
