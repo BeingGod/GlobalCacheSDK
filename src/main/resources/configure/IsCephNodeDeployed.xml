@@ -4,7 +4,7 @@
     <async>false</async>
     <args>false</args>
     <execute>ALL_CEPH_NODES</execute>
-    <privilege>USER</privilege>
+    <privilege>ROOT</privilege>
     <timeout>2</timeout>
     <comment>Ceph节点部署检查</comment>
 </description>
