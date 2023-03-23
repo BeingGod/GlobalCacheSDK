@@ -180,4 +180,9 @@ public enum RegisterExecutor {
      */
     @Registry
     IS_SERVER_NODE_DEPLOYED,
+    /**
+     * 检查GC服务是否正在运行
+     */
+    @Registry
+    IS_GLOBAL_CACHE_SERVICE_RUN,
 }

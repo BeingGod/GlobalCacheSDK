@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<description>
+    <name>IsGlobalCacheServiceRun</name>
+    <async>false</async>
+    <args>true</args>
+    <execute>ALL_CEPH_NODES</execute>
+    <privilege>ROOT</privilege>
+    <timeout>2</timeout>
+    <comment>GlobalCache服务状态检查</comment>
+</description>
