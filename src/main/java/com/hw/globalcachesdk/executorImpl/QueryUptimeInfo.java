@@ -27,7 +27,6 @@ public class QueryUptimeInfo extends AbstractCommandExecutorSync {
         } else {
             int date = 0, hour = 0, min = 0;
             returnValue = returnValue.substring(0, returnValue.length() - 1);
-            //returnValue="6days , 55 min,";
             //判断是否有day的输入
             int dateIndex = returnValue.indexOf("d");
             if (dateIndex != -1) {
