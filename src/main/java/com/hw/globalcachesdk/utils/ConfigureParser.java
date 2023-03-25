@@ -13,6 +13,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * XML配置文件解析器
@@ -21,17 +22,16 @@ import java.io.IOException;
 public class ConfigureParser {
     /**
      * XML配置文件解析器
-     * @param path 文件路径
+     * @param inputStream 配置文件输入流
      * @return CommandExecutorDescription
      * @throws ConfigureParserException 解析失败抛出此异常
      */
-    public static CommandExecutorDescription parse(String path) throws ConfigureParserException {
-        File f = new File(path);
+    public static CommandExecutorDescription parse(InputStream inputStream) throws ConfigureParserException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         Document doc = null;
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
-            doc = builder.parse(f);
+            doc = builder.parse(inputStream);
         } catch (ParserConfigurationException | IOException | SAXException e) {
             throw new ConfigureParserException("解析失败", e);
         }
