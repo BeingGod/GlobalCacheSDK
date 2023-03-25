@@ -9,7 +9,7 @@ import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.utils.ConfigureParser;
 import com.jcraft.jsch.Session;
 
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 
 /**
@@ -24,20 +24,13 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
         }
 
         Configure conf = class_.getAnnotation(Configure.class);
-        java.net.URL resource = this.getClass().getResource(conf.path());
-
-        if (resource == null) {
-            System.err.println("未找到" + class_.getName() + "配置文件");
-            throw new RuntimeException("未找到配置文件");
-        }
-
-        String realPath = resource.getPath();
+        InputStream inputStream = this.getClass().getResourceAsStream(conf.path());
         try {
             // 解析对应注解的接口配置文件
-            this.des = ConfigureParser.parse(realPath);
+            this.des = ConfigureParser.parse(inputStream);
         } catch (ConfigureParserException e) {
             System.err.println(class_.getName() + "配置文件解析失败");
-            throw new RuntimeException("配置文件解析失败");
+            throw new RuntimeException("配置文件解析失败", e);
         }
 
         if (this.des.isAsync()) {
