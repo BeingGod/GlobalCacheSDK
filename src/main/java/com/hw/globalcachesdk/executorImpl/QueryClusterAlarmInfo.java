@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * @author 章睿彬, 杨凤仪
  */
 @Configure(path = "/configure/QueryClusterAlarmInfo.xml")
-@Script(path = "/home/GlobalCacheScriptsNew/data/cluster_alarm/cluster_alarm.sh")
+@Script(path = "/home/GlobalCacheScripts/data/cluster_alarm/cluster_alarm.sh")
 public class QueryClusterAlarmInfo extends AbstractCommandExecutorSync {
 
     private static final Pattern CLUSTER_ALARM_INFO_PATTERN = Pattern.compile("\\((.*?)\\)");

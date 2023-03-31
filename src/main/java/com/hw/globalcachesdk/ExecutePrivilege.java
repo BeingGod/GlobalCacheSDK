@@ -16,5 +16,6 @@ public enum ExecutePrivilege {
     /**
      * 普通用户
      */
+    @Deprecated
     USER,
 }

@@ -13,7 +13,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/IsGlobalCacheServiceRun.xml")
-@Script(path = "/home/GlobalCacheScriptsNew/mgr/gc_service_control.sh", suffixCommand = "> /dev/null && echo $?")
+@Script(path = "/home/GlobalCacheScripts/mgr/gc_service_control.sh", suffixCommand = "> /dev/null && echo $?")
 public class IsGlobalCacheServiceRun extends AbstractCommandExecutorSync {
 
     public IsGlobalCacheServiceRun() {

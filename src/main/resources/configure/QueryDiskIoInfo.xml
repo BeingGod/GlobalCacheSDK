@@ -4,7 +4,7 @@
     <async>false</async>
     <args>false</args>
     <execute>ANY_NODES</execute>
-    <privilege>USER</privilege>
+    <privilege>GLOBAL_CACHE_OP</privilege>
     <timeout>2</timeout>
     <comment>获取节点磁盘IO信息</comment>
 </description>

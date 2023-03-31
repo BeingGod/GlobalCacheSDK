@@ -13,7 +13,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/QueryAllPgInfo.xml")
-@Script(path = "/home/GlobalCacheScriptsNew/data/all_pg/all_pg.sh")
+@Script(path = "/home/GlobalCacheScripts/data/all_pg/all_pg.sh")
 public class QueryAllPgInfo extends AbstractCommandExecutorSync {
 
     public QueryAllPgInfo() {

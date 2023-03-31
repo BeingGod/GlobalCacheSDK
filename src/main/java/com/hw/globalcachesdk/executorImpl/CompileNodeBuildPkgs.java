@@ -9,7 +9,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/CompileNodeBuildPkgs.xml")
-@Script(path = "/home/GlobalCacheScriptsNew/compile/compile_build.sh")
+@Script(path = "/home/GlobalCacheScripts/compile/compile_build.sh")
 public class CompileNodeBuildPkgs extends AbstractCommandExecutorAsync {
 
     public CompileNodeBuildPkgs() {

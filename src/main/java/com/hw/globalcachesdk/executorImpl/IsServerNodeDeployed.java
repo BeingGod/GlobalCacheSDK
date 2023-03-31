@@ -13,7 +13,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/IsServerNodeDeployed.xml")
-@Script(path = "/home/GlobalCacheScriptsNew/deploy/server/server_check.sh", suffixCommand = "> /dev/null && echo $?")
+@Script(path = "/home/GlobalCacheScripts/deploy/server/server_check.sh", suffixCommand = "> /dev/null && echo $?")
 public class IsServerNodeDeployed extends AbstractCommandExecutorSync {
 
     public IsServerNodeDeployed() {

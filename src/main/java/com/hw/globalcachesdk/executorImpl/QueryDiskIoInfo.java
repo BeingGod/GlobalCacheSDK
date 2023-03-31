@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author 李金泽
  */
 @Configure(path = "/configure/QueryDiskIoInfo.xml")
-@Script(path = "/home/GlobalCacheScriptsNew/data/disk_io/disk_io.sh")
+@Script(path = "/home/GlobalCacheScripts/data/disk_io/disk_io.sh")
 public class QueryDiskIoInfo extends AbstractCommandExecutorSync {
 
     public QueryDiskIoInfo() {

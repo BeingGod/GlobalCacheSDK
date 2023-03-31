@@ -12,7 +12,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/QueryUptimeInfo.xml")
-@Script(path = "/home/GlobalCacheScriptsNew/data/uptime/uptime.sh")
+@Script(path = "/home/GlobalCacheScripts/data/uptime/uptime.sh")
 public class QueryUptimeInfo extends AbstractCommandExecutorSync {
 
     public QueryUptimeInfo() {

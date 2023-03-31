@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author 章睿彬, 李金泽
  */
 @Configure(path = "/configure/QueryClusterStatusInfo.xml")
-@Script(path = "/home/GlobalCacheScriptsNew/data/node_status/node_status.sh")
+@Script(path = "/home/GlobalCacheScripts/data/node_status/node_status.sh")
 public class QueryNodeStatusInfo extends AbstractCommandExecutorSync {
     public QueryNodeStatusInfo() {
         super(QueryNodeStatusInfo.class);

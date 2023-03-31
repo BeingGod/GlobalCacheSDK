@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @author 章睿彬, 蔡润培
  */
 @Configure(path = "/configure/QueryDiskInfo.xml")
-@Script(path = "/home/GlobalCacheScriptsNew/data/disk/disk.sh")
+@Script(path = "/home/GlobalCacheScripts/data/disk/disk.sh")
 public class QueryDiskInfo extends AbstractCommandExecutorSync {
 
     public QueryDiskInfo() {

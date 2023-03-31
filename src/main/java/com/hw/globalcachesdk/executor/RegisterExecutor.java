@@ -185,4 +185,9 @@ public enum RegisterExecutor {
      */
     @Registry
     IS_GLOBAL_CACHE_SERVICE_RUN,
+    /**
+     * 分发软件包
+     */
+    @Registry
+    COMPILE_NODE_DISTRIBUTE_PKGS,
 }

@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * @author 蔡润培
  */
 @Configure(path = "/configure/QueryStaticNetInfo.xml")
-@Script(path = "/home/GlobalCacheScriptsNew/data/static_net/static_net.sh")
+@Script(path = "/home/GlobalCacheScripts/data/static_net/static_net.sh")
 public class QueryStaticNetInfo extends AbstractCommandExecutorSync {
 
     private static final Pattern MAC_ADDR_PATTERN = Pattern.compile("(?<=ether )\\S+");

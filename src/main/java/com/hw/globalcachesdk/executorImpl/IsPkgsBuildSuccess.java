@@ -13,7 +13,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/IsPkgsBuildSuccess.xml")
-@Script(path = "/home/GlobalCacheScriptsNew/compile/compile_check.sh", suffixCommand = "> /dev/null && echo $?")
+@Script(path = "/home/GlobalCacheScripts/compile/compile_check.sh", suffixCommand = "> /dev/null && echo $?")
 public class IsPkgsBuildSuccess extends AbstractCommandExecutorSync {
 
     public IsPkgsBuildSuccess() {
