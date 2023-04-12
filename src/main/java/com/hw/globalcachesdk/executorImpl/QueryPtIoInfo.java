@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author 李金泽
  */
 @Configure(path = "/configure/QueryPtIoInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/data/pt_io/pt_io.sh")
+@Script(path = "/data/pt_io/pt_io.sh")
 public class QueryPtIoInfo extends AbstractCommandExecutorSync {
 
     public QueryPtIoInfo() {

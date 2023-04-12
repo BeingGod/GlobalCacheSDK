@@ -43,7 +43,7 @@ public class ConfigureParser {
             doc.getElementsByTagName("privilege").getLength() != 1 ||
             doc.getElementsByTagName("timeout").getLength() != 1
         ) {
-            throw new ConfigureParserException("配置文件格式错误");
+            throw new ConfigureParserException("接口配置文件格式错误");
         }
 
         CommandExecutorDescription des = new CommandExecutorDescription();

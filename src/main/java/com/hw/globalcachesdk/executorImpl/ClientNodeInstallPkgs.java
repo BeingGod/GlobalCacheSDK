@@ -9,7 +9,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/ClientNodeInstallPkgs.xml")
-@Script(path = "/home/GlobalCacheScripts/deploy/client/client_install.sh")
+@Script(path = "/deploy/client/client_install.sh")
 public class ClientNodeInstallPkgs extends AbstractCommandExecutorAsync {
     public ClientNodeInstallPkgs() {
         super(ClientNodeInstallPkgs.class);

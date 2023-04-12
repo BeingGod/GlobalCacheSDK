@@ -13,7 +13,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/CheckHardware.xml")
-@Script(path = "/home/GlobalCacheScripts/envs/check/check_hardware.sh", suffixCommand = "> /dev/null && echo $?")
+@Script(path = "/envs/check/check_hardware.sh", suffixCommand = "> /dev/null && echo $?")
 public class CheckHardware extends AbstractCommandExecutorSync {
 
     public CheckHardware() {

@@ -12,7 +12,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/QueryAllPtInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/data/all_pt/all_pt.sh")
+@Script(path = "/data/all_pt/all_pt.sh")
 public class QueryAllPtInfo extends AbstractCommandExecutorSync {
 
     public QueryAllPtInfo() {

@@ -12,7 +12,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/QueryMemInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/data/mem/mem.sh")
+@Script(path = "/data/mem/mem.sh")
 public class QueryMemInfo extends AbstractCommandExecutorSync {
 
     public QueryMemInfo() {

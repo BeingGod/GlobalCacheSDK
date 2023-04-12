@@ -9,7 +9,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/ClientNodeConfEnv.xml")
-@Script(path = "/home/GlobalCacheScripts/envs/configure/client/configure_client_env.sh")
+@Script(path = "/envs/configure/client/configure_client_env.sh")
 public class ClientNodeConfEnv extends AbstractCommandExecutorAsync {
     public ClientNodeConfEnv() {
         super(ClientNodeConfEnv.class);

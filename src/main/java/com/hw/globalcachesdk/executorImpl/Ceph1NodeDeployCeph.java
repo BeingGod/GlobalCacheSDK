@@ -9,7 +9,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/Ceph1NodeDeployCeph.xml")
-@Script(path = "/home/GlobalCacheScripts/deploy/ceph/deploy_ceph.sh")
+@Script(path = "/deploy/ceph/deploy_ceph.sh")
 public class Ceph1NodeDeployCeph extends AbstractCommandExecutorAsync {
     public Ceph1NodeDeployCeph() {
         super(Ceph1NodeDeployCeph.class);

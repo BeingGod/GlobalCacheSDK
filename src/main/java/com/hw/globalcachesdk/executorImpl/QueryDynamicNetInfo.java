@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author 章睿彬
  */
 @Configure(path = "/configure/QueryDynamicNetInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/data/dynamic_net/dynamic_net.sh")
+@Script(path = "/data/dynamic_net/dynamic_net.sh")
 public class QueryDynamicNetInfo extends AbstractCommandExecutorSync {
 
     public QueryDynamicNetInfo() {

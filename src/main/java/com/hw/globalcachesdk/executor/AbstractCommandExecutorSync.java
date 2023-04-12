@@ -2,6 +2,7 @@ package com.hw.globalcachesdk.executor;
 
 import cn.hutool.extra.ssh.JschUtil;
 import com.hw.globalcachesdk.ExecutePrivilege;
+import com.hw.globalcachesdk.GlobalCacheSDK;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.exception.CommandExecException;
 import com.hw.globalcachesdk.exception.ConfigureParserException;
@@ -55,7 +56,7 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
         Script script = this.getClass().getAnnotation(Script.class);
         String prefixCommand = script.prefixCommand();
         String suffixCommand = script.suffixCommand();
-        String path = script.path();
+        String path = GlobalCacheSDK.getScriptsPath() + script.path();
         String command = "";
         // TODO: 优化逻辑
         if ("".equals(prefixCommand) && ! "".equals(suffixCommand)) {

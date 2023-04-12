@@ -1,5 +1,6 @@
 package com.hw.globalcachesdk.executor;
 
+import com.hw.globalcachesdk.GlobalCacheSDK;
 import com.hw.globalcachesdk.exception.CommandExecException;
 import com.hw.globalcachesdk.exception.ConfigureParserException;
 import com.hw.globalcachesdk.utils.ConfigureParser;
@@ -53,10 +54,10 @@ public abstract class AbstractCommandExecutorAsync extends AbstractCommandExecut
             throw new CommandExecException("Channel未开启");
         }
 
-        Script script = this.getClass().getAnnotation(Script.class);
+        Script script =  this.getClass().getAnnotation(Script.class);
         String prefixCommand = script.prefixCommand();
         String suffixCommand = script.suffixCommand();
-        String path = script.path();
+        String path = GlobalCacheSDK.getScriptsPath() + script.path();
         String command = "";
         // TODO: 优化逻辑
         if ("".equals(prefixCommand) && ! "".equals(suffixCommand)) {

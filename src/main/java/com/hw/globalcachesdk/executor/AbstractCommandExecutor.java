@@ -9,6 +9,7 @@ import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.utils.ConfigureParser;
 import com.jcraft.jsch.Session;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
@@ -22,9 +23,6 @@ public abstract class AbstractCommandExecutor {
      * 命令配置信息
      */
     protected CommandExecutorDescription des = null;
-
-    public AbstractCommandExecutor() {
-    }
 
     public CommandExecutorDescription getDes() {
         return des;

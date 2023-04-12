@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @author 章睿彬, 蔡润培
  */
 @Configure(path = "/configure/QueryCacheDiskInfo.xml")
-@Script(path = "/home/GlobalCacheScripts/data/cache_disk/cache_disk.sh", suffixCommand = "| grep diskId")
+@Script(path = "/data/cache_disk/cache_disk.sh", suffixCommand = "| grep diskId")
 public class QueryCacheDiskInfo extends AbstractCommandExecutorSync {
     private static final Pattern CACHE_INFO_PATTERN = Pattern.compile(".*\\n");
     public QueryCacheDiskInfo() {
