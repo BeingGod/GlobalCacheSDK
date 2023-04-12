@@ -190,4 +190,9 @@ public enum RegisterExecutor {
      */
     @Registry
     COMPILE_NODE_DISTRIBUTE_PKGS,
+    /**
+     * 所有节点安装pdsh
+     */
+    @Registry
+    ALL_NODE_INSTALL_PDSH,
 }
