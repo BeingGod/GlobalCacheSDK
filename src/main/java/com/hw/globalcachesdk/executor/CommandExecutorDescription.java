@@ -33,7 +33,7 @@ public class CommandExecutorDescription {
     /**
      * 当前命令需要的执行权限
      */
-    private ExecutePrivilege executePrivilege = ExecutePrivilege.USER;
+    private ExecutePrivilege executePrivilege = ExecutePrivilege.GLOBAL_CACHE_OP;
 
     /**
      * 接口超时时间

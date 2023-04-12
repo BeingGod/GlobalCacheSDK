@@ -13,9 +13,4 @@ public enum ExecutePrivilege {
      * global cache运维用户
      */
     GLOBAL_CACHE_OP,
-    /**
-     * 普通用户
-     */
-    @Deprecated
-    USER,
 }

@@ -21,8 +21,6 @@ public class Utils {
                 return "root";
             case GLOBAL_CACHE_OP:
                 return "globalcacheop";
-            case USER:
-                return "globalcachesdk";
             default:
                 throw new GlobalCacheSDKException("未知的用户权限");
         }
