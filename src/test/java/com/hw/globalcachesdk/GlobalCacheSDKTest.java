@@ -1,9 +1,12 @@
 package com.hw.globalcachesdk;
 
 import cn.hutool.core.collection.CollUtil;
+import com.hw.globalcachesdk.GlobalCacheSDK;
+import com.hw.globalcachesdk.StatusCode;
 import com.hw.globalcachesdk.exception.GlobalCacheSDKException;
 import com.hw.globalcachesdk.executor.CommandExecuteResult;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -78,7 +81,7 @@ public class GlobalCacheSDKTest {
         ArrayList<String> hosts = getCephIpList();
         try {
             for (Map.Entry<String, CommandExecuteResult> entry: GlobalCacheSDK.queryMemInfo(hosts).entrySet()) {
-                assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
+                Assert.assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
                 assertNotNull(entry.getValue().getData());
             }
         } catch (GlobalCacheSDKException e) {
