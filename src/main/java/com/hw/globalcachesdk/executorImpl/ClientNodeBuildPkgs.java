@@ -8,12 +8,12 @@ import com.hw.globalcachesdk.executor.Script;
  * 编译依赖包
  * @author 章睿彬
  */
-@Configure(path = "/configure/CompileNodeBuildPkgs.xml")
-@Script(path = "/compile/compile_build_server.sh")
-public class CompileNodeBuildPkgs extends AbstractCommandExecutorAsync {
+@Configure(path = "/configure/ClientNodeBuildPkgs.xml")
+@Script(path = "/compile/compile_build_client.sh")
+public class ClientNodeBuildPkgs extends AbstractCommandExecutorAsync {
 
-    public CompileNodeBuildPkgs() {
-        super(CompileNodeBuildPkgs.class);
+    public ClientNodeBuildPkgs() {
+        super(ClientNodeBuildPkgs.class);
     }
 
 }

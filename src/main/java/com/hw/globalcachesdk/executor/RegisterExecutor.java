@@ -136,6 +136,11 @@ public enum RegisterExecutor {
     @Registry
     COMPILE_NODE_BUILD_PKGS,
     /**
+     * 客户端编译依赖软件包
+     */
+    @Registry
+    CLIENT_NODE_BUILD_PKGS,
+    /**
      * 安装Ceph软件包
      */
     @Registry
