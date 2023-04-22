@@ -12,12 +12,12 @@ import com.hw.globalcachesdk.executor.Script;
  * 依赖包构建检查
  * @author 章睿彬
  */
-@Configure(path = "/configure/IsPkgsBuildSuccess.xml")
-@Script(path = "/compile/compile_check.sh", suffixCommand = "> /dev/null && echo $?")
-public class IsPkgsBuildSuccess extends AbstractCommandExecutorSync {
+@Configure(path = "/configure/IsPkgsBuildSuccessOnServer.xml")
+@Script(path = "/compile/compile_check_server.sh", suffixCommand = "> /dev/null && echo $?")
+public class IsPkgsBuildSuccessOnServer extends AbstractCommandExecutorSync {
 
-    public IsPkgsBuildSuccess() {
-        super(IsPkgsBuildSuccess.class);
+    public IsPkgsBuildSuccessOnServer() {
+        super(IsPkgsBuildSuccessOnServer.class);
     }
 
     @Override
