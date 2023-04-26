@@ -5,7 +5,7 @@ import com.hw.globalcachesdk.executor.Configure;
 import com.hw.globalcachesdk.executor.Script;
 
 @Configure(path = "/configure/NtpServerNodeConfEnv.xml")
-@Script(path = "/envs/configure/ceph/configure_ntp_server.sh")
+@Script(path = "/envs/configure/ceph/configure_ntp_server.sh", suffixCommand = "&& source /etc/profile")
 public class NtpServerNodeConfEnv extends AbstractCommandExecutorAsync {
     public NtpServerNodeConfEnv() {
         super(NtpServerNodeConfEnv.class);
