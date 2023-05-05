@@ -35,9 +35,9 @@ public class QueryDiskInfo extends AbstractCommandExecutorSync {
             String[] diskInfoListString = diskInfoString.replaceAll("\\s{2,}", " ").split(" ");
             DiskInfo.Disk disk = new DiskInfo.Disk();
             disk.setName(diskInfoListString[0]);
-            if("0".equals(diskInfoListString[1])){
+            if("1".equals(diskInfoListString[1])){
                 disk.setType(DiskInfo.DiskType.ROTA);
-            } else if ("1".equals(diskInfoListString[1])) {
+            } else if ("0".equals(diskInfoListString[1])) {
                 disk.setType(DiskInfo.DiskType.NVME);
             }
             diskList.add(disk);
