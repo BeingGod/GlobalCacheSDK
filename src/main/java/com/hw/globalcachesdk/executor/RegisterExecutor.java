@@ -166,36 +166,6 @@ public enum RegisterExecutor {
     @Registry
     CHECK_HARDWARE,
     /**
-     * 检查服务端依赖包是否编译成功
-     */
-    @Registry
-    IS_PKGS_BUILD_SUCCESS_ON_SERVER,
-    /**
-     * 检查客户端依赖包是否编译成功
-     */
-    @Registry
-    IS_PKGS_BUILD_SUCCESS_ON_CLIENT,
-    /**
-     * 检查Ceph节点是否部署成功
-     */
-    @Registry
-    IS_CEPH_NODE_DEPLOYED,
-    /**
-     * 检查Client节点是否部署成功
-     */
-    @Registry
-    IS_CLIENT_NODE_DEPLOYED,
-    /**
-     * 检查Server节点是否部署成功
-     */
-    @Registry
-    IS_SERVER_NODE_DEPLOYED,
-    /**
-     * 检查GC服务是否正在运行
-     */
-    @Registry
-    IS_GLOBAL_CACHE_SERVICE_RUN,
-    /**
      * 分发软件包
      */
     @Registry
