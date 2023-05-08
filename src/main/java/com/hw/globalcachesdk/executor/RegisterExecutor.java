@@ -101,6 +101,11 @@ public enum RegisterExecutor {
     @Registry
     QUERY_DISK_IO_INFO,
     /**
+     * 获取节点名称
+     */
+    @Registry
+    QUERY_HOST_NAME_INFO,
+    /**
      * 配置所有节点CephConfEnv
      */
     @Registry
