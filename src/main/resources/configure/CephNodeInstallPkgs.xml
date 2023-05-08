@@ -3,7 +3,7 @@
     <name>NtpClientNodeConfEnv</name>        // 命令名称（Java类名）
     <async>true</async>             // 是否为异步命令
     <args>false</args>               // 是否为带参命令
-    <execute>CEPH1_ONLY</execute>     // 命令执行节点
+    <execute>ALL_CEPH_NODES</execute>     // 命令执行节点
     <privilege>ROOT</privilege>      // 命令执行权限
     <timeout>5</timeout>             // 命令请求等待时间，单位：秒
     <comment>安装Ceph</comment> // 备注
