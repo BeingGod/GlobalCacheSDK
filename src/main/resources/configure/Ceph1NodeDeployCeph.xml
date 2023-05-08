@@ -3,7 +3,7 @@
     <name>Ceph1NodeDeployCeph</name>
     <async>true</async>
     <args>false</args>
-    <execute>ALL_CEPH_NODES</execute>
+    <execute>CEPH1_ONLY</execute>
     <privilege>ROOT</privilege>
     <timeout>5</timeout>
     <comment>部署Ceph</comment>
