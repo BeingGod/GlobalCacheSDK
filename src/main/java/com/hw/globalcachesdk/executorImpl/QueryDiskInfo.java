@@ -37,8 +37,10 @@ public class QueryDiskInfo extends AbstractCommandExecutorSync {
             disk.setName(diskInfoListString[0]);
             if ("1".equals(diskInfoListString[1]) || diskInfoListString[0].contains("sd")){
                 disk.setType(DiskInfo.DiskType.ROTA);
-            } else {
+            } else if (diskInfoListString[0].contains("nvme")){
                 disk.setType(DiskInfo.DiskType.NVME);
+            } else {
+                disk.setType(DiskInfo.DiskType.UNKNOWN);
             }
             diskList.add(disk);
         }

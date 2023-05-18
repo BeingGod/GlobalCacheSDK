@@ -19,6 +19,10 @@ public class DiskInfo extends AbstractEntity {
          * NVME硬盘
          */
         NVME,
+        /**
+         * 未知磁盘类型
+         */
+        UNKNOWN,
     }
 
     /**
