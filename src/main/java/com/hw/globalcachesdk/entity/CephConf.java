@@ -23,7 +23,7 @@ public class CephConf {
 
     private String clusterIp;
 
-    private String networkMask;
+    private String publicNetworkMask;
 
     private String rootPasswd;
 
@@ -112,11 +112,11 @@ public class CephConf {
     }
 
     public String getNetworkMask() {
-        return networkMask;
+        return publicNetworkMask;
     }
 
-    public void setNetworkMask(String networkMask) {
-        this.networkMask = networkMask;
+    public void setNetworkMask(String publicNetworkMask) {
+        this.publicNetworkMask = publicNetworkMask;
     }
 
     public String getRootPasswd() {
@@ -127,7 +127,7 @@ public class CephConf {
         this.rootPasswd = rootPasswd;
     }
 
-    public CephConf(String hostname, int nodeNumber, boolean isZkServer, boolean isNtpServer, boolean isCcmMonitor, String localIp, String publicIp, String clusterIp, String networkMask, String rootPasswd, ArrayList<String> dataDiskList, ArrayList<String> cacheDiskList) {
+    public CephConf(String hostname, int nodeNumber, boolean isZkServer, boolean isNtpServer, boolean isCcmMonitor, String localIp, String publicIp, String clusterIp, String publicNetworkMask, String rootPasswd, ArrayList<String> dataDiskList, ArrayList<String> cacheDiskList) {
         this.hostname = hostname;
         this.nodeNumber = nodeNumber;
         this.isZkServer = isZkServer;
@@ -136,7 +136,7 @@ public class CephConf {
         this.localIp = localIp;
         this.publicIp = publicIp;
         this.clusterIp = clusterIp;
-        this.networkMask = networkMask;
+        this.publicNetworkMask = publicNetworkMask;
         this.rootPasswd = rootPasswd;
         this.dataDiskList = dataDiskList;
         this.cacheDiskList = cacheDiskList;
