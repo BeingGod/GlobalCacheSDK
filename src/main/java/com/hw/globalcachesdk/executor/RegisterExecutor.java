@@ -166,13 +166,43 @@ public enum RegisterExecutor {
     @Registry
     CLIENT_NODE_INSTALL_PKGS,
     /**
+     * 分发软件包
+     */
+    @Registry
+    COMPILE_NODE_DISTRIBUTE_PKGS,
+    /**
+     * Ceph部署检查
+     */
+    @Registry
+    CHECK_CEPH,
+    /**
+     * Client节点GlobalCache部署检查
+     */
+    @Registry
+    CHECK_CLIENT,
+    /**
+     * Compile节点依赖包编译检查
+     */
+    @Registry
+    CHECK_COMPILE,
+    /**
+     * 节点配置文件检查
+     */
+    @Registry
+    CHECK_CONF,
+    /**
+     * 软件包分发检查
+     */
+    @Registry
+    CHECK_DISTRIBUTE,
+    /**
      * 检查节点硬件
      */
     @Registry
     CHECK_HARDWARE,
     /**
-     * 分发软件包
+     * Server节点GlobalCache部署检查
      */
     @Registry
-    COMPILE_NODE_DISTRIBUTE_PKGS,
+    CHECK_SERVER,
 }

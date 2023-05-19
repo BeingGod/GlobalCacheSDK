@@ -9,7 +9,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 李金泽
  */
 @Configure(path = "/configure/AllNodeCephConfEnv.xml")
-@Script(path = "/envs/configure/ceph/configure_ceph_env.sh", suffixCommand = "&& source /etc/profile")
+@Script(path = "/envs/ceph/configure_ceph_env.sh", suffixCommand = "&& source /etc/profile")
 public class AllNodeCephConfEnv extends AbstractCommandExecutorAsync {
 
     public AllNodeCephConfEnv() {

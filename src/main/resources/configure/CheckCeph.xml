@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<description>
+    <name>CheckCeph</name>
+    <async>false</async>
+    <args>false</args>
+    <execute>ALL_CEPH_NODES</execute>
+    <privilege>ROOT</privilege>
+    <timeout>5</timeout>
+    <comment>Ceph部署检查</comment>
+</description>
