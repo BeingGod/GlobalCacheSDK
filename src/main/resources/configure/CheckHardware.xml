@@ -5,6 +5,6 @@
     <args>false</args>
     <execute>ALL_NODES</execute>
     <privilege>ROOT</privilege>
-    <timeout>2</timeout>
+    <timeout>5</timeout>
     <comment>检查节点硬件</comment>
 </description>

@@ -5,6 +5,6 @@
     <args>false</args>
     <execute>CEPH1_ONLY</execute>
     <privilege>ROOT</privilege>
-    <timeout>2</timeout>
+    <timeout>5</timeout>
     <comment>软件包分发检查</comment>
 </description>

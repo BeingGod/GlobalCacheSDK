@@ -5,6 +5,6 @@
     <args>false</args>
     <execute>ALL_CLIENT_NODES</execute>
     <privilege>ROOT</privilege>
-    <timeout>2</timeout>
+    <timeout>5</timeout>
     <comment>Client节点GlobalCache部署检查</comment>
 </description>
