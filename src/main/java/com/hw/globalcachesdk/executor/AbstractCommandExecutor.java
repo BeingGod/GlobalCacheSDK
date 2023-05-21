@@ -35,28 +35,8 @@ public abstract class AbstractCommandExecutor {
     protected String whoami(Session sshSession) throws CommandExecException {
         String command = "whoami";
 
-        int[] flag = {1};
-        OutputStream newErrStream = new OutputStream() {
-            @Override
-            public void write(int b) {
-                //TODO：本处输出为ASCII强转实现，UTF-8适配
-                System.err.print((char) b);
-            }
-            @Override
-            public void write(byte[] b, int off, int len) {
-                flag[0] = 0;
-                StringBuilder errMsg= new StringBuilder();
-                for (int i = 0; i < len; i++) {
-                    errMsg.append((char) b[off + i]);
-                }
-                System.err.print(errMsg);
-            }
-        };
-        String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset(), newErrStream).trim();
-        if (flag[0] == 0) {
-            throw new CommandExecException("命令执行失败");
-        } else {
-            return returnValue;
-        }
+        String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset()).trim();
+
+        return returnValue;
     }
 }
