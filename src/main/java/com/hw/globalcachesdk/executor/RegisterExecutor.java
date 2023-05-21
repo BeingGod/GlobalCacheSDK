@@ -54,7 +54,7 @@ public enum RegisterExecutor {
      * 获取集群异常状态信息
      */
     @Registry
-    QUERY_CLUSTER_AlARM_INFO,
+    QUERY_CLUSTER_ALARM_INFO,
     /**
      * 获取全部PG信息
      */
