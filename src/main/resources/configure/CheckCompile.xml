@@ -3,7 +3,7 @@
     <name>CheckCompile</name>
     <async>false</async>
     <args>false</args>
-    <execute>ALL_NODES</execute>
+    <execute>ANY_NODES</execute>
     <privilege>ROOT</privilege>
     <timeout>5</timeout>
     <comment>Compile节点依赖包编译检查</comment>
