@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <description>
-    <name>NtpClientNodeConfEnv</name>        // 命令名称（Java类名）
+    <name>CephNodeInstallPkgs</name>        // 命令名称（Java类名）
     <async>true</async>             // 是否为异步命令
     <args>false</args>               // 是否为带参命令
     <execute>ALL_CEPH_NODES</execute>     // 命令执行节点
