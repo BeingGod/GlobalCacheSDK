@@ -13,7 +13,7 @@ import com.hw.globalcachesdk.executor.Script;
  * @author 章睿彬
  */
 @Configure(path = "/configure/CheckHardware.xml")
-@Script(path = "/check/hardware_check.sh", suffixCommand = "> /dev/null && echo $?")
+@Script(path = "/check/hardware_check.sh")
 public class CheckHardware extends AbstractCommandExecutorSync {
 
     public CheckHardware() {
@@ -25,23 +25,17 @@ public class CheckHardware extends AbstractCommandExecutorSync {
         returnValue = returnValue.replace("\n","");
 
         ErrorCodeEntity entity = new ErrorCodeEntity();
-        int errorCode = Integer.parseInt(returnValue);
-        entity.setErrorCode(errorCode);
+        int errorCode = 0;
 
-        switch (errorCode) {
-            case 0:
-                entity.setMessage("The hardware environment meets the requirements");
-                break;
-            case 1:
-                entity.setMessage("CPU is not satisfied!");
-                break;
-            case 2:
-                entity.setMessage("Memory is not satisified!");
-                break;
-            default:
-                entity.setMessage("Unknown");
-                break;
+        if (returnValue.contains("check mem failed")) {
+            errorCode += 1;
         }
+        if (returnValue.contains("check cpu failed")) {
+            errorCode += 2;
+        }
+
+        entity.setErrorCode(errorCode);
+        entity.setMessage(returnValue);
 
         return entity;
     }
