@@ -9,6 +9,8 @@ public class ClientConf {
 
     private String networkMask;
 
+    private String remoteIp;
+
     private String publicIp;
 
     private String rootPasswd;
@@ -45,9 +47,18 @@ public class ClientConf {
         this.networkMask = networkMask;
     }
 
-    public ClientConf(String hostname, String networkMask, String publicIp, String rootPasswd) {
+    public String getRemoteIp() {
+        return remoteIp;
+    }
+
+    public void setRemoteIp(String remoteIp) {
+        this.remoteIp = remoteIp;
+    }
+
+    public ClientConf(String hostname, String networkMask, String remoteIp, String publicIp, String rootPasswd) {
         this.hostname = hostname;
         this.networkMask = networkMask;
+        this.remoteIp = remoteIp;
         this.publicIp = publicIp;
         this.rootPasswd = rootPasswd;
     }

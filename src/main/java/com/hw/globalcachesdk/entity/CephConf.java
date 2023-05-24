@@ -17,6 +17,8 @@ public class CephConf {
 
     private boolean isCcmMonitor;
 
+    private String remoteIp;
+
     private String localIp;
 
     private String publicIp;
@@ -127,12 +129,21 @@ public class CephConf {
         this.rootPasswd = rootPasswd;
     }
 
-    public CephConf(String hostname, int nodeNumber, boolean isZkServer, boolean isNtpServer, boolean isCcmMonitor, String localIp, String publicIp, String clusterIp, String publicNetworkMask, String rootPasswd, ArrayList<String> dataDiskList, ArrayList<String> cacheDiskList) {
+    public String getRemoteIp() {
+        return remoteIp;
+    }
+
+    public void setRemoteIp(String remoteIp) {
+        this.remoteIp = remoteIp;
+    }
+
+    public CephConf(String hostname, int nodeNumber, boolean isZkServer, boolean isNtpServer, boolean isCcmMonitor, String remoteIp, String localIp, String publicIp, String clusterIp, String publicNetworkMask, String rootPasswd, ArrayList<String> dataDiskList, ArrayList<String> cacheDiskList) {
         this.hostname = hostname;
         this.nodeNumber = nodeNumber;
         this.isZkServer = isZkServer;
         this.isNtpServer = isNtpServer;
         this.isCcmMonitor = isCcmMonitor;
+        this.remoteIp = remoteIp;
         this.localIp = localIp;
         this.publicIp = publicIp;
         this.clusterIp = clusterIp;
