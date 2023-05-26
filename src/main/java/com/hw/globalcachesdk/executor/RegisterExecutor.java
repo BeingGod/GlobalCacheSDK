@@ -205,4 +205,9 @@ public enum RegisterExecutor {
      */
     @Registry
     CHECK_SERVER,
+    /**
+     * Ceph1节点清理OSD
+     */
+    @Registry
+    CEPH1_NODE_CLEAN_OSD,
 }
