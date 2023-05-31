@@ -210,4 +210,9 @@ public enum RegisterExecutor {
      */
     @Registry
     CEPH1_NODE_CLEAN_OSD,
+    /**
+     * GlobalCache软件运行检查
+     */
+    @Registry
+    CHECK_GLOBAL_CACHE_RUNNING,
 }
