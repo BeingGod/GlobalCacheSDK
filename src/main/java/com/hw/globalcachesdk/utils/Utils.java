@@ -3,6 +3,8 @@ package com.hw.globalcachesdk.utils;
 import com.hw.globalcachesdk.ExecutePrivilege;
 import com.hw.globalcachesdk.exception.GlobalCacheSDKException;
 
+import java.io.*;
+
 /**
  * 常用工具类
  * @author 章睿彬
@@ -51,5 +53,31 @@ public class Utils {
         }
 
         return stringBuilder.toString();
+    }
+
+    public static boolean copyFile(String src, String dst) throws GlobalCacheSDKException {
+        File sourceFile = new File(src);
+        File destFile = new File(dst);
+
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(sourceFile);
+            FileOutputStream outputStream = new FileOutputStream(destFile);
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            inputStream.close();
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            System.err.println("file not found!");
+            throw new GlobalCacheSDKException("file not found", e);
+        } catch (IOException e) {
+            System.err.println("io exception!");
+            throw new GlobalCacheSDKException("file write failed!", e);
+        }
     }
 }
