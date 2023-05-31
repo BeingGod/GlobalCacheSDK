@@ -55,7 +55,7 @@ public class Utils {
         return stringBuilder.toString();
     }
 
-    public static boolean copyFile(String src, String dst) throws GlobalCacheSDKException {
+    public static void copyFile(String src, String dst) throws GlobalCacheSDKException {
         File sourceFile = new File(src);
         File destFile = new File(dst);
 
