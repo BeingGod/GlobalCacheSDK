@@ -146,10 +146,10 @@ public enum RegisterExecutor {
     @Registry
     CLIENT_NODE_BUILD_PKGS,
     /**
-     * 安装Ceph软件包
+     * 格式化磁盘
      */
     @Registry
-    CEPH_NODE_INSTALL_PKGS,
+    CEPH_NODE_DISK_PARTITION,
     /**
      * 部署Ceph
      */
