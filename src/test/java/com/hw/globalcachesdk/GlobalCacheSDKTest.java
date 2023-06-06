@@ -56,8 +56,8 @@ public class GlobalCacheSDKTest {
         return hostname2ipTable.get("ceph1");
     }
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         HashMap<Object, Object> temp = MapUtil.of(nodeInfo);
 
         hostname2ipTable = new HashMap<>();
@@ -76,8 +76,8 @@ public class GlobalCacheSDKTest {
         GlobalCacheSDK.setHostname2ipTable(hostname2ipTable);
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         for (Map.Entry<String,String> entry : hostname2ipTable.entrySet()) {
             GlobalCacheSDK.releaseSession(entry.getValue(), "root");
             String hostname = entry.getKey();
@@ -88,12 +88,16 @@ public class GlobalCacheSDKTest {
     }
 
     @Test
+    public void createSession() {
+
+    }
+
+    @Test
     public void queryMemInfo() {
         ArrayList<String> hosts = getCephHosts();
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryMemInfo(hosts).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -106,7 +110,7 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryCpuInfo(hosts).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
+
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -118,7 +122,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryCacheDiskInfo(getCeph1Host()).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -130,7 +133,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryClusterAlarmInfo(getCeph1Host()).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -143,7 +145,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryDiskInfo(hosts).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -156,7 +157,7 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryUptime(hosts).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
+
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -168,7 +169,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryClusterStatusInfo(getCeph1Host()).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -180,7 +180,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryNodeStatusInfo(getCeph1Host()).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -193,7 +192,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryDiskIoInfo(hosts).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -205,7 +203,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryStaticNetInfo(getCeph1Host()).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -218,7 +215,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryDynamicNetInfo(hosts).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -230,7 +226,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryNodePtInfo(getCeph1Host(), 0).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -242,7 +237,7 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryAllPtInfo(getCeph1Host()).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
+
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -254,7 +249,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryDiskPtInfo(getCeph1Host(), 0).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -266,7 +260,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryPtIoInfo(getCeph1Host()).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -278,7 +271,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryNodePgInfo(getCeph1Host(), 0).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -290,7 +282,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryAllPgInfo(getCeph1Host()).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -302,7 +293,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryDiskPgInfo(getCeph1Host(),0).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -314,7 +304,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.queryHostNameInfo(getCeph1Host()).entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -326,7 +315,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.checkCeph().entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -338,7 +326,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.checkClient().entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -350,7 +337,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.checkCompile().entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -362,7 +348,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.checkConf().entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -374,7 +359,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.checkDistribute().entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -386,9 +370,7 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.checkServer().entrySet()) {
                 ErrorCodeEntity entity = (ErrorCodeEntity) entry.getValue().getData();
-                System.out.println(entity.getMessage());
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
@@ -400,7 +382,6 @@ public class GlobalCacheSDKTest {
         try {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.checkHardware().entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
-                
             }
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
