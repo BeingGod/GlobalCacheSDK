@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <description>
-    <name>AllNodeCephConfEnv</name>
+    <name>ClientNodeInstallCeph</name>
     <async>true</async>
     <args>false</args>
-    <execute>ALL_NODES</execute>
+    <execute>ALL_CLIENT_NODES</execute>
     <privilege>ROOT</privilege>
     <timeout>5</timeout>
-    <comment>配置所有节点Ceph环境</comment>
+    <comment>GC客户端节点安装Ceph</comment>
 </description>

@@ -106,10 +106,10 @@ public enum RegisterExecutor {
     @Registry
     QUERY_HOST_NAME_INFO,
     /**
-     * 配置所有节点CephConfEnv
+     * Ceph节点配置
      */
     @Registry
-    ALL_NODE_CEPH_CONF_ENV,
+    CEPH_NODE_CONF_ENV,
     /**
      * 配置编译节点
      */
@@ -215,4 +215,9 @@ public enum RegisterExecutor {
      */
     @Registry
     CHECK_GLOBAL_CACHE_RUNNING,
+    /**
+     * client节点安装ceph
+     */
+    @Registry
+    CLIENT_NODE_INSTALL_CEPH,
 }
