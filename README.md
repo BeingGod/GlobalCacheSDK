@@ -24,6 +24,25 @@
 
 ![image-20230216162900061](./assets/image-20230216162900061.png)
 
+### 设置脚本路径
+
+GlobalCacheSDK需要调用GlobalCacheScripts中的脚本，因此，在调用时需要设置GlobalCacheScripts的路径。目前支持两种方式设置脚本。
+
+**配置文件设置：**
+
+在`application.yml`文件中添加配置
+
+```
+# GlobalCacheSDK注册的scripts路径
+GlobalCacheScripts.path: <path to GlobalCacheScripts>
+```
+
+**动态接口设置：**
+
+调用`setScriptsPath()`进行设置
+
+
+
 ### 同步接口调用
 
 ​	由于数据请求接口调用时间较短，因此将其设计为阻塞调用，即调用完函数即可获得输出。接下来以调用CPU信息请求接口为例，演示如何调用阻塞接口：
@@ -37,13 +56,13 @@
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <description>
-    <name>QueryCpuInfo</name>        // 命令名称（Java类名）
-    <async>false</async>             // 是否为异步命令
-    <args>false</args>               // 是否为带参命令
-    <execute>ALL_NODES</execute>     // 命令执行节点
-    <privilege>USER</privilege>      // 命令执行权限
-    <timeout>2</timeout>             // 命令请求等待时间，单位：秒
-    <comment>获取节点CPU信息</comment> // 备注
+    <name>QueryCpuInfo</name>                   // 命令名称（Java类名）
+    <async>false</async>                        // 是否为异步命令
+    <args>false</args>                          // 是否为带参命令
+    <execute>ALL_NODES</execute>                // 命令执行节点
+    <privilege>GLOBAL_CACHE_OP</privilege>      // 命令执行权限
+    <timeout>2</timeout>                        // 命令请求等待时间，单位：秒
+    <comment>获取节点CPU信息</comment>            // 备注
 </description>
 ```
 
@@ -74,16 +93,16 @@ public static void queryCpuInfoDemo() {
   hosts.add("175.34.8.39");
 
   ArrayList<String> users = new ArrayList<>();
-  users.add("globalcachesdk");
-  users.add("globalcachesdk");
-  users.add("globalcachesdk");
-  users.add("globalcachesdk");
+  users.add("globalcacheop");
+  users.add("globalcacheop");
+  users.add("globalcacheop");
+  users.add("globalcacheop");
 
   ArrayList<String> passwords = new ArrayList<>();
-  passwords.add("globalcachesdk");
-  passwords.add("globalcachesdk");
-  passwords.add("globalcachesdk");
-  passwords.add("globalcachesdk");
+  passwords.add("globalcacheop");
+  passwords.add("globalcacheop");
+  passwords.add("globalcacheop");
+  passwords.add("globalcacheop");
 
   for (int i = 0;i < hosts.size(); i++) {
     try {
@@ -265,13 +284,13 @@ src
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <description>
-    <name>QueryCpuInfo</name>        // 命令名称（Java类名）
-    <async>false</async>             // 是否为异步命令
-    <args>false</args>               // 是否为带参命令
-    <execute>ALL_NODES</execute>     // 命令执行节点
-    <privilege>USER</privilege>      // 命令执行权限
-    <timeout>2</timeout>             // 命令请求等待时间，单位：秒
-    <comment>获取节点CPU信息</comment> // 备注
+    <name>QueryCpuInfo</name>                   // 命令名称（Java类名）
+    <async>false</async>                        // 是否为异步命令
+    <args>false</args>                          // 是否为带参命令
+    <execute>ALL_NODES</execute>                // 命令执行节点
+    <privilege>GLOBAL_CACHE_OP</privilege>      // 命令执行权限
+    <timeout>2</timeout>                        // 命令请求等待时间，单位：秒
+    <comment>获取节点CPU信息</comment>            // 备注
 </description>
 ```
 
@@ -364,7 +383,7 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
     <async>false</async>
     <args>false</args>
     <execute>ALL_NODES</execute>
-    <privilege>USER</privilege>
+    <privilege>GLOBAL_CACHE_OP</privilege>
     <timeout>2</timeout>
     <comment>获取节点CPU信息</comment>
 </description>
@@ -372,7 +391,7 @@ public class QueryCpuInfo extends AbstractCommandExecutor {
 
 ​	在`QueryCpuInfo`类中添加`@Configure`注解，注解参数`path`为XML文件的相对路径。此时，该命令执行类的默认配置和对应的XML文件已经进行了映射，可以通过修改XML文件实现修改命令执行类的默认配置。
 
-在`QueryCpuInfo`类中添加`@Script`注解，注解参数`path`为远程Shell脚本的绝对路径。`prefixCommand`为前缀命令，`suffixCommand`为后缀命令，默认均为空。
+在`QueryCpuInfo`类中添加`@Script`注解，注解参数`path`为GlobalCacheScripts中脚本的相对路径。`prefixCommand`为前缀命令，`suffixCommand`为后缀命令，默认均为空。
 此时，在`SSHSessionPool`中会自动执行SSH请求，并获取返回结果。其中执行的Shell命令格式为:
 
 ```bash
@@ -472,7 +491,7 @@ public class GlobalCacheServiceControl extends AbstractCommandExecutorAsync {
 
 ​	在`GlobalCacheServiceControl`类中添加`@Configure`注解，注解参数`path`为XML文件的相对路径。此时，该命令执行类的默认配置和对应的XML文件已经进行了映射，可以通过修改XML文件实现修改命令执行类的默认配置。
 
-​	在`GlobalCacheServiceControl`类中添加`@Script`注解，注解参数`path`为远程Shell脚本的绝对路径。`prefixCommand`为前缀命令，`suffixCommand`为后缀命令，默认均为空。
+​	在`GlobalCacheServiceControl`类中添加`@Script`注解，注解参数`path`为GlobalCacheScripts中脚本的相对路径。`prefixCommand`为前缀命令，`suffixCommand`为后缀命令，默认均为空。
 此时，在`SSHSessionPool`中会自动执行SSH请求，并获取返回结果。其中执行的Shell命令格式为:
 
 ```bash
