@@ -44,7 +44,7 @@ public class QueryDiskInfo extends AbstractCommandExecutorSync {
             }
             String capacityStr = diskInfoListString[2];
             char unit = capacityStr.charAt(capacityStr.length() -1);
-            float capacity = Float.parseFloat(capacityStr.substring(0, capacityStr.length() - 2));
+            float capacity = Float.parseFloat(capacityStr.substring(0, capacityStr.length() - 1));
             if (unit == 'M') {
                 capacity = capacity / 1024 / 1024;
             } else if (unit == 'G') {
