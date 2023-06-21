@@ -37,6 +37,10 @@ public class DiskInfo extends AbstractEntity {
          * 设备类型
          */
         private DiskType type;
+        /**
+         * 容量，以TB为单位
+         */
+        private float capacity;
 
         public String getName() {
             return name;
@@ -52,6 +56,14 @@ public class DiskInfo extends AbstractEntity {
 
         public void setType(DiskType type) {
             this.type = type;
+        }
+
+        public float getCapacity() {
+            return capacity;
+        }
+
+        public void setCapacity(float capacity) {
+            this.capacity = capacity;
         }
     }
 

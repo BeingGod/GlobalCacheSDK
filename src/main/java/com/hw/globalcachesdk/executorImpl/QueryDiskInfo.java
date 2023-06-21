@@ -42,6 +42,19 @@ public class QueryDiskInfo extends AbstractCommandExecutorSync {
             } else {
                 disk.setType(DiskInfo.DiskType.UNKNOWN);
             }
+            String capacityStr = diskInfoListString[2];
+            char unit = capacityStr.charAt(capacityStr.length() -1);
+            float capacity = Float.parseFloat(capacityStr.substring(0, capacityStr.length() - 2));
+            if (unit == 'M') {
+                capacity = capacity / 1024 / 1024;
+            } else if (unit == 'G') {
+                capacity = capacity / 1024;
+            } else if (unit == 'T') {
+                // pass
+            } else if (unit == 'P') {
+                capacity = capacity * 1024;
+            }
+            disk.setCapacity(capacity);
             diskList.add(disk);
         }
 
