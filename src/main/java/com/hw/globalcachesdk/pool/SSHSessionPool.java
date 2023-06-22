@@ -3,6 +3,8 @@ package com.hw.globalcachesdk.pool;
 import cn.hutool.core.lang.Pair;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.extra.ssh.ChannelType;
+import com.hw.globalcachesdk.ExecutePrivilege;
+import com.hw.globalcachesdk.StatusCode;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.entity.AsyncEntity;
 import com.hw.globalcachesdk.exception.*;
@@ -15,6 +17,7 @@ import cn.hutool.extra.ssh.JschUtil;
 import com.hw.globalcachesdk.executor.CommandExecuteResult;
 
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.*;
@@ -297,24 +300,29 @@ public class SSHSessionPool {
                 try {
                     // 每个线程一个Session
                     Session session = getSession(hosts.get(finalI), users.get(finalI));
-                    if (!executor.getDes().isAsync()) {
-                        // 同步命令
-                        AbstractCommandExecutorSync syncExecutor = (AbstractCommandExecutorSync) executor;
-                        // 执行命令
-                        String returnValue = syncExecutor.exec(session, executor.getDes().isWithArgs() ? args.get(finalI) : "");
-                        // 存入中间结果
-                        setReturnValueResult(returnValueHashMap, "" + hosts.get(finalI), returnValue);
-                        // 命令执行成功，设置状态码
-                        commandExecuteResult.setStatusCode(SUCCESS);
+
+                    if (!checkPrivilege(session, executor.getDes().getExecutePrivilege())) {
+                        commandExecuteResult.setStatusCode(PERMISSION_DENIED);
                     } else {
-                        // 异步命令
-                        AbstractCommandExecutorAsync asyncExecutor = (AbstractCommandExecutorAsync)executor;
-                        Channel channel = JschUtil.openChannel(session, ChannelType.SHELL);
-                        // 执行命令 -> 得到Shell结果输出流
-                        InputStream stream = asyncExecutor.exec(channel, executor.getDes().isWithArgs() ? args.get(finalI) : "");
-                        // 命令执行成功，设置状态码
-                        commandExecuteResult.setStatusCode(SUCCESS);
-                        commandExecuteResult.setData(new AsyncEntity(stream, channel));
+                        if (!executor.getDes().isAsync()) {
+                            // 同步命令
+                            AbstractCommandExecutorSync syncExecutor = (AbstractCommandExecutorSync) executor;
+                            // 执行命令
+                            String returnValue = syncExecutor.exec(session, executor.getDes().isWithArgs() ? args.get(finalI) : "");
+                            // 存入中间结果
+                            setReturnValueResult(returnValueHashMap, "" + hosts.get(finalI), returnValue);
+                            // 命令执行成功，设置状态码
+                            commandExecuteResult.setStatusCode(SUCCESS);
+                        } else {
+                            // 异步命令
+                            AbstractCommandExecutorAsync asyncExecutor = (AbstractCommandExecutorAsync)executor;
+                            Channel channel = JschUtil.openChannel(session, ChannelType.SHELL);
+                            // 执行命令 -> 得到Shell结果输出流
+                            InputStream stream = asyncExecutor.exec(channel, executor.getDes().isWithArgs() ? args.get(finalI) : "");
+                            // 命令执行成功，设置状态码
+                            commandExecuteResult.setStatusCode(SUCCESS);
+                            commandExecuteResult.setData(new AsyncEntity(stream, channel));
+                        }
                     }
                 } catch (SessionException e) {
                     // 连接不存在，设置状态码
@@ -385,4 +393,28 @@ public class SSHSessionPool {
         returnValueHashMap.put(host, returnValue);
     }
 
+    private boolean checkPrivilege(Session sshSession, ExecutePrivilege expectPrivilege) {
+        String command = "whoami";
+
+        String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset()).trim();
+
+        final String root = "root";
+        final String globalcacheop = "globalcacheop";
+
+        if (expectPrivilege == ExecutePrivilege.ROOT) {
+            // 校验权限
+            if (!root.equals(returnValue)) {
+                return false;
+            }
+        }
+
+        if (expectPrivilege == ExecutePrivilege.GLOBAL_CACHE_OP) {
+            // 校验权限
+            if (!globalcacheop.equals(returnValue) && !root.equals(returnValue)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

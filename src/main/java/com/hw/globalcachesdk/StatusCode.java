@@ -29,5 +29,9 @@ public enum StatusCode {
     /**
      * 返回值解析失败
      */
-    RETURN_VALUE_PARSE_FAILED
+    RETURN_VALUE_PARSE_FAILED,
+    /**
+     * 权限拒绝
+     */
+    PERMISSION_DENIED,
 }

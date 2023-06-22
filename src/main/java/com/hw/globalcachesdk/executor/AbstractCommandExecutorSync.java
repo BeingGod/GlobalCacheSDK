@@ -87,7 +87,6 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
 
     /**
      * 执行命令
-     * 通过自定义错误流判断shell脚本是否执行成功
      *
      * @param sshSession SSH会话
      * @param command 需要执行的命令
@@ -95,22 +94,6 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
      * @throws CommandExecException 命令执行失败抛出此异常
      */
     protected String execInternal(Session sshSession, String command) throws CommandExecException {
-        if (des.getExecutePrivilege() == ExecutePrivilege.ROOT) {
-            // 校验权限
-            final String root = "root";
-            if (!root.equals(whoami(sshSession))) {
-                throw new CommandExecException("用户没有该命令执行权限");
-            }
-        }
-
-        if (des.getExecutePrivilege() == ExecutePrivilege.GLOBAL_CACHE_OP) {
-            // 校验权限
-            final String globalcacheop = "globalcacheop";
-            if (!globalcacheop.equals(whoami(sshSession))) {
-                throw new CommandExecException("用户没有该命令执行权限");
-            }
-        }
-
         String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset());
 
         return returnValue;

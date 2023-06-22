@@ -1,10 +1,12 @@
 package com.hw.globalcachesdk.executor;
 
+import com.hw.globalcachesdk.ExecutePrivilege;
 import com.hw.globalcachesdk.GlobalCacheSDK;
 import com.hw.globalcachesdk.exception.CommandExecException;
 import com.hw.globalcachesdk.exception.ConfigureParserException;
 import com.hw.globalcachesdk.utils.ConfigureParser;
 import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.Session;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,7 +80,6 @@ public abstract class AbstractCommandExecutorAsync extends AbstractCommandExecut
 
     /**
      * 执行命令
-     * 通过自定义错误流判断shell脚本是否执行成功
      *
      * @param channel 通道
      * @param command 需要执行的命令

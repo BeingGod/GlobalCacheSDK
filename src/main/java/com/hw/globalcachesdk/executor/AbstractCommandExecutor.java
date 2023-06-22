@@ -32,11 +32,4 @@ public abstract class AbstractCommandExecutor {
         this.des = des;
     }
 
-    protected String whoami(Session sshSession) throws CommandExecException {
-        String command = "whoami";
-
-        String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset()).trim();
-
-        return returnValue;
-    }
 }
