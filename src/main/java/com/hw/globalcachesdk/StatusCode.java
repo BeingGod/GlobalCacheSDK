@@ -27,7 +27,7 @@ public enum StatusCode {
      */
     CONN_TIMEOUT,
     /**
-     * 返回值解析失败
+     * return value parse failed
      */
     RETURN_VALUE_PARSE_FAILED,
     /**

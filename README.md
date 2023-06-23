@@ -447,7 +447,7 @@ public static HashMap<String, CommandExecuteResult> queryCpuInfo(ArrayList<Strin
       // step3 调用"SSHSessionPool.execute"让内部线程池并发执行QueryCpuInfo的exec方法
       return getInstance().sshSessionPool.execute(hosts, users, executor);
   } catch (SSHSessionPoolException e) {
-      throw new GlobalCacheSDKException("SSH会话池异常", e);
+      throw new GlobalCacheSDKException("ssh session pool exception", e);
   }
 }
 ...

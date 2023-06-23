@@ -30,13 +30,11 @@ public abstract class AbstractCommandExecutorAsync extends AbstractCommandExecut
             // 解析对应注解的接口配置文件
             this.des = ConfigureParser.parse(inputStream);
         } catch (ConfigureParserException e) {
-            System.err.println(class_.getName() + "配置文件解析失败");
-            throw new RuntimeException("配置文件解析失败", e);
+            throw new RuntimeException("settings parse failed", e);
         }
 
         if (!this.des.isAsync()) {
-            System.err.println(class_.getName() + "不为异步命令");
-            throw new RuntimeException("命令类型错误");
+            throw new RuntimeException("command type error");
         }
     }
 
@@ -50,10 +48,10 @@ public abstract class AbstractCommandExecutorAsync extends AbstractCommandExecut
      */
     public InputStream exec(Channel channel, String args) throws CommandExecException {
         if (!this.getClass().isAnnotationPresent(Script.class)) {
-            throw new CommandExecException("当前Executor未绑定Shell脚本");
+            throw new CommandExecException("executor is not bind shell script, please use @Script to bind");
         }
         if (channel.isClosed()) {
-            throw new CommandExecException("Channel未开启");
+            throw new CommandExecException("channel is not opened");
         }
 
         Script script =  this.getClass().getAnnotation(Script.class);
@@ -99,7 +97,7 @@ public abstract class AbstractCommandExecutorAsync extends AbstractCommandExecut
             return inputStream;
 
         } catch (IOException e) {
-            throw new CommandExecException("输入/输出流打开失败", e);
+            throw new CommandExecException("input or output stream open failed", e);
         }
     }
 }

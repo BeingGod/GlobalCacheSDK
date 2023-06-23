@@ -59,7 +59,7 @@ public class AsyncEntity extends AbstractEntity {
         try {
             return thread.readLine();
         } catch (InterruptedException e) {
-            throw new AsyncThreadException("线程中断", e);
+            throw new AsyncThreadException("thread interrupted", e);
         }
     }
 

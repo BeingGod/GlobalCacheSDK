@@ -24,7 +24,7 @@ public class Utils {
             case GLOBAL_CACHE_OP:
                 return "globalcacheop";
             default:
-                throw new GlobalCacheSDKException("未知的用户权限");
+                throw new GlobalCacheSDKException("unknown execute privilege");
         }
     }
 
@@ -73,10 +73,8 @@ public class Utils {
             inputStream.close();
             outputStream.close();
         } catch (FileNotFoundException e) {
-            System.err.println("file not found!");
             throw new GlobalCacheSDKException("file not found", e);
         } catch (IOException e) {
-            System.err.println("io exception!");
             throw new GlobalCacheSDKException("file write failed!", e);
         }
     }

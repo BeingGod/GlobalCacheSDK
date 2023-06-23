@@ -1,7 +1,7 @@
 package com.hw.globalcachesdk.exception;
 
 /**
- * SSH会话池异常
+ * ssh session pool exception
  * @author 章睿彬
  */
 public class SSHSessionPoolException extends Exception {

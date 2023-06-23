@@ -58,7 +58,7 @@ public class QueryNodePgInfo extends AbstractCommandExecutorSync {
 
             return pgInfo;
         } catch (Exception e) {
-            throw new ReturnValueParseException("返回值解析失败", e);
+            throw new ReturnValueParseException("return value parse failed", e);
         }
     }
 }

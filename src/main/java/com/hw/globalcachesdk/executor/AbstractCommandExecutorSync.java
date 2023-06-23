@@ -30,13 +30,11 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
             // 解析对应注解的接口配置文件
             this.des = ConfigureParser.parse(inputStream);
         } catch (ConfigureParserException e) {
-            System.err.println(class_.getName() + "配置文件解析失败");
-            throw new RuntimeException("配置文件解析失败", e);
+            throw new RuntimeException("settings parse failed", e);
         }
 
         if (this.des.isAsync()) {
-            System.err.println(class_.getName() + "不为同步命令");
-            throw new RuntimeException("命令类型错误");
+            throw new RuntimeException("command type error");
         }
     }
 
@@ -50,7 +48,7 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
      */
     public String exec(Session sshSession, String args) throws CommandExecException {
         if (!this.getClass().isAnnotationPresent(Script.class)) {
-            throw new CommandExecException("当前Executor未绑定Shell脚本");
+            throw new CommandExecException("executor is not bind shell script, please use @Script to bind");
         }
 
         Script script = this.getClass().getAnnotation(Script.class);

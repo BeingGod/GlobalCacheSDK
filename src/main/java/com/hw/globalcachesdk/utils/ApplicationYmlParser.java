@@ -21,7 +21,7 @@ public class ApplicationYmlParser {
 
             return data;
         } catch (Exception e) {
-            throw new ApplicationYmlParserException("配置文件格式错误");
+            throw new ApplicationYmlParserException("parse failed");
         }
     }
 }

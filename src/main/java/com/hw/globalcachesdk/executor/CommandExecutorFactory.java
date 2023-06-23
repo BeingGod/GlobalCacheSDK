@@ -44,7 +44,7 @@ public class CommandExecutorFactory {
             try {
                 class_ = Class.forName(classPath);
             } catch (ClassNotFoundException e) {
-                throw new CommandExecutorFactoryException("找不到指定类", e);
+                throw new CommandExecutorFactoryException("cannot found target class", e);
             }
 
             // 获取构造函数
@@ -52,14 +52,14 @@ public class CommandExecutorFactory {
             try {
                 constructor = class_.getConstructor();
             } catch (NoSuchMethodException e) {
-                throw new CommandExecutorFactoryException("找不到指定类构造函数", e);
+                throw new CommandExecutorFactoryException("cannot found target construct function", e);
             }
             // 通过构造器对象的newInstance方法进行对象的初始化
             try {
                 AbstractCommandExecutor abstractCommandExecutor = (AbstractCommandExecutor) constructor.newInstance();
                 registriedCommandExecutor.put(RegisterExecutor.valueOf(field.getName()), abstractCommandExecutor);
             } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-                throw new CommandExecutorFactoryException("类初始化失败", e);
+                throw new CommandExecutorFactoryException("class initialize failed", e);
 
             }
         }

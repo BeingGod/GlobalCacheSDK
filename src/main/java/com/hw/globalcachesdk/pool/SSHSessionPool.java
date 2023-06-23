@@ -86,10 +86,10 @@ public class SSHSessionPool {
                 Session newSession = JschUtil.getSession(host,port,user,password);
                 hostSessionHashMap.put(Pair.of(host, user), newSession);
             } catch (RuntimeException e) {
-                throw new SessionException("连接失败", e);
+                throw new SessionException("connect failed", e);
             }
         } else {
-            throw new SessionException("当前链接已存在");
+            throw new SessionException("session already exist");
         }
     }
 
@@ -113,10 +113,10 @@ public class SSHSessionPool {
                 Session newSession = JschUtil.getSession(host, port, user, privateKeyPath, passphrase);
                 hostSessionHashMap.put(Pair.of(host, user), newSession);
             } catch (RuntimeException e) {
-                throw new SessionException("连接失败", e);
+                throw new SessionException("connect failed", e);
             }
         } else {
-            throw new SessionException("当前链接已存在");
+            throw new SessionException("session already exist");
         }
     }
 
@@ -135,10 +135,10 @@ public class SSHSessionPool {
                 // 当数据量大，只使用get时采用破坏遍历结构的方式换取最高地执行效率
                 hostSessionHashMap.remove(Pair.of(host, user));
             } catch (RuntimeException e) {
-                throw new SessionException("链接关闭失败", e);
+                throw new SessionException("session close failed", e);
             }
         } else {
-            throw new SessionException("主机不存在");
+            throw new SessionException("host not exist");
         }
     }
 
@@ -167,7 +167,7 @@ public class SSHSessionPool {
         if (session != null){
             return session;
         } else {
-            throw new SessionException("主机不存在");
+            throw new SessionException("host not exist");
         }
     }
 
@@ -185,17 +185,17 @@ public class SSHSessionPool {
      */
     public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor, ArrayList<String> args) throws SSHSessionPoolException {
         if (0 == hosts.size()) {
-            throw new SSHSessionPoolException("节点IP列表为空");
+            throw new SSHSessionPoolException("node-ip table is empty");
         }
 
         if (executor.getDes().isWithArgs() && hosts.size() != args.size()) {
-            throw new SSHSessionPoolException("节点个数与输出参数不匹配");
+            throw new SSHSessionPoolException("node size is not equal to args size");
         }
 
         try {
             return executeInternal(hosts, users, executor, args);
         } catch (InterruptedException e) {
-            throw new SSHSessionPoolException("线程执行中断", e);
+            throw new SSHSessionPoolException("thread interrupted", e);
         }
     }
 
@@ -221,7 +221,7 @@ public class SSHSessionPool {
 
             return executeInternal(hosts, users, executor, args);
         } catch (InterruptedException e) {
-            throw new SSHSessionPoolException("线程执行中断", e);
+            throw new SSHSessionPoolException("thread interrupted", e);
         }
     }
 
@@ -237,17 +237,17 @@ public class SSHSessionPool {
      */
     public HashMap<String, CommandExecuteResult> execute(ArrayList<String> hosts, ArrayList<String> users, AbstractCommandExecutor executor) throws SSHSessionPoolException {
         if (0 == hosts.size()) {
-            throw new SSHSessionPoolException("节点IP列表为空");
+            throw new SSHSessionPoolException("node-ip table is empty");
         }
 
         if (users.size() != hosts.size()) {
-            throw new SSHSessionPoolException("节点IP数量与用户数量不一致");
+            throw new SSHSessionPoolException("node size is not equal to user size");
         }
 
         try {
             return executeInternal(hosts, users, executor, null);
         } catch (InterruptedException e) {
-            throw new SSHSessionPoolException("线程执行中断", e);
+            throw new SSHSessionPoolException("thread interrupted", e);
         }
     }
 
@@ -271,7 +271,7 @@ public class SSHSessionPool {
 
             return executeInternal(hosts, users, executor, null);
         } catch (InterruptedException e) {
-            throw new SSHSessionPoolException("线程执行中断", e);
+            throw new SSHSessionPoolException("thread interrupted", e);
         }
     }
 

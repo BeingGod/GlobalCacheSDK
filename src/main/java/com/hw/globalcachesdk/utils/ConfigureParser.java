@@ -33,7 +33,7 @@ public class ConfigureParser {
             DocumentBuilder builder = factory.newDocumentBuilder();
             doc = builder.parse(inputStream);
         } catch (ParserConfigurationException | IOException | SAXException e) {
-            throw new ConfigureParserException("解析失败", e);
+            throw new ConfigureParserException("parse failed", e);
         }
 
         if (doc.getElementsByTagName("name").getLength() != 1 ||
@@ -43,7 +43,7 @@ public class ConfigureParser {
             doc.getElementsByTagName("privilege").getLength() != 1 ||
             doc.getElementsByTagName("timeout").getLength() != 1
         ) {
-            throw new ConfigureParserException("接口配置文件格式错误");
+            throw new ConfigureParserException("parse failed");
         }
 
         CommandExecutorDescription des = new CommandExecutorDescription();
