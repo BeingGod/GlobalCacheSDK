@@ -165,6 +165,10 @@ public class PtInfo extends AbstractEntity {
     }
 
     public static PtInfo parseOf(String str) {
+        if (str.equals("")) {
+            return null;
+        }
+
         String[] strList = str.split("\n");
 
         PtInfo ptInfo = new PtInfo();

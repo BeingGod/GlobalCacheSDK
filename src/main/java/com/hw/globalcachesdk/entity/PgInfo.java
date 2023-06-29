@@ -247,6 +247,10 @@ public class PgInfo extends AbstractEntity {
      *  179 |     25 |          2 |          5 |        PG_STATE_NORMAL |      3 |[<2, 5, PG_COPY_STATE_RUNNING>, <1, 3, PG_COPY_STATE_RUNNING>, <0, 1, PG_COPY_STATE_RUNNING>, ]
      */
     public static ArrayList<PgInfo.Pg> parseOf(String str) {
+        if (str.equals("")) {
+            return null;
+        }
+
         ArrayList<PgInfo.Pg> pgView = new ArrayList<>();
 
         String[] strList = str.split("\n");
