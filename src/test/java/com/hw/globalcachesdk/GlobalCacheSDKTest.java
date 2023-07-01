@@ -2,6 +2,7 @@ package com.hw.globalcachesdk;
 
 import cn.hutool.core.map.MapUtil;
 import com.hw.globalcachesdk.entity.ErrorCodeEntity;
+import com.hw.globalcachesdk.entity.NodeStatusInfo;
 import com.hw.globalcachesdk.exception.GlobalCacheSDKException;
 import com.hw.globalcachesdk.executor.CommandExecuteResult;
 import org.junit.*;
@@ -383,6 +384,15 @@ public class GlobalCacheSDKTest {
             for (Map.Entry<String, CommandExecuteResult> entry : GlobalCacheSDK.checkHardware().entrySet()) {
                 assertEquals(StatusCode.SUCCESS, entry.getValue().getStatusCode());
             }
+        } catch (GlobalCacheSDKException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void queryNodeStatusInfoLocal() {
+        try {
+            NodeStatusInfo info = (NodeStatusInfo) GlobalCacheSDK.queryNodeStatusInfoLocal();
         } catch (GlobalCacheSDKException e) {
             throw new RuntimeException(e);
         }
