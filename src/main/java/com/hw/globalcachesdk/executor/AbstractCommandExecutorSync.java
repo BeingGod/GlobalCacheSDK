@@ -78,6 +78,58 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
     }
 
     /**
+     * 执行命令
+     *
+     * @param sshSession SSH会话
+     * @param command 需要执行的命令
+     * @return 命令执行结果
+     * @throws CommandExecException 命令执行失败抛出此异常
+     */
+    protected String execInternal(Session sshSession, String command) throws CommandExecException {
+        String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset());
+
+        return returnValue;
+    }
+
+    /**
+     * 统一执行命令接口
+     *
+     * @param args       命令参数
+     * @return 命令返回结果
+     * @throws CommandExecException 命令执行失败抛出此异常
+     */
+    public String exec(String args) throws CommandExecException {
+        if (!this.getClass().isAnnotationPresent(Script.class)) {
+            throw new CommandExecException("executor is not bind shell script, please use @Script to bind");
+        }
+
+        Script script = this.getClass().getAnnotation(Script.class);
+        String prefixCommand = script.prefixCommand();
+        String suffixCommand = script.suffixCommand();
+        String path = GlobalCacheSDK.getScriptsPath() + script.path();
+        String command = "";
+        // TODO: 优化逻辑
+        if ("".equals(prefixCommand) && ! "".equals(suffixCommand)) {
+            command = "bash" + " " + path + " " + args + " " + suffixCommand;
+        }
+        if ("".equals(suffixCommand) && ! "".equals(prefixCommand)) {
+            command = prefixCommand + " " + "bash" + " " + path + " " + args;
+        }
+        if (! "".equals(suffixCommand) && ! "".equals(prefixCommand)) {
+            command = prefixCommand + " " + "bash" + " " + path + " " + args + " " + suffixCommand;
+        }
+        if ("".equals(suffixCommand) && "".equals(prefixCommand)) {
+            command = "bash" + " " + path + " " + args;
+        }
+
+        return execInternal(command);
+    }
+
+    public String exec() throws CommandExecException {
+        return exec("");
+    }
+
+    /**
      * 返回结果解析接口
      * 注意: 所有子类需要实现该方法
      *
@@ -90,14 +142,27 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
     /**
      * 执行命令
      *
-     * @param sshSession SSH会话
      * @param command 需要执行的命令
      * @return 命令执行结果
      * @throws CommandExecException 命令执行失败抛出此异常
      */
-    protected String execInternal(Session sshSession, String command) throws CommandExecException {
-        String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset());
+    protected String execInternal(String command) throws CommandExecException {
+        Process process = null;
+        try {
+            process = Runtime.getRuntime().exec(command);
+            BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-        return returnValue;
+            StringBuilder returnValue = new StringBuilder();
+
+            String line = "";
+            while ((line = input.readLine()) != null) {
+                returnValue.append(line);
+            }
+            input.close();
+
+            return returnValue.toString();
+        } catch (IOException e) {
+            throw new CommandExecException("process exec io exception ", e);
+        }
     }
 }
