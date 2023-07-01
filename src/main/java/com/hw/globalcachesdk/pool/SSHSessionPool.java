@@ -67,6 +67,20 @@ public class SSHSessionPool {
         hostSessionHashMap = new HashMap<>();
     }
 
+    public boolean isSessionConnected(String host, String user) {
+        Session session =  hostSessionHashMap.get(Pair.of(host, user));
+        if (session == null) {
+            return false;
+        } else {
+            boolean isConnected = session.isConnected();
+            if (!isConnected) {
+                JschUtil.close(session);
+                hostSessionHashMap.remove(Pair.of(host, user));
+            }
+            return session.isConnected();
+        }
+    }
+
     /**
      * 创建SSH连接, 并将其添加到hostSessionHashMap中，没有任何异常则表示执行成功
      * 如果链接失败需要抛出ConnectFailedException异常
