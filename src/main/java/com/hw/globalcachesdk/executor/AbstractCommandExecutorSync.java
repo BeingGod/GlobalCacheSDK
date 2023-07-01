@@ -156,7 +156,7 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
 
             String line = "";
             while ((line = input.readLine()) != null) {
-                returnValue.append(line);
+                returnValue.append(line).append("\n");
             }
             input.close();
 
