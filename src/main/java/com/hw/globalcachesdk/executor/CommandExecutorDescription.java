@@ -16,7 +16,6 @@ public class CommandExecutorDescription {
 
     /**
      * 是否为异步调用接口（默认同步）
-     * for future
      */
     private boolean isAsync = false;
 
@@ -40,6 +39,11 @@ public class CommandExecutorDescription {
      * 单位：秒
      */
     private int timeout = 1;
+
+    /**
+     * 是否为本地调用接口
+     */
+    private boolean isLocal = false;
 
     public String getName() {
         return name;
@@ -87,6 +91,14 @@ public class CommandExecutorDescription {
 
     public void setTimeout(int timeout) {
         this.timeout = timeout;
+    }
+
+    public boolean isLocal() {
+        return isLocal;
+    }
+
+    public void setLocal(boolean local) {
+        isLocal = local;
     }
 
     @Override

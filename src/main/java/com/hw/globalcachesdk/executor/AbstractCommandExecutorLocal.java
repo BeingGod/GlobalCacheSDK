@@ -1,7 +1,6 @@
 package com.hw.globalcachesdk.executor;
 
 import cn.hutool.extra.ssh.JschUtil;
-import com.hw.globalcachesdk.ExecutePrivilege;
 import com.hw.globalcachesdk.GlobalCacheSDK;
 import com.hw.globalcachesdk.entity.AbstractEntity;
 import com.hw.globalcachesdk.exception.CommandExecException;
@@ -10,16 +9,19 @@ import com.hw.globalcachesdk.exception.ReturnValueParseException;
 import com.hw.globalcachesdk.utils.ConfigureParser;
 import com.jcraft.jsch.Session;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 /**
  * Shell命令调用(同步)
  * @author 章睿彬
  */
-public abstract class AbstractCommandExecutorSync extends AbstractCommandExecutor {
+public abstract class AbstractCommandExecutorLocal extends AbstractCommandExecutor {
 
-    public AbstractCommandExecutorSync(Class<?> class_) {
+    public AbstractCommandExecutorLocal(Class<?> class_) {
         if (!class_.isAnnotationPresent(Configure.class)) {
             return;
         }
@@ -41,12 +43,11 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
     /**
      * 统一执行命令接口
      *
-     * @param sshSession SSH会话
      * @param args       命令参数
      * @return 命令返回结果
      * @throws CommandExecException 命令执行失败抛出此异常
      */
-    public String exec(Session sshSession, String args) throws CommandExecException {
+    public String exec(String args) throws CommandExecException {
         if (!this.getClass().isAnnotationPresent(Script.class)) {
             throw new CommandExecException("executor is not bind shell script, please use @Script to bind");
         }
@@ -70,11 +71,11 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
             command = "bash" + " " + path + " " + args;
         }
 
-        return execInternal(sshSession, command);
+        return execInternal(command);
     }
 
-    public String exec(Session sshSession) throws CommandExecException {
-        return exec(sshSession, "");
+    public String exec() throws CommandExecException {
+        return exec("");
     }
 
     /**
@@ -90,14 +91,27 @@ public abstract class AbstractCommandExecutorSync extends AbstractCommandExecuto
     /**
      * 执行命令
      *
-     * @param sshSession SSH会话
      * @param command 需要执行的命令
      * @return 命令执行结果
      * @throws CommandExecException 命令执行失败抛出此异常
      */
-    protected String execInternal(Session sshSession, String command) throws CommandExecException {
-        String returnValue = JschUtil.exec(sshSession, command, Charset.defaultCharset());
+    protected String execInternal(String command) throws CommandExecException {
+        Process process = null;
+        try {
+            process = Runtime.getRuntime().exec(command);
+            BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-        return returnValue;
+            StringBuilder returnValue = new StringBuilder();
+
+            String line = "";
+            while ((line = input.readLine()) != null) {
+                returnValue.append(line);
+            }
+            input.close();
+
+            return returnValue.toString();
+        } catch (IOException e) {
+            throw new CommandExecException("process exec io exception ", e);
+        }
     }
 }

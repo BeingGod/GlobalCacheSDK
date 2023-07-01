@@ -76,6 +76,10 @@ public abstract class AbstractCommandExecutorAsync extends AbstractCommandExecut
         return execInternal(channel, command);
     }
 
+    public InputStream exec(Channel channel) throws CommandExecException {
+        return exec(channel, "");
+    }
+
     /**
      * 执行命令
      *
