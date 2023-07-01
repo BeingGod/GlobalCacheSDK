@@ -67,17 +67,16 @@ public class SSHSessionPool {
         hostSessionHashMap = new HashMap<>();
     }
 
-    public boolean isSessionConnected(String host, String user) {
+    public boolean isSessionConnected(String host, String user) throws SessionException {
         Session session =  hostSessionHashMap.get(Pair.of(host, user));
         if (session == null) {
             return false;
         } else {
             boolean isConnected = session.isConnected();
             if (!isConnected) {
-                JschUtil.close(session);
-                hostSessionHashMap.remove(Pair.of(host, user));
+                releaseSession(host, user);
             }
-            return session.isConnected();
+            return isConnected;
         }
     }
 
