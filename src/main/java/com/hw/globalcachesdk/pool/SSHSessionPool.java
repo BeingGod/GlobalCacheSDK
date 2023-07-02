@@ -173,15 +173,10 @@ public class SSHSessionPool {
      * @param host 需要获取连接session的主机IP
      * @param user 用户名称
      * @return JSCH会话对象
-     * @throws SessionException 会话不存在抛出此异常
      */
-    private Session getSession(String host, String user) throws SessionException {
+    private Session getSession(String host, String user) {
         Session session =  hostSessionHashMap.get(Pair.of(host, user));
-        if (session != null){
-            return session;
-        } else {
-            throw new SessionException("host not exist");
-        }
+        return session;
     }
 
     /**
@@ -310,9 +305,17 @@ public class SSHSessionPool {
             threadPool.execute(() -> {
                 // 向线程池中添加任务
                 CommandExecuteResult commandExecuteResult = new CommandExecuteResult();
+                // 每个线程一个Session
+                Session session = getSession(hosts.get(finalI), users.get(finalI));
+                if (session == null) {
+                    // fallback
+                    session = getSession(hosts.get(finalI), "root");
+                }
+
                 try {
-                    // 每个线程一个Session
-                    Session session = getSession(hosts.get(finalI), users.get(finalI));
+                    if (session == null) {
+                        throw new SessionException("session is not exist");
+                    }
 
                     if (!checkPrivilege(session, executor.getDes().getExecutePrivilege())) {
                         commandExecuteResult.setStatusCode(PERMISSION_DENIED);
