@@ -220,4 +220,8 @@ public enum RegisterExecutor {
      */
     @Registry
     CLIENT_NODE_INSTALL_CEPH,
+    /**
+     * server节点卸载globalcache
+     */
+    SERVER_NODE_UNINSTALL,
 }
